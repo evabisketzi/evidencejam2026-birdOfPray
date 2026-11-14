@@ -2,7 +2,7 @@
 # Dev loop: run the pipeline on the two dev papers, then score against the gold.
 #   dev/run_dev.sh [extra pipeline options, e.g. --thinking on | --prompt system_socratic.txt | --no-cache]
 #   env: DEV_OUT (pipeline output dir, default dev/out), DEV_SCORE_OUT (scorer output dir, default dev/score_out)
-#        DEV_SET=all  also the two newer gold papers 3KPITIV3 and 6HKWT4QG;  DEV_SET=new  only those two
+#        DEV_SET=all  also the newer gold papers 3KPITIV3, 6HKWT4QG and ITXNQ843;  DEV_SET=new  only those three
 # Needs BRINE_URL, BRINE_MODEL, BRINE_API_KEY.  Murphy = corpus slug YKQQZV93 (gold doc murphy2005, see dev/gold/doc_map.csv).
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -10,9 +10,9 @@ OUT="${DEV_OUT:-dev/out}"
 SCORE="${DEV_SCORE_OUT:-dev/score_out}"
 case "${DEV_SET:-orig}" in
   orig) DOCS=YKQQZV93,4CB9X9XE; GOLD=(--gold dev/gold/murphy2005.yaml --gold-doc-id murphy2005 --gold dev/gold/4CB9X9XE.camo.yaml) ;;
-  new)  DOCS=3KPITIV3,6HKWT4QG;  GOLD=(--gold dev/gold/3KPITIV3.yaml --gold dev/gold/6HKWT4QG.yaml) ;;
-  all)  DOCS=YKQQZV93,4CB9X9XE,3KPITIV3,6HKWT4QG
-        GOLD=(--gold dev/gold/murphy2005.yaml --gold-doc-id murphy2005 --gold dev/gold/4CB9X9XE.camo.yaml --gold dev/gold/3KPITIV3.yaml --gold dev/gold/6HKWT4QG.yaml) ;;
+  new)  DOCS=3KPITIV3,6HKWT4QG,ITXNQ843;  GOLD=(--gold dev/gold/3KPITIV3.yaml --gold dev/gold/6HKWT4QG.yaml --gold dev/gold/ITXNQ843.yaml) ;;
+  all)  DOCS=YKQQZV93,4CB9X9XE,3KPITIV3,6HKWT4QG,ITXNQ843
+        GOLD=(--gold dev/gold/murphy2005.yaml --gold-doc-id murphy2005 --gold dev/gold/4CB9X9XE.camo.yaml --gold dev/gold/3KPITIV3.yaml --gold dev/gold/6HKWT4QG.yaml --gold dev/gold/ITXNQ843.yaml) ;;
   *) echo "DEV_SET must be orig, new or all" >&2; exit 2 ;;
 esac
 ./run.sh corpus/ "$OUT" --docs "$DOCS" "$@"

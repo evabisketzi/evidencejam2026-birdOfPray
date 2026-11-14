@@ -1,0 +1,4078 @@
+# CAMO CausalGraph - Stover, Naeth & Wilkinson (2017)
+# Applied Vegetation Science 20(4): 608, doi:10.1111/avsc.12316
+# Validate: linkml-validate -s schema/causalmosaic.yaml -C CausalGraph data/stover2017_fescue_nonnative_control.yaml
+graph_id: camo:graph/stover-2017-avs-fescue-nonnative-control
+schema_version: 0.10.0
+provenance:
+  ontology_framework: ELMO + CAMO
+  causal_mosaic_version: 0.10.0
+  created: '2026-11-14T12:00:00Z'
+  source_corpus: 'Single article: Stover, Naeth & Wilkinson 2017, Applied Vegetation Science 20(4)'
+  project: EcoWeaver
+source_documents:
+- document_id: 10.1111/avsc.12316
+  doi: 10.1111/avsc.12316
+  title: Glyphosate, steam and cutting for non-native plant control in Alberta fescue grassland restoration
+  authors:
+  - Holly J. Stover
+  - M. Anne Naeth
+  - Sarah R. Wilkinson
+  year: 2017
+  journal: Applied Vegetation Science
+  study_coordinates:
+  - latitude: 49.0517
+    longitude: -113.9142
+    elevation_m: 1280
+    coordinate_uncertainty_m: 10000
+    coordinate_location_basis:
+    - nearest_municipality
+    geodetic_datum: WGS84
+  study_country: CA
+  study_state_or_province: Alberta
+  study_period_start: 2010-07
+  study_period_end: 2013-08
+  study_temporal_note: Baseline vegetation July 2010; treatments late July 2010 and May-June 2011; seeding
+    June 2011 and transplanting June 2012 in all plots; assessments late July/early August 2011-2013;
+    soils sampled September 2011. Coordinates are Waterton Park townsite (the paper gives none; sites
+    lie within a 3-km radius of each other in Waterton Lakes National Park).
+  study_design: randomized_experiment
+  sample_size_value: 33
+  sample_size_unit: plots
+  sampling_effort_protocol: 'Randomized incomplete block design: 3 sites (blocks) of 0.3 ha, each in 12
+    plots, with cutting, glyphosate, steam and control randomly assigned to 3 plots each (no steam at
+    Site 2, so 33 treated or control plots); ten 0.1-m2 quadrats on two transects per plot; ocular canopy
+    cover by species; analysed by site (one-way ANOVA in proc mixed, Tukey), paired t-tests 2010 vs 2013,
+    NMDS with Spearman correlations, MRPP and indicator species analysis; plus an undisturbed reference
+    plot per site'
+  is_sampling_effort_reported: true
+nodes:
+- id: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  name: Broadcast glyphosate application (not species-targeted)
+  entity_type: management_intervention
+  entity_term: broadcast glyphosate application without species targeting (Roundup; July 2010 and May
+    2011)
+  state_or_change_qualifier: occurred
+  applied_to: &id001
+  - entity_type: composite_variable
+    entity_term: non-native grasses
+  - entity_type: composite_variable
+    entity_term: non-native forbs
+  source_spans:
+  - text: Glyphosate reduced non-native grass cover for three growing seasons following application and
+      non-native forbs for one growing season.
+    section: abstract
+  - text: Non-native grass cover with glyphosate was 75% less than the control at Site 2 in 2012, and
+      50% at Site 1 and 84% at Site 2 in 2013.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:cutting_of_vegetation_two_annual_cuts_e37e
+  name: Cutting of vegetation (two annual cuts)
+  entity_type: management_intervention
+  entity_term: cutting with handheld grass trimmers, cuttings left in place (July 2010, June 2011)
+  state_or_change_qualifier: occurred
+  applied_to: *id001
+  source_spans:
+  - text: Flowering and seed set of non-native grasses was significantly reduced with glyphosate at Site
+      1, and that of nonnative forbs was significantly reduced with cutting and glyphosate at Site 2 (Fig.
+      3).
+    section: results
+  - text: Cutting and steam did not change plant community structure relative to the control.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:steam_application_to_vegetation_fb17
+  name: Steam application to vegetation
+  entity_type: management_intervention
+  entity_term: commercial hot-water steam application (325 °C/800 psi 2010; 225 °C/350 psi 2011)
+  state_or_change_qualifier: occurred
+  applied_to: *id001
+  source_spans:
+  - text: Cutting and steam did not change plant community structure relative to the control.
+    section: results
+  - text: They did not reduce non-native grass and forb cover relative to controls within a year (Fig.
+      1), although over 3 yr, non-native grass cover was significantly lower with steam at Site 1 and
+      with cutting at Site 3 (Fig. 2).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:non_native_plant_management_treatment_cutting_glyphosate_or__5959
+  name: Non-native plant management treatment (cutting, glyphosate or steam)
+  entity_type: management_intervention
+  entity_term: non-native plant management treatments tested (cutting, glyphosate, steam)
+  state_or_change_qualifier: occurred
+  applied_to: *id001
+  source_spans:
+  - text: At Site 3, treatment had no effect on non-native plant flowering and seed production, although
+      it significantly reduced that of native grasses and forbs.
+    section: results
+  - text: No treatment effectively re-established native grassland communities.
+    section: abstract
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:early_spring_herbicide_application_to_establishing_non_nativ_88d3
+  name: Early spring herbicide application to establishing non-native grasses
+  entity_type: management_intervention
+  entity_term: two early spring herbicide applications timed to grass establishment
+  state_or_change_qualifier: occurred
+  applied_to:
+  - &id002
+    entity_type: taxon
+    entity_term: NCBITaxon:4479
+  - &id003
+    entity_type: composite_variable
+    entity_term: non-native grasses
+  source_spans:
+  - text: Two early spring herbicide applications when grasses were establishing and putting resources
+      into shoot production may reduce non-native grasses more with less harm to native forbs than in
+      July when grasses, and forbs, are at peak production.
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:follow_up_herbicide_spraying_of_non_native_forbs_replacing_c_6f8d
+  name: Follow-up herbicide spraying of non-native forbs replacing controlled grasses
+  entity_type: management_intervention
+  entity_term: follow-up herbicide treatment targeting establishing non-native forbs
+  state_or_change_qualifier: occurred
+  applied_to:
+  - entity_type: composite_variable
+    entity_term: non-native forbs
+  source_spans:
+  - text: Spraying the dominant grasses in spring with follow-up spraying to manage non-native forbs that
+      establish and replace these grasses later in the growing season could be an effective management
+      technique, although caution must be taken to protect native forbs.
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:repeated_herbicide_application_every_2_3_years_5594
+  name: Repeated herbicide application every 2-3 years
+  entity_type: management_intervention
+  entity_term: repeated herbicide application at 2-3 year intervals
+  state_or_change_qualifier: occurred
+  applied_to: *id001
+  source_spans:
+  - text: The effects of herbicide are often shortlived, so repeated herbicide application has been recommended
+      for every 2–3 yr to prevent reinvasion (Holl et al. 2014).
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:spot_spraying_of_herbicide_187b
+  name: Spot spraying of herbicide
+  entity_type: management_intervention
+  entity_term: spot (targeted) herbicide spraying
+  state_or_change_qualifier: occurred
+  applied_to: *id001
+  source_spans:
+  - text: We only recommend this for heavily invaded sites, and suggest spot spraying may be a less detrimental
+      alternative for native species.
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:repeated_within_season_cutting_that_removes_tiller_apices_6fa6
+  name: Repeated within-season cutting that removes tiller apices
+  entity_type: management_intervention
+  entity_term: cutting repeated during the growing season over longer periods, removing tiller apices
+  state_or_change_qualifier: occurred
+  applied_to:
+  - *id002
+  - *id003
+  source_spans:
+  - text: Short-term cutting is likely more effective with one non-native species to be controlled (Rinella
+      et al. 2001), when repeated during the growing season, for longer periods of time and when tiller
+      apices are removed (Willson & Stubbendieck 1996; Wilson & Clark 2001).
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:removal_of_invasive_plant_species_e06b
+  name: Removal of invasive plant species
+  entity_type: management_intervention
+  entity_term: invasive plant species removal (various methods; cited studies)
+  state_or_change_qualifier: occurred
+  applied_to: *id001
+  source_spans:
+  - text: In contrast to our findings and others (e.g. Rinella et al. 2001; Orloff et al. 2015), native
+      diversity and abundance increased following invasive species removal.
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:decreased_non_native_grass_cover_2c8a
+  name: Decreased non-native grass cover
+  entity_type: composite_variable
+  entity_term: non-native grasses
+  measured_attribute: percent canopy cover
+  state_or_change_qualifier: decreased
+  applied_to: &id009
+  - *id002
+  - *id003
+  - entity_type: taxon
+    entity_term: Bromus inermis
+  - entity_type: taxon
+    entity_term: Elymus repens
+  - entity_type: taxon
+    entity_term: Agropyron cristatum
+  - entity_type: taxon
+    entity_term: Poa compressa
+  - entity_type: taxon
+    entity_term: Poa pratensis
+  spatial_grain:
+    numeric_value: 0.1
+    unit: unit:M2
+    verbatim: ten 0.1-m2 quadrats per plot (cover); richness and Shannon diversity per plot
+  nativeness_basis: not_reported
+  source_spans:
+  - text: Glyphosate reduced non-native grass cover for three growing seasons following application and
+      non-native forbs for one growing season.
+    section: abstract
+  - text: Non-native grass cover with glyphosate was 75% less than the control at Site 2 in 2012, and
+      50% at Site 1 and 84% at Site 2 in 2013.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:decreased_non_native_grass_species_richness_ef1e
+  name: Decreased non-native grass species richness
+  entity_type: composite_variable
+  entity_term: non-native grasses
+  measured_attribute: species richness per plot
+  state_or_change_qualifier: decreased
+  applied_to:
+  - *id002
+  - *id003
+  spatial_grain:
+    numeric_value: 0.1
+    unit: unit:M2
+    verbatim: ten 0.1-m2 quadrats per plot (cover); richness and Shannon diversity per plot
+  nativeness_basis: not_reported
+  source_spans:
+  - text: Non-native grass species richness and diversity were significantly lower with glyphosate at
+      Sites 1 and 2 in 2011 (Table 1) and at the end of the study relative to pre-treatment (Fig. 2).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:increased_non_native_grass_species_richness_e635
+  name: Increased non-native grass species richness
+  entity_type: composite_variable
+  entity_term: non-native grasses
+  measured_attribute: species richness per plot
+  state_or_change_qualifier: increased
+  applied_to:
+  - *id002
+  - *id003
+  spatial_grain:
+    numeric_value: 0.1
+    unit: unit:M2
+    verbatim: ten 0.1-m2 quadrats per plot (cover); richness and Shannon diversity per plot
+  nativeness_basis: not_reported
+  source_spans:
+  - text: Cutting and steam had little significant impact on vegetation diversity and species richness
+      (Table 1).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:decreased_non_native_forb_cover_82c2
+  name: Decreased non-native forb cover
+  entity_type: composite_variable
+  entity_term: non-native forbs
+  measured_attribute: percent canopy cover
+  state_or_change_qualifier: decreased
+  applied_to: &id004
+  - &id005
+    entity_type: composite_variable
+    entity_term: non-native forbs
+  - entity_type: taxon
+    entity_term: NCBITaxon:200329
+  - entity_type: taxon
+    entity_term: Medicago lupulina
+  - entity_type: taxon
+    entity_term: Centaurea maculosa
+  - entity_type: taxon
+    entity_term: Chrysanthemum leucanthemum
+  - entity_type: taxon
+    entity_term: Cirsium arvense
+  spatial_grain:
+    numeric_value: 0.1
+    unit: unit:M2
+    verbatim: ten 0.1-m2 quadrats per plot (cover); richness and Shannon diversity per plot
+  nativeness_basis: not_reported
+  source_spans:
+  - text: Prior to and immediately after treatment, non-native forb cover was <5% at all sites and treatments,
+      except significantly lower with glyphosate at Site 1 (Fig. 1).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:increased_non_native_forb_cover_ed76
+  name: Increased non-native forb cover
+  entity_type: composite_variable
+  entity_term: non-native forbs
+  measured_attribute: percent canopy cover
+  state_or_change_qualifier: increased
+  applied_to: *id004
+  composition:
+    basis: cover
+    members:
+    - entity_type: taxon
+      entity_term: NCBITaxon:200329
+      dominance: codominant
+    - entity_type: taxon
+      entity_term: Medicago lupulina
+      dominance: codominant
+    verbatim: Increased cover was mainly due to Lepidium densiflorum Scrad. (common pepper weed) and Medicago
+      lupulina L. (black medic) at all sites
+  spatial_grain:
+    numeric_value: 0.1
+    unit: unit:M2
+    verbatim: ten 0.1-m2 quadrats per plot (cover); richness and Shannon diversity per plot
+  nativeness_basis: not_reported
+  source_spans:
+  - text: In 2012, non-native forb cover significantly increased with glyphosate at all sites, persisting
+      in 2013 at two sites.
+    section: results
+  - text: By the end of the study non-native forb cover was significantly higher with glyphosate than
+      pre-treatment at Sites 1 and 2, and native forb cover had significantly decreased with glyphosate
+      at Site 3 (Figs 1 and 2).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:increased_non_native_forb_species_richness_6c8d
+  name: Increased non-native forb species richness
+  entity_type: composite_variable
+  entity_term: non-native forbs
+  measured_attribute: species richness per plot
+  state_or_change_qualifier: increased
+  applied_to:
+  - *id005
+  spatial_grain:
+    numeric_value: 0.1
+    unit: unit:M2
+    verbatim: ten 0.1-m2 quadrats per plot (cover); richness and Shannon diversity per plot
+  nativeness_basis: not_reported
+  source_spans:
+  - text: Non-native forb richness was significantly higher with glyphosate at Sites 1 and 2 in 2012 and
+      2013 (Table 1).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:decreased_native_forb_cover_a462
+  name: Decreased native forb cover
+  entity_type: composite_variable
+  entity_term: native forbs
+  measured_attribute: percent canopy cover
+  state_or_change_qualifier: decreased
+  applied_to: &id007
+  - &id006
+    entity_type: composite_variable
+    entity_term: native forbs
+  spatial_grain:
+    numeric_value: 0.1
+    unit: unit:M2
+    verbatim: ten 0.1-m2 quadrats per plot (cover); richness and Shannon diversity per plot
+  nativeness_basis: not_reported
+  source_spans:
+  - text: When native forbs were abundant prior to management, glyphosate reduced them.
+    section: abstract
+  - text: By the end of the study non-native forb cover was significantly higher with glyphosate than
+      pre-treatment at Sites 1 and 2, and native forb cover had significantly decreased with glyphosate
+      at Site 3 (Figs 1 and 2).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:increased_native_forb_cover_5160
+  name: Increased native forb cover
+  entity_type: composite_variable
+  entity_term: native forbs
+  measured_attribute: percent canopy cover
+  state_or_change_qualifier: increased
+  applied_to:
+  - *id006
+  - entity_type: taxon
+    entity_term: Verbena bracteata
+  spatial_grain:
+    numeric_value: 0.1
+    unit: unit:M2
+    verbatim: ten 0.1-m2 quadrats per plot (cover); richness and Shannon diversity per plot
+  nativeness_basis: not_reported
+  source_spans:
+  - text: In 2013 the significantly higher native forb cover with glyphosate at Site 1 was due to increased
+      Verbena bracteata Cav. ex Lag. & Rodr. (prostrate vervain), only found at this site.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:decreased_native_forb_species_richness_a998
+  name: Decreased native forb species richness
+  entity_type: composite_variable
+  entity_term: native forbs
+  measured_attribute: species richness per plot
+  state_or_change_qualifier: decreased
+  applied_to: *id007
+  spatial_grain:
+    numeric_value: 0.1
+    unit: unit:M2
+    verbatim: ten 0.1-m2 quadrats per plot (cover); richness and Shannon diversity per plot
+  nativeness_basis: not_reported
+  source_spans:
+  - text: In 2011 and 2012 native forb cover and richness were significantly lower with glyphosate than
+      controls at Site 3; but only cover at Site 2 in 2011 and Site 3 in 2013 (Fig. 1).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:native_grass_cover_aea6
+  name: Native grass cover
+  entity_type: composite_variable
+  entity_term: native grasses
+  measured_attribute: percent canopy cover
+  applied_to:
+  - &id008
+    entity_type: composite_variable
+    entity_term: native grasses
+  spatial_grain:
+    numeric_value: 0.1
+    unit: unit:M2
+    verbatim: ten 0.1-m2 quadrats per plot (cover); richness and Shannon diversity per plot
+  nativeness_basis: not_reported
+  source_spans:
+  - text: Native grass cover was <5% at all sites and did not significantly differ among treatments in
+      any year.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:decreased_shannon_diversity_of_the_plant_community_ffc0
+  name: Decreased Shannon diversity of the plant community
+  entity_type: composite_variable
+  entity_term: plant community (native and non-native species)
+  measured_attribute: Shannon diversity index per plot
+  state_or_change_qualifier: decreased
+  applied_to:
+  - entity_type: composite_variable
+    entity_term: native and non-native vascular plants
+  spatial_grain:
+    numeric_value: 0.1
+    unit: unit:M2
+    verbatim: ten 0.1-m2 quadrats per plot (cover); richness and Shannon diversity per plot
+  source_spans:
+  - text: Total diversity was significantly lower with glyphosate across sites in 2011 but only at Site
+      3 in 2012.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:decreased_flowering_and_seed_set_of_non_native_grasses_afeb
+  name: Decreased flowering and seed set of non-native grasses
+  entity_type: composite_variable
+  entity_term: non-native grasses
+  measured_attribute: physiological stage score (1 immature, 2 flowering, 3 seed set)
+  state_or_change_qualifier: decreased
+  applied_to:
+  - *id002
+  - *id003
+  nativeness_basis: not_reported
+  life_stage: reproductive_adult
+  source_spans:
+  - text: Flowering and seed set of non-native grasses was significantly reduced with glyphosate at Site
+      1, and that of nonnative forbs was significantly reduced with cutting and glyphosate at Site 2 (Fig.
+      3).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:decreased_flowering_and_seed_set_of_non_native_forbs_6d39
+  name: Decreased flowering and seed set of non-native forbs
+  entity_type: composite_variable
+  entity_term: non-native forbs
+  measured_attribute: physiological stage score (1 immature, 2 flowering, 3 seed set)
+  state_or_change_qualifier: decreased
+  applied_to:
+  - *id005
+  nativeness_basis: not_reported
+  life_stage: reproductive_adult
+  source_spans:
+  - text: Flowering and seed set of non-native grasses was significantly reduced with glyphosate at Site
+      1, and that of nonnative forbs was significantly reduced with cutting and glyphosate at Site 2 (Fig.
+      3).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:decreased_flowering_and_seed_set_of_native_grasses_and_forbs_ebbb
+  name: Decreased flowering and seed set of native grasses and forbs
+  entity_type: composite_variable
+  entity_term: native grasses and forbs
+  measured_attribute: physiological stage score (1 immature, 2 flowering, 3 seed set)
+  state_or_change_qualifier: decreased
+  applied_to:
+  - *id008
+  - *id006
+  nativeness_basis: not_reported
+  life_stage: reproductive_adult
+  source_spans:
+  - text: At Site 3, treatment had no effect on non-native plant flowering and seed production, although
+      it significantly reduced that of native grasses and forbs.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:increased_dominance_of_non_native_forbs_in_the_plant_communi_6c69
+  name: Increased dominance of non-native forbs in the plant community
+  entity_type: composite_variable
+  entity_term: plant community composition
+  measured_attribute: relative dominance of non-native forbs (NMDS ordination)
+  state_or_change_qualifier: increased
+  applied_to:
+  - entity_type: composite_variable
+    entity_term: non-native forbs
+  - entity_type: composite_variable
+    entity_term: non-native perennial grasses
+  nativeness_basis: not_reported
+  source_spans:
+  - text: Glyphosate shifted communities dominated by non-native perennial grasses to dominance by non-native
+      forbs (Fig. 4a).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:plant_community_structure_6770
+  name: Plant community structure
+  entity_type: composite_variable
+  entity_term: plant community composition
+  measured_attribute: community structure (NMDS ordination, MRPP)
+  applied_to:
+  - entity_type: composite_variable
+    entity_term: vascular plant community
+  source_spans:
+  - text: Cutting and steam did not change plant community structure relative to the control.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:re_establishment_of_native_fescue_grassland_community_41de
+  name: Re-establishment of native fescue grassland community
+  entity_type: composite_variable
+  entity_term: native foothills fescue grassland community
+  measured_attribute: similarity to undisturbed reference community
+  state_or_change_qualifier: increased
+  applied_to:
+  - entity_type: taxon
+    entity_term: Festuca campestris
+  - entity_type: taxon
+    entity_term: Festuca idahoensis
+  - entity_type: taxon
+    entity_term: Danthonia parryi
+  - entity_type: taxon
+    entity_term: Selaginella densa
+  nativeness_basis: not_reported
+  source_spans:
+  - text: No treatment effectively re-established native grassland communities.
+    section: abstract
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:increased_establishment_of_native_grasses_and_forbs_e573
+  name: Increased establishment of native grasses and forbs
+  entity_type: composite_variable
+  entity_term: native grasses and forbs
+  measured_attribute: establishment
+  state_or_change_qualifier: increased
+  applied_to:
+  - *id008
+  - *id006
+  nativeness_basis: not_reported
+  source_spans:
+  - text: Both are factors in our study as the native seed bank in heavily invaded sites may have become
+      depleted over past decades, and litter production in glyphosate and cutting treatments may inhibit
+      native grass and forb establishment.
+    section: discussion
+  - text: Handheld grass trimmers were used to cut vegetation low to the ground; cuttings were not removed
+      since non-native species were not in seed.
+    section: methods
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:increased_native_plant_species_abundance_e61c
+  name: Increased native plant species abundance
+  entity_type: composite_variable
+  entity_term: native plant species
+  measured_attribute: abundance (NMDS gradient)
+  state_or_change_qualifier: increased
+  applied_to:
+  - entity_type: composite_variable
+    entity_term: native plant species
+  nativeness_basis: not_reported
+  source_spans:
+  - text: 'A gradient of increasing native plant species and decreasing non-native plant species was detected
+      from Site 1 to Site 2 to Site 3, correlating with decreasing soil C: N ratio, clay and silt and
+      increasing sand.'
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:increased_native_species_diversity_and_abundance_b948
+  name: Increased native species diversity and abundance
+  entity_type: composite_variable
+  entity_term: native plant species
+  measured_attribute: diversity and abundance
+  state_or_change_qualifier: increased
+  applied_to:
+  - entity_type: composite_variable
+    entity_term: native plant species
+  nativeness_basis: not_reported
+  source_spans:
+  - text: In contrast to our findings and others (e.g. Rinella et al. 2001; Orloff et al. 2015), native
+      diversity and abundance increased following invasive species removal.
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:increased_growth_and_seed_production_of_native_species_e8e8
+  name: Increased growth and seed production of native species
+  entity_type: composite_variable
+  entity_term: native plant species
+  measured_attribute: growth and seed production
+  state_or_change_qualifier: increased
+  applied_to:
+  - entity_type: composite_variable
+    entity_term: native plant species
+  nativeness_basis: not_reported
+  source_spans:
+  - text: Cutting increased growth and seed production of native species in grassland restoration (Maron
+      & Jefferies 2001; Kimball et al. 2014); although it is not known if native species respond in the
+      same way in all prairie types.
+    section: introduction
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:reinvasion_by_non_native_plants_6a51
+  name: Reinvasion by non-native plants
+  entity_type: composite_variable
+  entity_term: non-native plants
+  measured_attribute: cover after control
+  state_or_change_qualifier: increased
+  applied_to: *id001
+  nativeness_basis: not_reported
+  source_spans:
+  - text: The effects of herbicide are often shortlived, so repeated herbicide application has been recommended
+      for every 2–3 yr to prevent reinvasion (Holl et al. 2014).
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:high_pre_treatment_native_species_abundance_and_diversity_39a9
+  name: High pre-treatment native species abundance and diversity
+  entity_type: composite_variable
+  entity_term: native plant species before treatment
+  measured_attribute: abundance and diversity before management
+  state_or_change_qualifier: increased
+  applied_to:
+  - entity_type: composite_variable
+    entity_term: native forbs
+  nativeness_basis: not_reported
+  source_spans:
+  - text: When native forbs were abundant prior to management, glyphosate reduced them.
+    section: abstract
+  - text: In 2011 and 2012 native forb cover and richness were significantly lower with glyphosate than
+      controls at Site 3; but only cover at Site 2 in 2011 and Site 3 in 2013 (Fig. 1).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:dominance_of_perennial_non_native_grasses_778f
+  name: Dominance of perennial non-native grasses
+  entity_type: composite_variable
+  entity_term: perennial non-native grasses
+  measured_attribute: dominance
+  state_or_change_qualifier: present
+  applied_to: *id009
+  nativeness_basis: not_reported
+  source_spans:
+  - text: Additionally, perennial nonnative grasses dominating our sites are difficult to kill with steam
+      (Wei et al. 2010).
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:depleted_native_seed_bank_on_heavily_invaded_sites_7ac1
+  name: Depleted native seed bank on heavily invaded sites
+  entity_type: composite_variable
+  entity_term: native soil seed bank
+  measured_attribute: seed bank density
+  state_or_change_qualifier: decreased
+  applied_to:
+  - entity_type: composite_variable
+    entity_term: native plant species
+  nativeness_basis: not_reported
+  source_spans:
+  - text: Both are factors in our study as the native seed bank in heavily invaded sites may have become
+      depleted over past decades, and litter production in glyphosate and cutting treatments may inhibit
+      native grass and forb establishment.
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:increased_plant_litter_after_glyphosate_and_cutting_7ee2
+  name: Increased plant litter after glyphosate and cutting
+  entity_type: environmental_variable
+  entity_term: plant litter
+  measured_attribute: litter amount
+  state_or_change_qualifier: increased
+  source_spans:
+  - text: Both are factors in our study as the native seed bank in heavily invaded sites may have become
+      depleted over past decades, and litter production in glyphosate and cutting treatments may inhibit
+      native grass and forb establishment.
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:site_conditions_soil_disturbance_history_initial_plant_commu_a09a
+  name: Site conditions (soil, disturbance history, initial plant community)
+  entity_type: environmental_variable
+  entity_term: site conditions of disturbed grassland restoration sites
+  measured_attribute: soil properties, disturbance history and initial community composition
+  state_or_change_qualifier: present
+  source_spans:
+  - text: Site 9 treatment effects were significant (data not shown), therefore data were analysed separately
+      by site for treatment effects.
+    section: methods
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:increased_soil_sand_content_c193
+  name: Increased soil sand content
+  entity_type: environmental_variable
+  entity_term: ENVO:00001998
+  measured_attribute: sand content
+  state_or_change_qualifier: increased
+  source_spans:
+  - text: 'A gradient of increasing native plant species and decreasing non-native plant species was detected
+      from Site 1 to Site 2 to Site 3, correlating with decreasing soil C: N ratio, clay and silt and
+      increasing sand.'
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:decreased_soil_c_n_ratio_e894
+  name: Decreased soil C:N ratio
+  entity_type: environmental_variable
+  entity_term: ENVO:00001998
+  measured_attribute: carbon to nitrogen ratio
+  state_or_change_qualifier: decreased
+  source_spans:
+  - text: 'A gradient of increasing native plant species and decreasing non-native plant species was detected
+      from Site 1 to Site 2 to Site 3, correlating with decreasing soil C: N ratio, clay and silt and
+      increasing sand.'
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:increased_soil_clay_content_19a1
+  name: Increased soil clay content
+  entity_type: environmental_variable
+  entity_term: ENVO:00001998
+  measured_attribute: clay content
+  state_or_change_qualifier: increased
+  source_spans:
+  - text: For example, B. inermis was significantly
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:decreased_cover_of_poa_compressa_fcc4
+  name: Decreased cover of Poa compressa
+  entity_type: taxon
+  entity_term: Poa compressa
+  measured_attribute: percent canopy cover
+  state_or_change_qualifier: decreased
+  spatial_grain:
+    numeric_value: 0.1
+    unit: unit:M2
+    verbatim: ten 0.1-m2 quadrats per plot (cover); richness and Shannon diversity per plot
+  life_stage: mixed_or_whole_population
+  source_spans:
+  - text: P. compressa at all sites, and B. inermis and P. pratensis at Site 2, were significantly reduced
+      with glyphosate relative to the control and most other
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:decreased_cover_of_bromus_inermis_dfb0
+  name: Decreased cover of Bromus inermis
+  entity_type: taxon
+  entity_term: Bromus inermis
+  measured_attribute: percent canopy cover
+  state_or_change_qualifier: decreased
+  spatial_grain:
+    numeric_value: 0.1
+    unit: unit:M2
+    verbatim: ten 0.1-m2 quadrats per plot (cover); richness and Shannon diversity per plot
+  life_stage: mixed_or_whole_population
+  source_spans:
+  - text: P. compressa at all sites, and B. inermis and P. pratensis at Site 2, were significantly reduced
+      with glyphosate relative to the control and most other
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:increased_cover_of_bromus_inermis_32de
+  name: Increased cover of Bromus inermis
+  entity_type: taxon
+  entity_term: Bromus inermis
+  measured_attribute: percent canopy cover
+  state_or_change_qualifier: increased
+  spatial_grain:
+    numeric_value: 0.1
+    unit: unit:M2
+    verbatim: ten 0.1-m2 quadrats per plot (cover); richness and Shannon diversity per plot
+  life_stage: mixed_or_whole_population
+  source_spans:
+  - text: For example, B. inermis was significantly
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:decreased_cover_of_poa_pratensis_f7b5
+  name: Decreased cover of Poa pratensis
+  entity_type: taxon
+  entity_term: Poa pratensis
+  measured_attribute: percent canopy cover
+  state_or_change_qualifier: decreased
+  spatial_grain:
+    numeric_value: 0.1
+    unit: unit:M2
+    verbatim: ten 0.1-m2 quadrats per plot (cover); richness and Shannon diversity per plot
+  life_stage: mixed_or_whole_population
+  source_spans:
+  - text: P. compressa at all sites, and B. inermis and P. pratensis at Site 2, were significantly reduced
+      with glyphosate relative to the control and most other
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:decreased_cover_of_agropyron_cristatum_de21
+  name: Decreased cover of Agropyron cristatum
+  entity_type: taxon
+  entity_term: Agropyron cristatum
+  measured_attribute: percent canopy cover
+  state_or_change_qualifier: decreased
+  spatial_grain:
+    numeric_value: 0.1
+    unit: unit:M2
+    verbatim: ten 0.1-m2 quadrats per plot (cover); richness and Shannon diversity per plot
+  life_stage: mixed_or_whole_population
+  source_spans:
+  - text: Within sites, A. cristatum (Site 1), Poa pratensis L. (Kentucky blue grass) and P. compressa
+      (Site 2) were significantly reduced with glyphosate.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:elimination_of_poa_pratensis_8238
+  name: Elimination of Poa pratensis
+  entity_type: taxon
+  entity_term: Poa pratensis
+  measured_attribute: occurrence in plots
+  state_or_change_qualifier: removed
+  life_stage: mixed_or_whole_population
+  source_spans:
+  - text: P. pratensis and E. repens were eliminated from Site 3.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:elimination_of_elymus_repens_8be1
+  name: Elimination of Elymus repens
+  entity_type: taxon
+  entity_term: Elymus repens
+  measured_attribute: occurrence in plots
+  state_or_change_qualifier: removed
+  life_stage: mixed_or_whole_population
+  source_spans:
+  - text: P. pratensis and E. repens were eliminated from Site 3.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:elimination_of_heterotheca_villosa_7c27
+  name: Elimination of Heterotheca villosa
+  entity_type: taxon
+  entity_term: Heterotheca villosa
+  measured_attribute: occurrence in plots
+  state_or_change_qualifier: removed
+  life_stage: mixed_or_whole_population
+  source_spans:
+  - text: The native forb species Heterotheca villosa (Pursch) Shinners (hairy false golden aster) and
+      Achillea millefolium L. (common yarrow) were eliminated by glyphosate.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:elimination_of_achillea_millefolium_2230
+  name: Elimination of Achillea millefolium
+  entity_type: taxon
+  entity_term: NCBITaxon:13329
+  measured_attribute: occurrence in plots
+  state_or_change_qualifier: removed
+  life_stage: mixed_or_whole_population
+  source_spans:
+  - text: The native forb species Heterotheca villosa (Pursch) Shinners (hairy false golden aster) and
+      Achillea millefolium L. (common yarrow) were eliminated by glyphosate.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:increased_cover_of_lepidium_densiflorum_ffcb
+  name: Increased cover of Lepidium densiflorum
+  entity_type: taxon
+  entity_term: NCBITaxon:200329
+  measured_attribute: percent canopy cover
+  state_or_change_qualifier: increased
+  spatial_grain:
+    numeric_value: 0.1
+    unit: unit:M2
+    verbatim: ten 0.1-m2 quadrats per plot (cover); richness and Shannon diversity per plot
+  life_stage: mixed_or_whole_population
+  source_spans:
+  - text: Increased cover was mainly due to Lepidium densiflorum Scrad. (common pepper weed) and Medicago
+      lupulina L. (black medic) at all sites and some species unique to sites, such as Chrysanthemum leucanthemum
+      L. (ox-eye daisy) and Verbascum thapsus L. (common mullein) at Site 1 and Cirsium arvense (L.) Scop.
+      (Canada thistle) at Site 2.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:increased_cover_of_bromus_tectorum_1748
+  name: Increased cover of Bromus tectorum
+  entity_type: taxon
+  entity_term: NCBITaxon:29667
+  measured_attribute: percent canopy cover
+  state_or_change_qualifier: increased
+  spatial_grain:
+    numeric_value: 0.1
+    unit: unit:M2
+    verbatim: ten 0.1-m2 quadrats per plot (cover); richness and Shannon diversity per plot
+  life_stage: mixed_or_whole_population
+  source_spans:
+  - text: Centaurea maculosa Lam. (spotted knapweed) (all three sites) and C. leucanthemum, species of
+      high priority for control, were not reduced over time, and B. tectorum increased with glyphosate
+      at Site 1 (data not shown).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+- id: causal_mosaic:decreased_cover_of_centaurea_maculosa_1ef6
+  name: Decreased cover of Centaurea maculosa
+  entity_type: taxon
+  entity_term: Centaurea maculosa
+  measured_attribute: percent canopy cover
+  state_or_change_qualifier: decreased
+  spatial_grain:
+    numeric_value: 0.1
+    unit: unit:M2
+    verbatim: ten 0.1-m2 quadrats per plot (cover); richness and Shannon diversity per plot
+  life_stage: mixed_or_whole_population
+  source_spans:
+  - text: Centaurea maculosa Lam. (spotted knapweed) (all three sites) and C. leucanthemum, species of
+      high priority for control, were not reduced over time, and B. tectorum increased with glyphosate
+      at Site 1 (data not shown).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+edges:
+- id: e01_gly_nngCover_site1_2012
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  predicate: causes
+  object: causal_mosaic:decreased_non_native_grass_cover_2c8a
+  negated: false
+  causal_language: direct_causal
+  original_sentence: Glyphosate reduced non-native grass cover for three growing seasons following application
+    and non-native forbs for one growing season.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: &id010
+  - status: explicitly_asserted
+    comparator_type: untreated_control
+    comparator_description: no treatment (control) plots, randomly assigned within each site
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: &id011
+    status: asserted
+    evidence_for_direction: experimental
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: significantly lower than control at Site 1 in 2012 (Fig. 1; values not in text)
+    significance: significant
+    alpha: 0.05
+    analysis_method: mixed_model
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    - Site 1, 2012
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: &id012
+    evidence_types:
+    - randomized_experiment
+    evidence_objects:
+    - correlation
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    observation_seasons:
+    - summer
+    time_since_intervention_months: 24
+    time_since_intervention_text: late July/early August 2012, 24 months after the first application (late
+      July 2010); second application May-June 2011
+  source_spans:
+  - text: Glyphosate reduced non-native grass cover for three growing seasons following application and
+      non-native forbs for one growing season.
+    section: abstract
+  - text: Non-native grass cover was reduced with glyphosate (Fig. 1).
+    section: results
+  - text: Although only statistically significant at Site 1 in 2012, this was biologically significant
+      in all years at all sites.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: All plots, including controls, were seeded (2011) and planted (2012) by Parks Canada,
+    so revegetation is not annotated as a cause; it applies equally to every arm.
+- id: e02_gly_nngCover_other
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  predicate: causes
+  object: causal_mosaic:decreased_non_native_grass_cover_2c8a
+  negated: false
+  causal_language: direct_causal
+  original_sentence: Non-native grass cover with glyphosate was 75% less than the control at Site 2 in
+    2012, and 50% at Site 1 and 84% at Site 2 in 2013.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: 75% less than control (Site 2, 2012); 50% (Site 1) and 84% (Site 2) less in 2013;
+      not statistically significant
+    significance: not_significant
+    alpha: 0.05
+    analysis_method: mixed_model
+    quantitative_numeric: -75
+    effect_metric: percent_change
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    - all site-years other than Site 1 in 2012
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    observation_seasons:
+    - summer
+    time_since_intervention_months: 36
+    time_since_intervention_text: late July/early August 2013, 36 months after the first application (late
+      July 2010); second application May-June 2011
+  source_spans:
+  - text: Non-native grass cover with glyphosate was 75% less than the control at Site 2 in 2012, and
+      50% at Site 1 and 84% at Site 2 in 2013.
+    section: results
+  - text: Although only statistically significant at Site 1 in 2012, this was biologically significant
+      in all years at all sites.
+    section: results
+  - text: Glyphosate reduced non-native grass cover for three growing seasons following application and
+      non-native forbs for one growing season.
+    section: abstract
+  - text: Glyphosate applied without targeting specific species was an effective and easily implemented
+      management technique to reduce non-native perennial grasses in the short term, and may be used to
+      control species posing a significant threat to conservation of native biodiversity.
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.7
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: 'Overstatement: the Abstract says glyphosate ''reduced non-native grass cover for
+    three growing seasons'', but the Results say the reduction was statistically significant only at Site
+    1 in 2012 and ''biologically significant'' elsewhere. Species-level effects were gone by 2013 (''non-native
+    grasses had recovered'', e22-e24).'
+- id: e03_gly_nngRichness
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  predicate: causes
+  object: causal_mosaic:decreased_non_native_grass_species_richness_ef1e
+  negated: false
+  causal_language: direct_causal
+  original_sentence: Non-native grass species richness and diversity were significantly lower with glyphosate
+    at Sites 1 and 2 in 2011 (Table 1) and at the end of the study relative to pre-treatment (Fig. 2).
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: 'Table 1, 2011 non-native grass richness: Site 1 glyphosate 3 b vs control 6 a;
+      Site 2 1 b vs 5 a'
+    significance: significant
+    alpha: 0.05
+    analysis_method: mixed_model
+    quantitative_numeric: -4
+    effect_metric: raw_mean_difference
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    - Sites 1 and 2, 2011
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    observation_seasons:
+    - summer
+    time_since_intervention_months: 12
+    time_since_intervention_text: late July/early August 2011, 12 months after the first application (late
+      July 2010); second application May-June 2011
+  source_spans:
+  - text: Non-native grass species richness and diversity were significantly lower with glyphosate at
+      Sites 1 and 2 in 2011 (Table 1) and at the end of the study relative to pre-treatment (Fig. 2).
+    section: results
+  - text: Table 1. Mean plot species richness and diversity before and after non-native management at
+      three restoration sites.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+- id: e04_gly_nngRichness_prepost
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  predicate: causes
+  object: causal_mosaic:decreased_non_native_grass_species_richness_ef1e
+  negated: false
+  causal_language: direct_causal
+  original_sentence: Non-native grass species richness and diversity were significantly lower with glyphosate
+    at Sites 1 and 2 in 2011 (Table 1) and at the end of the study relative to pre-treatment (Fig. 2).
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: &id013
+  - status: explicitly_asserted
+    comparator_type: pre_treatment_baseline
+    comparator_description: same plots before treatment (July 2010) vs final year (2013), paired t-test
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: lower in 2013 than 2010 (paired t-test)
+    significance: significant
+    alpha: 0.05
+    analysis_method: anova
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    observation_seasons:
+    - summer
+    time_since_intervention_months: 36
+    time_since_intervention_text: late July/early August 2013, 36 months after the first application (late
+      July 2010); second application May-June 2011
+  source_spans:
+  - text: Non-native grass species richness and diversity were significantly lower with glyphosate at
+      Sites 1 and 2 in 2011 (Table 1) and at the end of the study relative to pre-treatment (Fig. 2).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.6
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: The pre/post claim cites Fig. 2, which plots cover, not richness. Before-after contrasts
+    have no concurrent control, so year effects are not excluded (several species also declined in control
+    plots, Table 2). Paired t-test recorded as 'anova', the closest AnalysisMethodEnum value.
+- id: e05_gly_diversity
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  predicate: causes
+  object: causal_mosaic:decreased_shannon_diversity_of_the_plant_community_ffc0
+  negated: false
+  causal_language: direct_causal
+  original_sentence: Total diversity was significantly lower with glyphosate across sites in 2011 but
+    only at Site 3 in 2012.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: 'Table 1 Shannon diversity 2011: glyphosate 0.3 b vs control 0.9 a (Site 1), 0.1
+      b vs 0.9 a (Site 2), 0.4 b vs 1.4 a (Site 3); 2012 Site 3 1.0 b vs 1.5 a'
+    significance: significant
+    alpha: 0.05
+    analysis_method: mixed_model
+    quantitative_numeric: -0.8
+    effect_metric: raw_mean_difference
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: reversible
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    observation_seasons:
+    - summer
+    time_since_intervention_months: 12
+    time_since_intervention_text: late July/early August 2011, 12 months after the first application (late
+      July 2010); second application May-June 2011
+  source_spans:
+  - text: Total diversity was significantly lower with glyphosate across sites in 2011 but only at Site
+      3 in 2012.
+    section: results
+  - text: Table 1. Mean plot species richness and diversity before and after non-native management at
+      three restoration sites.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: No differences in 2013 (Table 1), so the diversity loss was temporary.
+- id: e06_gly_nativeGrass_null
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  predicate: associated_with
+  object: causal_mosaic:native_grass_cover_aea6
+  negated: true
+  causal_language: no_relationship
+  original_sentence: Native grass cover was <5% at all sites and did not significantly differ among treatments
+    in any year.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: native grass cover <5% at all sites; no significant treatment differences
+    significance: not_significant
+    alpha: 0.05
+    analysis_method: mixed_model
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent: &id014
+    observation_grain: annual
+    observation_seasons:
+    - summer
+    duration_text: three growing seasons after treatment (2011-2013)
+    time_since_intervention_months: 36
+    time_since_intervention_text: 2011-2013 assessments
+  source_spans:
+  - text: Native grass cover was <5% at all sites and did not significantly differ among treatments in
+      any year.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: Low cover (<5%) limits the power to detect an effect.
+- id: e07_gly_nnfCover_dec_2011
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  predicate: causes
+  object: causal_mosaic:decreased_non_native_forb_cover_82c2
+  negated: false
+  causal_language: direct_causal
+  original_sentence: Prior to and immediately after treatment, non-native forb cover was <5% at all sites
+    and treatments, except significantly lower with glyphosate at Site 1 (Fig. 1).
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: significantly lower at Site 1 immediately after treatment (Fig. 1)
+    significance: significant
+    alpha: 0.05
+    analysis_method: mixed_model
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: reversible
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    - Site 1 only, 2011
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    observation_seasons:
+    - summer
+    time_since_intervention_months: 12
+    time_since_intervention_text: late July/early August 2011, 12 months after the first application (late
+      July 2010); second application May-June 2011
+  source_spans:
+  - text: Prior to and immediately after treatment, non-native forb cover was <5% at all sites and treatments,
+      except significantly lower with glyphosate at Site 1 (Fig. 1).
+    section: results
+  - text: Glyphosate reduced non-native grass cover for three growing seasons following application and
+      non-native forbs for one growing season.
+    section: abstract
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: Reversed in 2012 (e08).
+- id: e08_gly_nnfCover_inc
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  predicate: causes
+  object: causal_mosaic:increased_non_native_forb_cover_ed76
+  negated: false
+  causal_language: direct_causal
+  original_sentence: In 2012, non-native forb cover significantly increased with glyphosate at all sites,
+    persisting in 2013 at two sites.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: significant at all sites in 2012 and at two sites in 2013; more than double pre-treatment
+      values 2 and 3 yr after application
+    significance: significant
+    alpha: 0.05
+    analysis_method: mixed_model
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: partially_reversible
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    observation_seasons:
+    - summer
+    time_since_intervention_months: 24
+    time_since_intervention_text: late July/early August 2012, 24 months after the first application (late
+      July 2010); second application May-June 2011
+  source_spans:
+  - text: In 2012, non-native forb cover significantly increased with glyphosate at all sites, persisting
+      in 2013 at two sites.
+    section: results
+  - text: At all sites, non-native forbs significantly increased with glyphosate in 2012, and remained
+      significantly higher in 2013 at two sites (Fig. 1).
+    section: results
+  - text: Increased cover was mainly due to Lepidium densiflorum Scrad. (common pepper weed) and Medicago
+      lupulina L. (black medic) at all sites and some species unique to sites, such as Chrysanthemum leucanthemum
+      L. (ox-eye daisy) and Verbascum thapsus L. (common mullein) at Site 1 and Cirsium arvense (L.) Scop.
+      (Canada thistle) at Site 2.
+    section: results
+  - text: Glyphosate led to significant increases in non-native forb cover, more than double pre-existing
+      values 2 and 3 yr after application.
+    section: abstract
+  - text: Although no single treatment effectively re-established native grassland communities over 3
+      yr, glyphosate was effective for controlling non-native grasses, but induced a shift to nonnative
+      forb dominance.
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: 'Composition on the object node: increase mainly Lepidium densiflorum and Medicago
+    lupulina. Partially reversible: forb abundance was declining by 2013 at Site 3, the least-invaded
+    site.'
+- id: e09_gly_nnfCover_prepost
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  predicate: causes
+  object: causal_mosaic:increased_non_native_forb_cover_ed76
+  negated: false
+  causal_language: direct_causal
+  original_sentence: By the end of the study non-native forb cover was significantly higher with glyphosate
+    than pre-treatment at Sites 1 and 2, and native forb cover had significantly decreased with glyphosate
+    at Site 3 (Figs 1 and 2).
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id013
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: 2013 > 2010 at Sites 1 and 2 (paired t-test)
+    significance: significant
+    alpha: 0.05
+    analysis_method: anova
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    - Sites 1 and 2
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    observation_seasons:
+    - summer
+    time_since_intervention_months: 36
+    time_since_intervention_text: late July/early August 2013, 36 months after the first application (late
+      July 2010); second application May-June 2011
+  source_spans:
+  - text: By the end of the study non-native forb cover was significantly higher with glyphosate than
+      pre-treatment at Sites 1 and 2, and native forb cover had significantly decreased with glyphosate
+      at Site 3 (Figs 1 and 2).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+- id: e10_gly_nnfRichness
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  predicate: causes
+  object: causal_mosaic:increased_non_native_forb_species_richness_6c8d
+  negated: false
+  causal_language: direct_causal
+  original_sentence: Non-native forb richness was significantly higher with glyphosate at Sites 1 and
+    2 in 2012 and 2013 (Table 1).
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: 'Table 1 non-native forb richness 2012: Site 1 13 b vs 8 a, Site 2 10 b vs 5 a;
+      2013: Site 2 6 b vs 4 a, Site 1 7 b vs 5 ab'
+    significance: significant
+    alpha: 0.05
+    analysis_method: mixed_model
+    quantitative_numeric: 5
+    effect_metric: raw_mean_difference
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    - Sites 1 and 2
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    observation_seasons:
+    - summer
+    time_since_intervention_months: 24
+    time_since_intervention_text: late July/early August 2012, 24 months after the first application (late
+      July 2010); second application May-June 2011
+  source_spans:
+  - text: Non-native forb richness was significantly higher with glyphosate at Sites 1 and 2 in 2012 and
+      2013 (Table 1).
+    section: results
+  - text: Table 1. Mean plot species richness and diversity before and after non-native management at
+      three restoration sites.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.75
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: 'TEXT-TABLE CONFLICT: the text says richness was significantly higher at Sites 1 and
+    2 in 2012 and 2013, but at Site 1 in 2013 glyphosate (7 b) and control (5 ab) share a letter, so they
+    do not differ.'
+- id: e11_gly_nfCover
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  predicate: causes
+  object: causal_mosaic:decreased_native_forb_cover_a462
+  negated: false
+  causal_language: direct_causal
+  original_sentence: When native forbs were abundant prior to management, glyphosate reduced them.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  moderation:
+    status: explicitly_asserted
+    moderator_node_ids:
+    - causal_mosaic:high_pre_treatment_native_species_abundance_and_diversity_39a9
+    interaction_type: quantitative
+  strength:
+    status: explicitly_asserted
+    quantitative_value: significantly lower at Site 3 (2011-2013) and Site 2 (2011); Fig. 1 only
+    significance: significant
+    alpha: 0.05
+    analysis_method: mixed_model
+  specificity: not_addressed
+  stability: not_addressed
+  scope: contingent
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    - where native forbs were abundant before treatment
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    observation_seasons:
+    - summer
+    time_since_intervention_months: 12
+    time_since_intervention_text: late July/early August 2011, 12 months after the first application (late
+      July 2010); second application May-June 2011
+  source_spans:
+  - text: When native forbs were abundant prior to management, glyphosate reduced them.
+    section: abstract
+  - text: In 2011 and 2012 native forb cover and richness were significantly lower with glyphosate than
+      controls at Site 3; but only cover at Site 2 in 2011 and Site 3 in 2013 (Fig. 1).
+    section: results
+  - text: Native forbs were least negatively impacted at Site 1 where pre-treatment cover was very low.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+- id: e12_gly_nfRichness
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  predicate: causes
+  object: causal_mosaic:decreased_native_forb_species_richness_a998
+  negated: false
+  causal_language: direct_causal
+  original_sentence: In 2011 and 2012 native forb cover and richness were significantly lower with glyphosate
+    than controls at Site 3; but only cover at Site 2 in 2011 and Site 3 in 2013 (Fig. 1).
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  moderation:
+    status: explicitly_asserted
+    moderator_node_ids:
+    - causal_mosaic:high_pre_treatment_native_species_abundance_and_diversity_39a9
+    interaction_type: quantitative
+  strength:
+    status: explicitly_asserted
+    quantitative_value: 'Table 1 native forb richness, Site 3: 2011 glyphosate 7 b vs control 15 a; 2012
+      11 b vs 20 a'
+    significance: significant
+    alpha: 0.05
+    analysis_method: mixed_model
+    quantitative_numeric: -8
+    effect_metric: raw_mean_difference
+  specificity: not_addressed
+  stability: not_addressed
+  scope: contingent
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    - Site 3
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    observation_seasons:
+    - summer
+    time_since_intervention_months: 12
+    time_since_intervention_text: late July/early August 2011, 12 months after the first application (late
+      July 2010); second application May-June 2011
+  source_spans:
+  - text: In 2011 and 2012 native forb cover and richness were significantly lower with glyphosate than
+      controls at Site 3; but only cover at Site 2 in 2011 and Site 3 in 2013 (Fig. 1).
+    section: results
+  - text: Table 1. Mean plot species richness and diversity before and after non-native management at
+      three restoration sites.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+- id: e13_gly_nfCover_prepost
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  predicate: causes
+  object: causal_mosaic:decreased_native_forb_cover_a462
+  negated: false
+  causal_language: direct_causal
+  original_sentence: By the end of the study non-native forb cover was significantly higher with glyphosate
+    than pre-treatment at Sites 1 and 2, and native forb cover had significantly decreased with glyphosate
+    at Site 3 (Figs 1 and 2).
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id013
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: 2013 < 2010 at Site 3 (paired t-test)
+    significance: significant
+    alpha: 0.05
+    analysis_method: anova
+  specificity: not_addressed
+  stability: not_addressed
+  scope: contingent
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    - Site 3
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    observation_seasons:
+    - summer
+    time_since_intervention_months: 36
+    time_since_intervention_text: late July/early August 2013, 36 months after the first application (late
+      July 2010); second application May-June 2011
+  source_spans:
+  - text: By the end of the study non-native forb cover was significantly higher with glyphosate than
+      pre-treatment at Sites 1 and 2, and native forb cover had significantly decreased with glyphosate
+      at Site 3 (Figs 1 and 2).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+- id: e14_gly_heviEliminated
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  predicate: causes
+  object: causal_mosaic:elimination_of_heterotheca_villosa_7c27
+  negated: false
+  causal_language: direct_causal
+  original_sentence: The native forb species Heterotheca villosa (Pursch) Shinners (hairy false golden
+    aster) and Achillea millefolium L. (common yarrow) were eliminated by glyphosate.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    significance: not_reported
+    analysis_method: not_reported
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  temporal_extent: *id014
+  source_spans:
+  - text: The native forb species Heterotheca villosa (Pursch) Shinners (hairy false golden aster) and
+      Achillea millefolium L. (common yarrow) were eliminated by glyphosate.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+- id: e15_gly_acmiEliminated
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  predicate: causes
+  object: causal_mosaic:elimination_of_achillea_millefolium_2230
+  negated: false
+  causal_language: direct_causal
+  original_sentence: The native forb species Heterotheca villosa (Pursch) Shinners (hairy false golden
+    aster) and Achillea millefolium L. (common yarrow) were eliminated by glyphosate.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    significance: not_reported
+    analysis_method: not_reported
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  temporal_extent: *id014
+  source_spans:
+  - text: The native forb species Heterotheca villosa (Pursch) Shinners (hairy false golden aster) and
+      Achillea millefolium L. (common yarrow) were eliminated by glyphosate.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+- id: e16_gly_nfCover_inc_site1
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  predicate: associated_with
+  object: causal_mosaic:increased_native_forb_cover_5160
+  negated: false
+  causal_language: associational
+  original_sentence: In 2013 the significantly higher native forb cover with glyphosate at Site 1 was
+    due to increased Verbena bracteata Cav. ex Lag. & Rodr. (prostrate vervain), only found at this site.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: significantly higher at Site 1 in 2013 (Fig. 1)
+    significance: significant
+    alpha: 0.05
+    analysis_method: mixed_model
+  specificity: not_addressed
+  stability: not_addressed
+  scope: contingent
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    - Site 1, 2013
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent:
+    observation_grain: annual
+    observation_seasons:
+    - summer
+    time_since_intervention_months: 36
+    time_since_intervention_text: late July/early August 2013, 36 months after the first application (late
+      July 2010); second application May-June 2011
+  source_spans:
+  - text: In 2013 the significantly higher native forb cover with glyphosate at Site 1 was due to increased
+      Verbena bracteata Cav. ex Lag. & Rodr. (prostrate vervain), only found at this site.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: Attributed to Verbena bracteata, found only at Site 1 (listed in applied_to).
+- id: e17_preNative_moderates
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:high_pre_treatment_native_species_abundance_and_diversity_39a9
+  predicate: moderates
+  object: causal_mosaic:decreased_native_forb_cover_a462
+  negated: false
+  causal_language: associational
+  original_sentence: Native species abundance and diversity were more negatively impacted by glyphosate
+    on sites with higher abundance and diversity prior to management treatments.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator:
+  - status: explicitly_asserted
+    comparator_type: spatial_or_temporal_control
+    comparator_description: Site 1, where pre-treatment native forb cover was very low
+  philosophical_accounts:
+  - probabilistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: &id016
+    status: asserted
+    evidence_for_direction: theoretical
+  temporal_ordering: not_addressed
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: &id020
+    evidence_types:
+    - observational_cross_sectional
+    evidence_objects:
+    - correlation
+  certainty_grade: not_assessed
+  temporal_extent: *id014
+  source_spans:
+  - text: Native species abundance and diversity were more negatively impacted by glyphosate on sites
+      with higher abundance and diversity prior to management treatments.
+    section: abstract
+  - text: Site conditions explained the larger impact of glyphosate on native plant species at Sites 2
+      and 3.
+    section: results
+  - text: Native forbs were least negatively impacted at Site 1 where pre-treatment cover was very low.
+    section: results
+  - text: Herbicide should be used with caution at less invaded sites with higher native species diversity.
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.75
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: 'Moderation of the glyphosate -> native decline relationship (e11, e12) across three
+    sites; with one site per condition, pre-treatment abundance is confounded with soil and history. Management
+    corollary (D30): use herbicide with caution at less invaded, more diverse sites.'
+- id: e18_gly_nngFlower
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  predicate: causes
+  object: causal_mosaic:decreased_flowering_and_seed_set_of_non_native_grasses_afeb
+  negated: false
+  causal_language: direct_causal
+  original_sentence: Flowering and seed set of non-native grasses was significantly reduced with glyphosate
+    at Site 1, and that of nonnative forbs was significantly reduced with cutting and glyphosate at Site
+    2 (Fig. 3).
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: Site 1 (Fig. 3)
+    significance: significant
+    alpha: 0.05
+    analysis_method: mixed_model
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    - Site 1
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  temporal_extent: &id015
+    observation_grain: annual
+    observation_seasons:
+    - summer
+    time_since_intervention_months: 12
+    time_since_intervention_text: 2011 physiological stage scoring
+  source_spans:
+  - text: Flowering and seed set of non-native grasses was significantly reduced with glyphosate at Site
+      1, and that of nonnative forbs was significantly reduced with cutting and glyphosate at Site 2 (Fig.
+      3).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+- id: e19_gly_nnfFlower
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  predicate: causes
+  object: causal_mosaic:decreased_flowering_and_seed_set_of_non_native_forbs_6d39
+  negated: false
+  causal_language: direct_causal
+  original_sentence: Flowering and seed set of non-native grasses was significantly reduced with glyphosate
+    at Site 1, and that of nonnative forbs was significantly reduced with cutting and glyphosate at Site
+    2 (Fig. 3).
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: Site 2 (Fig. 3)
+    significance: significant
+    alpha: 0.05
+    analysis_method: mixed_model
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    - Site 2
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  temporal_extent: *id015
+  source_spans:
+  - text: Flowering and seed set of non-native grasses was significantly reduced with glyphosate at Site
+      1, and that of nonnative forbs was significantly reduced with cutting and glyphosate at Site 2 (Fig.
+      3).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+- id: e20_cut_nnfFlower
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:cutting_of_vegetation_two_annual_cuts_e37e
+  predicate: causes
+  object: causal_mosaic:decreased_flowering_and_seed_set_of_non_native_forbs_6d39
+  negated: false
+  causal_language: direct_causal
+  original_sentence: Flowering and seed set of non-native grasses was significantly reduced with glyphosate
+    at Site 1, and that of nonnative forbs was significantly reduced with cutting and glyphosate at Site
+    2 (Fig. 3).
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: Site 2 (Fig. 3)
+    significance: significant
+    alpha: 0.05
+    analysis_method: mixed_model
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    - Site 2
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  temporal_extent: *id015
+  source_spans:
+  - text: Flowering and seed set of non-native grasses was significantly reduced with glyphosate at Site
+      1, and that of nonnative forbs was significantly reduced with cutting and glyphosate at Site 2 (Fig.
+      3).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: 'At Site 2, cut plots already had higher non-native forb richness before treatment
+    (Table 1, 2010: 3 b vs 1 a).'
+- id: e21_trt_nativeFlower
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:non_native_plant_management_treatment_cutting_glyphosate_or__5959
+  predicate: causes
+  object: causal_mosaic:decreased_flowering_and_seed_set_of_native_grasses_and_forbs_ebbb
+  negated: false
+  causal_language: direct_causal
+  original_sentence: At Site 3, treatment had no effect on non-native plant flowering and seed production,
+    although it significantly reduced that of native grasses and forbs.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: Site 3 (Fig. 3)
+    significance: significant
+    alpha: 0.05
+    analysis_method: mixed_model
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    - Site 3
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  temporal_extent: *id015
+  source_spans:
+  - text: At Site 3, treatment had no effect on non-native plant flowering and seed production, although
+      it significantly reduced that of native grasses and forbs.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.6
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: The sentence does not say which treatment reduced native flowering at Site 3; subject
+    kept generic.
+- id: e22_gly_poco
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  predicate: causes
+  object: causal_mosaic:decreased_cover_of_poa_compressa_fcc4
+  negated: false
+  causal_language: direct_causal
+  original_sentence: P. compressa at all sites, and B. inermis and P. pratensis at Site 2, were significantly
+    reduced with glyphosate relative to the control and most other
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: 'Table 2, 2011: Site 1 glyphosate 0.1 b vs control 3.0 a; Site 2 0.0 b vs 1.9
+      a; Site 3 0.1 b vs 2.4 a % cover (Site 1 also 2012: 0.6 b vs 2.8 a)'
+    significance: significant
+    alpha: 0.05
+    analysis_method: mixed_model
+    quantitative_numeric: -2.9
+    effect_metric: raw_mean_difference
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: reversible
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    observation_seasons:
+    - summer
+    time_since_intervention_months: 12
+    time_since_intervention_text: late July/early August 2011, 12 months after the first application (late
+      July 2010); second application May-June 2011
+  source_spans:
+  - text: P. compressa at all sites, and B. inermis and P. pratensis at Site 2, were significantly reduced
+      with glyphosate relative to the control and most other
+    section: results
+  - text: Treatment effects on individual species were most significant in 2011, mainly between glyphosate
+      and the control (Table 2).
+    section: results
+  - text: By 2013, there were no significant treatment effects on these species, suggesting non-native
+      grasses had recovered.
+    section: results
+  - text: Table 2. Effect of glyphosate application on cover of non-native species of concern in fescue
+      grassland.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: No significant treatment effect by 2013 ('non-native grasses had recovered'). Baseline
+    imbalance in 2010 (no letters) for some species, e.g. Site 2 P. compressa control 1.3 vs glyphosate
+    7.3.
+- id: e23_gly_brin
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  predicate: causes
+  object: causal_mosaic:decreased_cover_of_bromus_inermis_dfb0
+  negated: false
+  causal_language: direct_causal
+  original_sentence: P. compressa at all sites, and B. inermis and P. pratensis at Site 2, were significantly
+    reduced with glyphosate relative to the control and most other
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: 'Table 2, Site 2, 2011: glyphosate 0.3 b vs control 10.2 a % cover'
+    significance: significant
+    alpha: 0.05
+    analysis_method: mixed_model
+    quantitative_numeric: -9.9
+    effect_metric: raw_mean_difference
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: reversible
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    observation_seasons:
+    - summer
+    time_since_intervention_months: 12
+    time_since_intervention_text: late July/early August 2011, 12 months after the first application (late
+      July 2010); second application May-June 2011
+  source_spans:
+  - text: P. compressa at all sites, and B. inermis and P. pratensis at Site 2, were significantly reduced
+      with glyphosate relative to the control and most other
+    section: results
+  - text: Treatment effects on individual species were most significant in 2011, mainly between glyphosate
+      and the control (Table 2).
+    section: results
+  - text: By 2013, there were no significant treatment effects on these species, suggesting non-native
+      grasses had recovered.
+    section: results
+  - text: Table 2. Effect of glyphosate application on cover of non-native species of concern in fescue
+      grassland.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: No significant treatment effect by 2013 ('non-native grasses had recovered'). Baseline
+    imbalance in 2010 (no letters) for some species, e.g. Site 2 P. compressa control 1.3 vs glyphosate
+    7.3.
+- id: e24_gly_popr
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  predicate: causes
+  object: causal_mosaic:decreased_cover_of_poa_pratensis_f7b5
+  negated: false
+  causal_language: direct_causal
+  original_sentence: P. compressa at all sites, and B. inermis and P. pratensis at Site 2, were significantly
+    reduced with glyphosate relative to the control and most other
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: 'Table 2, Site 2, 2011: glyphosate 0.0 b vs control 1.9 a % cover'
+    significance: significant
+    alpha: 0.05
+    analysis_method: mixed_model
+    quantitative_numeric: -1.9
+    effect_metric: raw_mean_difference
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: reversible
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    observation_seasons:
+    - summer
+    time_since_intervention_months: 12
+    time_since_intervention_text: late July/early August 2011, 12 months after the first application (late
+      July 2010); second application May-June 2011
+  source_spans:
+  - text: P. compressa at all sites, and B. inermis and P. pratensis at Site 2, were significantly reduced
+      with glyphosate relative to the control and most other
+    section: results
+  - text: Treatment effects on individual species were most significant in 2011, mainly between glyphosate
+      and the control (Table 2).
+    section: results
+  - text: By 2013, there were no significant treatment effects on these species, suggesting non-native
+      grasses had recovered.
+    section: results
+  - text: Table 2. Effect of glyphosate application on cover of non-native species of concern in fescue
+      grassland.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: No significant treatment effect by 2013 ('non-native grasses had recovered'). Baseline
+    imbalance in 2010 (no letters) for some species, e.g. Site 2 P. compressa control 1.3 vs glyphosate
+    7.3.
+- id: e25_gly_agcr_prepost
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  predicate: causes
+  object: causal_mosaic:decreased_cover_of_agropyron_cristatum_de21
+  negated: false
+  causal_language: direct_causal
+  original_sentence: Within sites, A. cristatum (Site 1), Poa pratensis L. (Kentucky blue grass) and P.
+    compressa (Site 2) were significantly reduced with glyphosate.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id013
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: 'Table 2, Site 1 glyphosate: 3.0 A (2010) vs 1.1 B (2013) % cover'
+    significance: significant
+    alpha: 0.05
+    analysis_method: anova
+    quantitative_numeric: -1.9
+    effect_metric: raw_mean_difference
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    - Site 1
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    observation_seasons:
+    - summer
+    time_since_intervention_months: 36
+    time_since_intervention_text: late July/early August 2013, 36 months after the first application (late
+      July 2010); second application May-June 2011
+  source_spans:
+  - text: Within sites, A. cristatum (Site 1), Poa pratensis L. (Kentucky blue grass) and P. compressa
+      (Site 2) were significantly reduced with glyphosate.
+    section: results
+  - text: Table 2. Effect of glyphosate application on cover of non-native species of concern in fescue
+      grassland.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.75
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: Before-after contrast. In Table 2 the Site 1 control row for A. cristatum is '3.8
+    (2.6)' in both 2011 and 2012, a possible copy error. P. compressa also declined significantly in Site
+    1 controls (7.3 A to 0.6 B), so year effects matter in these contrasts.
+- id: e26_gly_popr_eliminated
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  predicate: associated_with
+  object: causal_mosaic:elimination_of_poa_pratensis_8238
+  negated: false
+  causal_language: associational
+  original_sentence: P. pratensis and E. repens were eliminated from Site 3.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    significance: not_reported
+    analysis_method: not_reported
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    - Site 3
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent: *id014
+  source_spans:
+  - text: P. pratensis and E. repens were eliminated from Site 3.
+    section: results
+  - text: Table 2. Effect of glyphosate application on cover of non-native species of concern in fescue
+      grassland.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.4
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: 'Weak attribution: Table 2 shows Site 3 control plots also at 0.0% cover for P. pratensis
+    (2011-2013) and E. repens (all post-treatment years), so elimination is not specific to glyphosate.'
+- id: e27_gly_elre_eliminated
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  predicate: associated_with
+  object: causal_mosaic:elimination_of_elymus_repens_8be1
+  negated: false
+  causal_language: associational
+  original_sentence: P. pratensis and E. repens were eliminated from Site 3.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    significance: not_reported
+    analysis_method: not_reported
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    - Site 3
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent: *id014
+  source_spans:
+  - text: P. pratensis and E. repens were eliminated from Site 3.
+    section: results
+  - text: Table 2. Effect of glyphosate application on cover of non-native species of concern in fescue
+      grassland.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.4
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: 'Weak attribution: Table 2 shows Site 3 control plots also at 0.0% cover for P. pratensis
+    (2011-2013) and E. repens (all post-treatment years), so elimination is not specific to glyphosate.'
+- id: e28_gly_lede
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  predicate: causes
+  object: causal_mosaic:increased_cover_of_lepidium_densiflorum_ffcb
+  negated: false
+  causal_language: direct_causal
+  original_sentence: Increased cover was mainly due to Lepidium densiflorum Scrad. (common pepper weed)
+    and Medicago lupulina L. (black medic) at all sites and some species unique to sites, such as Chrysanthemum
+    leucanthemum L. (ox-eye daisy) and Verbascum thapsus L. (common mullein) at Site 1 and Cirsium arvense
+    (L.) Scop. (Canada thistle) at Site 2.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: 'Table 2, 2012: Site 2 glyphosate 11.3 b vs control 0.1 a; Site 3 3.2 b vs 0.1
+      a % cover'
+    significance: significant
+    alpha: 0.05
+    analysis_method: mixed_model
+    quantitative_numeric: 11.2
+    effect_metric: raw_mean_difference
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    observation_seasons:
+    - summer
+    time_since_intervention_months: 24
+    time_since_intervention_text: late July/early August 2012, 24 months after the first application (late
+      July 2010); second application May-June 2011
+  source_spans:
+  - text: Increased cover was mainly due to Lepidium densiflorum Scrad. (common pepper weed) and Medicago
+      lupulina L. (black medic) at all sites and some species unique to sites, such as Chrysanthemum leucanthemum
+      L. (ox-eye daisy) and Verbascum thapsus L. (common mullein) at Site 1 and Cirsium arvense (L.) Scop.
+      (Canada thistle) at Site 2.
+    section: results
+  - text: Non-native forbs that increased in this study were annual weeds such as Lepidium densiflorum
+      and Medicago lupulina and perennial invasive species such as Cirsium arvense and Centaurea maculosa.
+    section: discussion
+  - text: Table 2. Effect of glyphosate application on cover of non-native species of concern in fescue
+      grassland.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: Medicago lupulina also increased (10.2 vs 1.1 at Site 2, 2012) but without significance
+    letters.
+- id: e29_gly_brte
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  predicate: causes
+  object: causal_mosaic:increased_cover_of_bromus_tectorum_1748
+  negated: false
+  causal_language: direct_causal
+  original_sentence: Centaurea maculosa Lam. (spotted knapweed) (all three sites) and C. leucanthemum,
+    species of high priority for control, were not reduced over time, and B. tectorum increased with glyphosate
+    at Site 1 (data not shown).
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    significance: not_reported
+    analysis_method: not_reported
+    quantitative_value: data not shown
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    - Site 1
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  temporal_extent: *id014
+  source_spans:
+  - text: Centaurea maculosa Lam. (spotted knapweed) (all three sites) and C. leucanthemum, species of
+      high priority for control, were not reduced over time, and B. tectorum increased with glyphosate
+      at Site 1 (data not shown).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.6
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+- id: e30_gly_cema_null
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  predicate: associated_with
+  object: causal_mosaic:decreased_cover_of_centaurea_maculosa_1ef6
+  negated: true
+  causal_language: no_relationship
+  original_sentence: Centaurea maculosa Lam. (spotted knapweed) (all three sites) and C. leucanthemum,
+    species of high priority for control, were not reduced over time, and B. tectorum increased with glyphosate
+    at Site 1 (data not shown).
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id013
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    significance: not_reported
+    analysis_method: not_reported
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent: *id014
+  source_spans:
+  - text: Centaurea maculosa Lam. (spotted knapweed) (all three sites) and C. leucanthemum, species of
+      high priority for control, were not reduced over time, and B. tectorum increased with glyphosate
+      at Site 1 (data not shown).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.6
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: Same holds for Chrysanthemum leucanthemum (text). The Discussion lists C. maculosa
+    among forbs that increased, beyond 'not reduced'.
+- id: e31_gly_communityShift
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  predicate: causes
+  object: causal_mosaic:increased_dominance_of_non_native_forbs_in_the_plant_communi_6c69
+  negated: false
+  causal_language: direct_causal
+  original_sentence: Glyphosate shifted communities dominated by non-native perennial grasses to dominance
+    by non-native forbs (Fig. 4a).
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    significance: not_reported
+    analysis_method: ordination
+    quantitative_value: NMDS (Sørensen, 2 axes, stress 14.42); MRPP group tests not reported numerically
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  temporal_extent: *id014
+  source_spans:
+  - text: Glyphosate shifted communities dominated by non-native perennial grasses to dominance by non-native
+      forbs (Fig. 4a).
+    section: results
+  - text: Although no single treatment effectively re-established native grassland communities over 3
+      yr, glyphosate was effective for controlling non-native grasses, but induced a shift to nonnative
+      forb dominance.
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: 'Fig. 4 caption: Axis 1 34.7% and Axis 2 48% of variation (Axis 2 larger than Axis
+    1, unusual).'
+- id: e32_cut_community_null
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:cutting_of_vegetation_two_annual_cuts_e37e
+  predicate: associated_with
+  object: causal_mosaic:plant_community_structure_6770
+  negated: true
+  causal_language: no_relationship
+  original_sentence: Cutting and steam did not change plant community structure relative to the control.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    significance: not_reported
+    analysis_method: multivariate_other
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent: *id014
+  source_spans:
+  - text: Cutting and steam did not change plant community structure relative to the control.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+- id: e33_steam_community_null
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:steam_application_to_vegetation_fb17
+  predicate: associated_with
+  object: causal_mosaic:plant_community_structure_6770
+  negated: true
+  causal_language: no_relationship
+  original_sentence: Cutting and steam did not change plant community structure relative to the control.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    significance: not_reported
+    analysis_method: multivariate_other
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent: *id014
+  source_spans:
+  - text: Cutting and steam did not change plant community structure relative to the control.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+- id: e34_trt_reestablish_null
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:non_native_plant_management_treatment_cutting_glyphosate_or__5959
+  predicate: associated_with
+  object: causal_mosaic:re_establishment_of_native_fescue_grassland_community_41de
+  negated: true
+  causal_language: no_relationship
+  original_sentence: No treatment effectively re-established native grassland communities.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator:
+  - status: explicitly_asserted
+    comparator_type: reference_undisturbed
+    comparator_description: adjacent undisturbed foothills fescue prairie reference plot at each site
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    significance: not_reported
+    analysis_method: ordination
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent: *id014
+  source_spans:
+  - text: No treatment effectively re-established native grassland communities.
+    section: abstract
+  - text: Although no single treatment effectively re-established native grassland communities over 3
+      yr, glyphosate was effective for controlling non-native grasses, but induced a shift to nonnative
+      forb dominance.
+    section: discussion
+  - text: As expected, undisturbed and disturbed communities were distinctly different; the former dominated
+      by Festuca campestris Rydb. (rough fescue), F. idahoensis Elmer (Idaho fescue), Danthonia parryi
+      Scribn. (Parry's oat grass) and Selaginella densa Rydb. (little club moss), which were absent or
+      with very low abundance in disturbed sites.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: Undisturbed reference communities were dominated by Festuca campestris, F. idahoensis,
+    Danthonia parryi and Selaginella densa, absent or rare in treated plots. All plots, including controls,
+    were seeded (2011) and planted (2012) by Parks Canada, so revegetation is not annotated as a cause;
+    it applies equally to every arm.
+- id: e35_cut_cover_null
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:cutting_of_vegetation_two_annual_cuts_e37e
+  predicate: associated_with
+  object: causal_mosaic:decreased_non_native_grass_cover_2c8a
+  negated: true
+  causal_language: no_relationship
+  original_sentence: They did not reduce non-native grass and forb cover relative to controls within a
+    year (Fig. 1), although over 3 yr, non-native grass cover was significantly lower with steam at Site
+    1 and with cutting at Site 3 (Fig. 2).
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    significance: not_significant
+    analysis_method: mixed_model
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent: *id014
+  source_spans:
+  - text: They did not reduce non-native grass and forb cover relative to controls within a year (Fig.
+      1), although over 3 yr, non-native grass cover was significantly lower with steam at Site 1 and
+      with cutting at Site 3 (Fig. 2).
+    section: results
+  - text: Cutting and steam had no effect on any species.
+    section: results
+  - text: Cutting and steam had little significant impact on vegetation diversity and species richness
+      (Table 1).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: Applies to non-native forb cover too ('did not reduce non-native grass and forb cover
+    relative to controls within a year').
+- id: e36_steam_cover_null
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:steam_application_to_vegetation_fb17
+  predicate: associated_with
+  object: causal_mosaic:decreased_non_native_grass_cover_2c8a
+  negated: true
+  causal_language: no_relationship
+  original_sentence: They did not reduce non-native grass and forb cover relative to controls within a
+    year (Fig. 1), although over 3 yr, non-native grass cover was significantly lower with steam at Site
+    1 and with cutting at Site 3 (Fig. 2).
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    significance: not_significant
+    analysis_method: mixed_model
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent: *id014
+  source_spans:
+  - text: They did not reduce non-native grass and forb cover relative to controls within a year (Fig.
+      1), although over 3 yr, non-native grass cover was significantly lower with steam at Site 1 and
+      with cutting at Site 3 (Fig. 2).
+    section: results
+  - text: Cutting and steam had no effect on any species.
+    section: results
+  - text: Cutting and steam had little significant impact on vegetation diversity and species richness
+      (Table 1).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: Applies to non-native forb cover too ('did not reduce non-native grass and forb cover
+    relative to controls within a year').
+- id: e37_cut_nngCover_prepost
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:cutting_of_vegetation_two_annual_cuts_e37e
+  predicate: causes
+  object: causal_mosaic:decreased_non_native_grass_cover_2c8a
+  negated: false
+  causal_language: direct_causal
+  original_sentence: They did not reduce non-native grass and forb cover relative to controls within a
+    year (Fig. 1), although over 3 yr, non-native grass cover was significantly lower with steam at Site
+    1 and with cutting at Site 3 (Fig. 2).
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id013
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: Site 3, 2010 vs 2013 (Fig. 2)
+    significance: significant
+    alpha: 0.05
+    analysis_method: anova
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    - Site 3
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    observation_seasons:
+    - summer
+    time_since_intervention_months: 36
+    time_since_intervention_text: late July/early August 2013, 36 months after the first application (late
+      July 2010); second application May-June 2011
+  source_spans:
+  - text: They did not reduce non-native grass and forb cover relative to controls within a year (Fig.
+      1), although over 3 yr, non-native grass cover was significantly lower with steam at Site 1 and
+      with cutting at Site 3 (Fig. 2).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.6
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: Before-after only; not significant against the concurrent control.
+- id: e38_steam_nngCover_prepost
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:steam_application_to_vegetation_fb17
+  predicate: causes
+  object: causal_mosaic:decreased_non_native_grass_cover_2c8a
+  negated: false
+  causal_language: direct_causal
+  original_sentence: They did not reduce non-native grass and forb cover relative to controls within a
+    year (Fig. 1), although over 3 yr, non-native grass cover was significantly lower with steam at Site
+    1 and with cutting at Site 3 (Fig. 2).
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id013
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: Site 1, 2010 vs 2013 (Fig. 2)
+    significance: significant
+    alpha: 0.05
+    analysis_method: anova
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    - Site 1 (described as the most heavily invaded)
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    observation_seasons:
+    - summer
+    time_since_intervention_months: 36
+    time_since_intervention_text: late July/early August 2013, 36 months after the first application (late
+      July 2010); second application May-June 2011
+  source_spans:
+  - text: They did not reduce non-native grass and forb cover relative to controls within a year (Fig.
+      1), although over 3 yr, non-native grass cover was significantly lower with steam at Site 1 and
+      with cutting at Site 3 (Fig. 2).
+    section: results
+  - text: Steam only reduced non-native grasses at one site – the most heavily invaded.
+    section: discussion
+  - text: Low frequency cutting over 2 yr did not consistently control non-native species, steam reduced
+      non-native grass cover at the most heavily invaded site.
+    section: abstract
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.6
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: Before-after only; steam was not applied at Site 2 (no vehicle access).
+- id: e39_cut_nngRichness_site3
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:cutting_of_vegetation_two_annual_cuts_e37e
+  predicate: associated_with
+  object: causal_mosaic:increased_non_native_grass_species_richness_e635
+  negated: false
+  causal_language: associational
+  original_sentence: Table 1. Mean plot species richness and diversity before and after non-native management
+    at three restoration sites.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: 'Table 1, Site 3, 2013 non-native grass richness: cut 4 b vs control 2 a'
+    significance: significant
+    alpha: 0.05
+    analysis_method: mixed_model
+    quantitative_numeric: 2
+    effect_metric: raw_mean_difference
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    - Site 3, 2013
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent:
+    observation_grain: annual
+    observation_seasons:
+    - summer
+    time_since_intervention_months: 36
+    time_since_intervention_text: late July/early August 2013, 36 months after the first application (late
+      July 2010); second application May-June 2011
+  source_spans:
+  - text: Table 1. Mean plot species richness and diversity before and after non-native management at
+      three restoration sites.
+    section: results
+  - text: Cutting and steam had little significant impact on vegetation diversity and species richness
+      (Table 1).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.4
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: 'Table-only result, not discussed in the text. Probably a baseline difference: in
+    2010 the same Site 3 cut plots already had 4 vs 2 species (no letters).'
+- id: e40_freqCut_nng
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:repeated_within_season_cutting_that_removes_tiller_apices_6fa6
+  predicate: causes
+  object: causal_mosaic:decreased_non_native_grass_cover_2c8a
+  negated: false
+  causal_language: uncertain_causal
+  original_sentence: Short-term cutting is likely more effective with one non-native species to be controlled
+    (Rinella et al. 2001), when repeated during the growing season, for longer periods of time and when
+    tiller apices are removed (Willson & Stubbendieck 1996; Wilson & Clark 2001).
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator:
+  - status: explicitly_asserted
+    comparator_type: alternative_treatment
+    comparator_description: two annual low-frequency cuts (this study)
+    comparator_node_id: causal_mosaic:cutting_of_vegetation_two_annual_cuts_e37e
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id016
+  temporal_ordering: not_addressed
+  specificity: not_addressed
+  stability: not_addressed
+  scope: prototypical
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    - one target species; repeated within season; longer duration
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: &id017
+    evidence_objects:
+    - correlation
+  certainty_grade: not_assessed
+  fcm_weight: 0.42
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  source_spans:
+  - text: Short-term cutting is likely more effective with one non-native species to be controlled (Rinella
+      et al. 2001), when repeated during the growing season, for longer periods of time and when tiller
+      apices are removed (Willson & Stubbendieck 1996; Wilson & Clark 2001).
+    section: discussion
+  - text: Two annual cuttings did not eliminate large and diverse populations of non-native plant species,
+      similar to other short-term studies (Simmons et al. 2007).
+    section: discussion
+  - text: With low frequency applications over 2 yr, cutting was not a useful management strategy for
+      reducing non-native grasses and forbs, although steam may have potential since it reduced nonnative
+      grasses at one site.
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.6
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: Cited studies (Rinella et al. 2001; Willson & Stubbendieck 1996; Wilson & Clark 2001).
+    Cuttings were left on plots in this study (Methods).
+- id: e41_perennial_moderates_steam
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:dominance_of_perennial_non_native_grasses_778f
+  predicate: moderates
+  object: causal_mosaic:decreased_non_native_grass_cover_2c8a
+  negated: false
+  causal_language: uncertain_causal
+  original_sentence: Additionally, perennial nonnative grasses dominating our sites are difficult to kill
+    with steam (Wei et al. 2010).
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: &id018
+  - status: not_addressed
+    comparator_type: not_applicable
+  philosophical_accounts:
+  - mechanistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id016
+  temporal_ordering: not_addressed
+  specificity: not_addressed
+  stability: not_addressed
+  scope: prototypical
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  evidential_basis: *id017
+  certainty_grade: not_assessed
+  source_spans:
+  - text: Additionally, perennial nonnative grasses dominating our sites are difficult to kill with steam
+      (Wei et al. 2010).
+    section: discussion
+  - text: Inconsistent results may occur from heat loss due to absence of a steam insulation component
+      (Labowsky 1990; Norberg et al. 1997), insufficient applications and too short a time period (<2
+      yr) for steam to significantly affect vegetation (Kristoffersen et al. 2007).
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.55
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: 'Moderates the steam -> non-native grass reduction (e38). Other proposed reasons:
+    heat loss without an insulation component, too few applications and too short a period (<2 yr). Steam
+    settings also changed between years (operator ceased business).'
+- id: e42_grassRelease_forbs
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:decreased_non_native_grass_cover_2c8a
+  predicate: causes
+  object: causal_mosaic:increased_non_native_forb_cover_ed76
+  negated: false
+  causal_language: uncertain_causal
+  original_sentence: Increased non-native forbs with glyphosate was likely due to a larger reduction in
+    non-native grasses, resulting in release from competition for other plants; and/or to different species
+    response to glyphosate (DiTomaso 2000;
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id018
+  philosophical_accounts:
+  - mechanistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id016
+  temporal_ordering: not_addressed
+  mediation:
+    status: explicitly_asserted
+    pathway_description: Release of other plants from competition with non-native grasses (secondary invasion)
+  specificity: not_addressed
+  stability: not_addressed
+  scope: prototypical
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: contributing_cause
+  reversibility: not_addressed
+  proportionality: not_addressed
+  evidential_basis:
+    evidence_types:
+    - randomized_experiment
+    - theoretical
+    evidence_objects:
+    - both
+  certainty_grade: not_assessed
+  fcm_weight: 0.42
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    observation_seasons:
+    - summer
+    time_since_intervention_months: 24
+    time_since_intervention_text: late July/early August 2012, 24 months after the first application (late
+      July 2010); second application May-June 2011
+  source_spans:
+  - text: Increased non-native forbs with glyphosate was likely due to a larger reduction in non-native
+      grasses, resulting in release from competition for other plants; and/or to different species response
+      to glyphosate (DiTomaso 2000;
+    section: discussion
+  - text: When certain species are eliminated they may leave niches that can be filled by other non-native
+      species (Pearson et al. 2016).
+    section: discussion
+  - text: The reduction of non-native grasses, but not non-native forbs, poses a continuing challenge
+      to grassland restoration with multiple non-native species.
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.65
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: '''and/or'' alternative: species-specific responses to glyphosate. Analogy: clopyralid
+    (Martin et al. 2014).'
+- id: e43_nnf_nf_cooccur
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:increased_non_native_forb_cover_ed76
+  predicate: associated_with
+  object: causal_mosaic:decreased_native_forb_cover_a462
+  negated: false
+  causal_language: associational
+  original_sentence: In our study, native forbs did not establish on heavily invaded sites and declined
+    as nonnative forbs increased at a less invaded site.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id018
+  philosophical_accounts:
+  - regularity
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction:
+    status: uncertain
+  temporal_ordering: not_addressed
+  specificity: not_addressed
+  stability: not_addressed
+  scope: contingent
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    - a less invaded site (Site 3)
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent: *id014
+  source_spans:
+  - text: In our study, native forbs did not establish on heavily invaded sites and declined as nonnative
+      forbs increased at a less invaded site.
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.6
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+- id: e44_seedbank_estab
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:depleted_native_seed_bank_on_heavily_invaded_sites_7ac1
+  predicate: prevents
+  object: causal_mosaic:increased_establishment_of_native_grasses_and_forbs_e573
+  negated: false
+  causal_language: uncertain_causal
+  original_sentence: Both are factors in our study as the native seed bank in heavily invaded sites may
+    have become depleted over past decades, and litter production in glyphosate and cutting treatments
+    may inhibit native grass and forb establishment.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id018
+  philosophical_accounts:
+  - mechanistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id016
+  temporal_ordering: not_addressed
+  specificity: not_addressed
+  stability: not_addressed
+  scope: contingent
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: contributing_cause
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    - heavily invaded sites (Sites 1 and 2)
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: &id019
+    evidence_types:
+    - theoretical
+    evidence_objects:
+    - mechanism
+  certainty_grade: not_assessed
+  fcm_weight: -0.36
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  source_spans:
+  - text: Both are factors in our study as the native seed bank in heavily invaded sites may have become
+      depleted over past decades, and litter production in glyphosate and cutting treatments may inhibit
+      native grass and forb establishment.
+    section: discussion
+  - text: In our study, native forbs did not establish on heavily invaded sites and declined as nonnative
+      forbs increased at a less invaded site.
+    section: discussion
+  - text: Following broadcast methods to remove fennel in grasslands, the native community did not recover
+      and non-native grasses readily established due to a lack of native seed bank and grass litter (Ogden
+      & Rejmanek 2005).
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.55
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: Seed bank not measured; inference supported by an analogous fennel removal study.
+- id: e45_litter_estab
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:increased_plant_litter_after_glyphosate_and_cutting_7ee2
+  predicate: prevents
+  object: causal_mosaic:increased_establishment_of_native_grasses_and_forbs_e573
+  negated: false
+  causal_language: uncertain_causal
+  original_sentence: Both are factors in our study as the native seed bank in heavily invaded sites may
+    have become depleted over past decades, and litter production in glyphosate and cutting treatments
+    may inhibit native grass and forb establishment.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id018
+  philosophical_accounts:
+  - mechanistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id016
+  temporal_ordering: not_addressed
+  specificity: not_addressed
+  stability: not_addressed
+  scope: contingent
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: contributing_cause
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    - glyphosate and cutting plots
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id019
+  certainty_grade: not_assessed
+  fcm_weight: -0.36
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  source_spans:
+  - text: Both are factors in our study as the native seed bank in heavily invaded sites may have become
+      depleted over past decades, and litter production in glyphosate and cutting treatments may inhibit
+      native grass and forb establishment.
+    section: discussion
+  - text: Handheld grass trimmers were used to cut vegetation low to the ground; cuttings were not removed
+      since non-native species were not in seed.
+    section: methods
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.5
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: Litter not measured; cuttings were left on cut plots.
+- id: e46_springHerbicide_nng
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:early_spring_herbicide_application_to_establishing_non_nativ_88d3
+  predicate: causes
+  object: causal_mosaic:decreased_non_native_grass_cover_2c8a
+  negated: false
+  causal_language: uncertain_causal
+  original_sentence: Two early spring herbicide applications when grasses were establishing and putting
+    resources into shoot production may reduce non-native grasses more with less harm to native forbs
+    than in July when grasses, and forbs, are at peak production.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator:
+  - status: explicitly_asserted
+    comparator_type: alternative_treatment
+    comparator_description: herbicide application in July, at peak production
+    comparator_node_id: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  philosophical_accounts:
+  - mechanistic
+  - agency
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id016
+  temporal_ordering: not_addressed
+  mediation:
+    status: explicitly_asserted
+    pathway_description: Grasses are establishing and allocating resources to shoot production in early
+      spring
+  specificity: not_addressed
+  stability: not_addressed
+  scope: prototypical
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  evidential_basis: *id019
+  certainty_grade: not_assessed
+  fcm_weight: 0.42
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  source_spans:
+  - text: Two early spring herbicide applications when grasses were establishing and putting resources
+      into shoot production may reduce non-native grasses more with less harm to native forbs than in
+      July when grasses, and forbs, are at peak production.
+    section: discussion
+  - text: Non-native forbs are most effectively controlled by herbicide when actively allocating resources
+      to both above- and belowground tissues and before flowering and seed set occurs.
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.55
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: Also hypothesised to cause less harm to native forbs than July application.
+- id: e47_followup_nnf
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:follow_up_herbicide_spraying_of_non_native_forbs_replacing_c_6f8d
+  predicate: prevents
+  object: causal_mosaic:increased_non_native_forb_cover_ed76
+  negated: false
+  causal_language: uncertain_causal
+  original_sentence: Spraying the dominant grasses in spring with follow-up spraying to manage non-native
+    forbs that establish and replace these grasses later in the growing season could be an effective management
+    technique, although caution must be taken to protect native forbs.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id018
+  philosophical_accounts:
+  - agency
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id016
+  temporal_ordering: not_addressed
+  specificity: not_addressed
+  stability: not_addressed
+  scope: prototypical
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    - caution needed to protect native forbs
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id019
+  certainty_grade: not_assessed
+  fcm_weight: -0.36
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  source_spans:
+  - text: Spraying the dominant grasses in spring with follow-up spraying to manage non-native forbs that
+      establish and replace these grasses later in the growing season could be an effective management
+      technique, although caution must be taken to protect native forbs.
+    section: discussion
+  - text: Further work should investigate a follow-up herbicide treatment to manage non-native forbs that
+      replace non-native grasses in invaded sites.
+    section: discussion
+  - text: Non-native forbs are most effectively controlled by herbicide when actively allocating resources
+      to both above- and belowground tissues and before flowering and seed set occurs.
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.55
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+- id: e48_repeat_reinvasion
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:repeated_herbicide_application_every_2_3_years_5594
+  predicate: prevents
+  object: causal_mosaic:reinvasion_by_non_native_plants_6a51
+  negated: false
+  causal_language: uncertain_causal
+  original_sentence: The effects of herbicide are often shortlived, so repeated herbicide application
+    has been recommended for every 2–3 yr to prevent reinvasion (Holl et al. 2014).
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id018
+  philosophical_accounts:
+  - agency
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id016
+  temporal_ordering: not_addressed
+  specificity: not_addressed
+  stability: not_addressed
+  scope: contingent
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    - recommended by the authors only for heavily invaded sites
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id017
+  certainty_grade: not_assessed
+  fcm_weight: -0.36
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  source_spans:
+  - text: The effects of herbicide are often shortlived, so repeated herbicide application has been recommended
+      for every 2–3 yr to prevent reinvasion (Holl et al. 2014).
+    section: discussion
+  - text: Although non-native grass cover and flowering were reduced following treatment, other research
+      has shown the effect may be temporary and repeated control required over the longer term (Rice et
+      al. 1997; Holl et al. 2014).
+    section: discussion
+  - text: We only recommend this for heavily invaded sites, and suggest spot spraying may be a less detrimental
+      alternative for native species.
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.6
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: Cited (Holl et al. 2014; Rice et al. 1997).
+- id: e49_spot_nativeProtect
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:spot_spraying_of_herbicide_187b
+  predicate: prevents
+  object: causal_mosaic:decreased_native_forb_cover_a462
+  negated: false
+  causal_language: uncertain_causal
+  original_sentence: We only recommend this for heavily invaded sites, and suggest spot spraying may be
+    a less detrimental alternative for native species.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator:
+  - status: explicitly_asserted
+    comparator_type: alternative_treatment
+    comparator_description: broadcast glyphosate application
+    comparator_node_id: causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578
+  philosophical_accounts:
+  - agency
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id016
+  temporal_ordering: not_addressed
+  specificity: not_addressed
+  stability: not_addressed
+  scope: prototypical
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  evidential_basis: *id019
+  certainty_grade: not_assessed
+  fcm_weight: -0.36
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  source_spans:
+  - text: We only recommend this for heavily invaded sites, and suggest spot spraying may be a less detrimental
+      alternative for native species.
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.5
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+- id: e50_cited_removal_native
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:removal_of_invasive_plant_species_e06b
+  predicate: causes
+  object: causal_mosaic:increased_native_species_diversity_and_abundance_b948
+  negated: false
+  causal_language: direct_causal
+  original_sentence: In contrast to our findings and others (e.g. Rinella et al. 2001; Orloff et al. 2015),
+    native diversity and abundance increased following invasive species removal.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  specificity: not_addressed
+  stability: explicitly_denied
+  scope: prototypical
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  evidential_basis: *id017
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  source_spans:
+  - text: In contrast to our findings and others (e.g. Rinella et al. 2001; Orloff et al. 2015), native
+      diversity and abundance increased following invasive species removal.
+    section: discussion
+  - text: Flory & Clay (2009) found multiple techniques controlled invasive species, although native plant
+      community response varied with method.
+    section: discussion
+  - text: Broadcast application can increase native species abundance and richness when competition from
+      non-native species is eliminated or reduced (Wilson & P€artel 2003; Simmons et al. 2007; Bahm et
+      al. 2011a,b; Orloff et al. 2015; Tucker et al. 2017).
+    section: introduction
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.6
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: Cited studies (Flory & Clay 2009; broadcast-herbicide studies in the Introduction).
+    This study found the opposite for native forbs (e11-e13, e34), so stability across studies is denied.
+- id: e51_cited_cut_native
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:cutting_of_vegetation_two_annual_cuts_e37e
+  predicate: causes
+  object: causal_mosaic:increased_growth_and_seed_production_of_native_species_e8e8
+  negated: false
+  causal_language: direct_causal
+  original_sentence: Cutting increased growth and seed production of native species in grassland restoration
+    (Maron & Jefferies 2001; Kimball et al. 2014); although it is not known if native species respond
+    in the same way in all prairie types.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  specificity: not_addressed
+  stability: not_addressed
+  scope: contingent
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    - not known to hold in all prairie types
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id017
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct
+    1.0, uncertain 0.6)'
+  source_spans:
+  - text: Cutting increased growth and seed production of native species in grassland restoration (Maron
+      & Jefferies 2001; Kimball et al. 2014); although it is not known if native species respond in the
+      same way in all prairie types.
+    section: introduction
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.6
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: Cited (Maron & Jefferies 2001; Kimball et al. 2014); not tested here.
+- id: e52_site_moderates
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:site_conditions_soil_disturbance_history_initial_plant_commu_a09a
+  predicate: moderates
+  object: causal_mosaic:decreased_non_native_grass_cover_2c8a
+  negated: false
+  causal_language: direct_causal
+  original_sentence: Site 9 treatment effects were significant (data not shown), therefore data were analysed
+    separately by site for treatment effects.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator:
+  - status: explicitly_asserted
+    comparator_type: spatial_or_temporal_control
+    comparator_description: the other restoration sites
+  philosophical_accounts:
+  - probabilistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id016
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    significance: significant
+    analysis_method: anova
+    quantitative_value: site x treatment interaction (data not shown)
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent: *id014
+  source_spans:
+  - text: Site 9 treatment effects were significant (data not shown), therefore data were analysed separately
+      by site for treatment effects.
+    section: methods
+  - text: Site variability influenced plant community response, with most restoration sites presenting
+      different conditions and disturbance histories that led to unique outcomes following management.
+    section: discussion
+  - text: Age of disturbance was similar among sites; however, factors such as soil properties and adjacent
+      disturbance and native and non-native plant abundances may direct level of nonnative plant invasion
+      prior to and post treatments (Orloff et al. 2015).
+    section: discussion
+  - text: Site-specific conditions must be considered to develop effective control methods for non-native
+      species.
+    section: abstract
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.7
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: '''Site 9 treatment'' in the supplied text is a conversion error for ''Site x treatment'';
+    the span is kept verbatim. Site x treatment interaction was significant, so treatments were analysed
+    by site (one-way ANOVA, proc mixed, Tukey).'
+- id: e53_sand_native
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:increased_soil_sand_content_c193
+  predicate: correlated_with
+  object: causal_mosaic:increased_native_plant_species_abundance_e61c
+  negated: false
+  causal_language: associational
+  original_sentence: 'A gradient of increasing native plant species and decreasing non-native plant species
+    was detected from Site 1 to Site 2 to Site 3, correlating with decreasing soil C: N ratio, clay and
+    silt and increasing sand.'
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator:
+  - status: explicitly_asserted
+    comparator_type: spatial_or_temporal_control
+    comparator_description: gradient across Sites 1-3
+  philosophical_accounts:
+  - probabilistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    significance: significant
+    analysis_method: nonparametric
+    quantitative_value: Spearman correlation with NMDS axes (values not reported)
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id020
+  certainty_grade: not_assessed
+  temporal_extent: *id014
+  source_spans:
+  - text: 'A gradient of increasing native plant species and decreasing non-native plant species was detected
+      from Site 1 to Site 2 to Site 3, correlating with decreasing soil C: N ratio, clay and silt and
+      increasing sand.'
+    section: results
+  - text: Comparing management treatments with target ecosystem data from undisturbed fescue grasslands
+      showed distributions of individual native and non-native plant species were affected by soil properties
+      contributing to the soil gradient (Fig. 4b).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.7
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: Three sites define the gradient, so site identity and soil are confounded.
+- id: e54_cn_native
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:decreased_soil_c_n_ratio_e894
+  predicate: correlated_with
+  object: causal_mosaic:increased_native_plant_species_abundance_e61c
+  negated: false
+  causal_language: associational
+  original_sentence: 'A gradient of increasing native plant species and decreasing non-native plant species
+    was detected from Site 1 to Site 2 to Site 3, correlating with decreasing soil C: N ratio, clay and
+    silt and increasing sand.'
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator:
+  - status: explicitly_asserted
+    comparator_type: spatial_or_temporal_control
+    comparator_description: gradient across Sites 1-3
+  philosophical_accounts:
+  - probabilistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    significance: significant
+    analysis_method: nonparametric
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id020
+  certainty_grade: not_assessed
+  temporal_extent: *id014
+  source_spans:
+  - text: 'A gradient of increasing native plant species and decreasing non-native plant species was detected
+      from Site 1 to Site 2 to Site 3, correlating with decreasing soil C: N ratio, clay and silt and
+      increasing sand.'
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.45
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: 'TEXT-METHODS CONFLICT: the gradient is said to run Site 1 to 2 to 3 with decreasing
+    C:N, but the Methods give C:N of 15 (Site 1), 24 (Site 2) and 14 (Site 3), which is not monotonic.'
+- id: e55_clay_brin
+  source_document: 10.1111/avsc.12316
+  subject: causal_mosaic:increased_soil_clay_content_19a1
+  predicate: correlated_with
+  object: causal_mosaic:increased_cover_of_bromus_inermis_32de
+  negated: false
+  causal_language: associational
+  original_sentence: positively correlated with increasing soil clay content.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator:
+  - status: explicitly_asserted
+    comparator_type: spatial_or_temporal_control
+    comparator_description: across sites and reference plots
+  philosophical_accounts:
+  - probabilistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    significance: significant
+    analysis_method: nonparametric
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - 'Three disturbed sites within 3 km in Waterton Lakes National Park: Site 1 former landfill (1952-1999);
+      Sites 2 and 3 gravel borrow pits abandoned in the 1970s'
+    geographic_scope: Waterton Lakes National Park, Alberta, Canada
+    ecosystem_scope: temperate_subhumid_grasslands
+  evidential_basis: *id020
+  certainty_grade: not_assessed
+  temporal_extent: *id014
+  source_spans:
+  - text: For example, B. inermis was significantly
+    section: results
+  - text: positively correlated with increasing soil clay content.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.7
+  annotation_timestamp: '2026-11-14T12:00:00Z'
+  annotation_notes: The sentence is split by Table 1 and Figs 2-3 in the source; spans are the two contiguous
+    halves.

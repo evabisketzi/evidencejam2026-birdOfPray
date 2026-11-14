@@ -13,7 +13,10 @@ Follow these steps in order. One change per experiment: if the request contains 
 ## 1. Baseline and starting state
 - `git status --short`: start from a clean working tree for the files you will touch (commit or note pre-existing changes;
   never stash blindly).
-- Read the latest numbers in `dev/experiments/LOG.md` (reference table + last KEPT entry). These are the baseline.
+- Read the latest numbers in `dev/experiments/LOG.md` (reference table + last KEPT entry). These are the baseline only if
+  they were measured on all 5 gold papers (gold5: YKQQZV93, 4CB9X9XE, 3KPITIV3, 6HKWT4QG, ITXNQ843). Entries before
+  2026-11-14 16:00 used 4 papers: then run the step-4 commands as the control BEFORE the edit (post-processing: the cached
+  eval, which scores all 5; input-changing: control jobs with `set=gold5`) and record those numbers.
 - State the hypothesis in one sentence: what should improve, on which metric, and why (cite the evidence: a score file, a
   failure list, a diag file).
 
@@ -34,14 +37,14 @@ test that pins the new behaviour. Never touch `dev/gold/`, `schema/`, `corpus/`.
 EVAL_PREPROCESS=paragraph-chunks .venv/bin/python dev/eval_murphy.py --cached --others --prompts system.txt
 ```
 (The paragraph-chunks line needs its cache: if it fails with a connection error, queue
-`preprocess=paragraph-chunks prompt=system.txt cache=on set=gold4` once — see below.) If the LOG has no exact baseline for
+`preprocess=paragraph-chunks prompt=system.txt cache=on set=gold5` once — see below.) If the LOG has no exact baseline for
 this configuration, run these commands BEFORE making the edit (step 3) and record the numbers.
 
 **Input-changing:** needs the job runner (`tmux ls` shows `jobs`; if not, give the user the start command from CLAUDE.md and
 stop). Queue 3 repeats per model, cache bypassed but stored:
 ```
-echo "preprocess=sentence prompt=system.txt cache=refresh set=gold4" > dev/jobs/queue/<exp>_sf_r1.job     # r1..r3
-echo "preprocess=paragraph-chunks prompt=system.txt cache=refresh set=gold4" > dev/jobs/queue/<exp>_pc_r1.job
+echo "preprocess=sentence prompt=system.txt cache=refresh set=gold5" > dev/jobs/queue/<exp>_sf_r1.job     # r1..r3
+echo "preprocess=paragraph-chunks prompt=system.txt cache=refresh set=gold5" > dev/jobs/queue/<exp>_pc_r1.job
 ```
 For a new prompt, save it as a new file in `pipeline/prompt/` and pass `prompt=<file>`; keep `system.txt` as the control.
 Wait for `DONE` lines in `dev/jobs/runner.log` (use a background wait, do not poll), then score each:

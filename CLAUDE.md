@@ -33,9 +33,12 @@ dev/preflight.sh                                         # clean-checkout submis
 ```
 
 ## Evaluation protocol
-- Gold: `dev/gold/` (`murphy2005.yaml` is the organisers' example and the primary yardstick; `4CB9X9XE`, `3KPITIV3`,
-  `6HKWT4QG` are team annotations, used as an out-of-sample check). Scorer: `dev/score/` (gated levels loose/standard/strict;
-  standard = right entities + object attribute similarity >= 0.5).
+- Gold: 5 papers in `dev/gold/` (`murphy2005.yaml` is the organisers' example and the primary yardstick; `4CB9X9XE`,
+  `3KPITIV3`, `6HKWT4QG`, `ITXNQ843` are team annotations, used as an out-of-sample check). Every experiment, including its
+  control, is evaluated on all 5 (`set=gold5`, `eval_murphy.py --others`); LOG entries before 2026-11-14 16:00 used 4 papers
+  (no ITXNQ843), so do not compare their out-of-sample numbers with gold5 numbers. Report Murphy separately from the
+  out-of-sample papers and say which a pooled (micro) number covers. Scorer: `dev/score/` (gated levels
+  loose/standard/strict; standard = right entities + object attribute similarity >= 0.5).
 - Post-processing changes (parse/expand/guard/write): exact comparison on cached model output, no noise.
 - Prompt or preprocessing changes: endpoint runs are noisy (Murphy standard F1 varies about ±0.04 between identical runs),
   so use >= 3 repeats per variant and compare means and ranges.
@@ -46,7 +49,7 @@ dev/preflight.sh                                         # clean-checkout submis
 - `BRINE_URL`, `BRINE_MODEL`, `BRINE_API_KEY` come from the environment only. Claude's own shell usually does NOT have them.
 - The user starts `tmux new -d -s jobs 'dev/jobrunner.sh'` in a shell that has them; Claude then queues runs by writing
   `dev/jobs/queue/NAME.job` (one line of key=value; NAME must be new). Keys: `preprocess=sentence|paragraph|paragraph-chunks
-  prompt=<file> cache=on|refresh|off set=gold4|murphy|all thinking=on|off max_tokens=<1000-16000> refine=on|off
+  prompt=<file> cache=on|refresh|off set=gold5|gold4|murphy|all thinking=on|off max_tokens=<1000-16000> refine=on|off
   samples=1|2|3` (refine=on / samples>1 only once the pipeline has `--refine` / `--samples`; checked per job, no restart).
   Up to 2 jobs run at once (oldest first); a bad key/value is REJECTED at once, a job the pipeline rejects FAILS, both with
   the reason in `dev/jobs/runner.log`; the runner keeps going. Output goes to `dev/jobs/out/NAME/`.

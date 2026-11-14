@@ -11,7 +11,7 @@ from .abbrev import find_abbreviations
 from .clean import clean
 from .context import build_context
 from .filter import apply_filter
-from .legend import Species, build_legend, format_legend, species_forms
+from .legend import Species, build_legend, format_legend, group_entries, species_forms
 from .sections import Para, SectionResult, detect_sections, split_paragraphs
 from .sentences import naive_spans, split_spans
 from .stats import compress_stats, detect_alpha
@@ -25,6 +25,8 @@ class Options:
     filter: bool = False
     context_tokens: int = 400
     max_legend: int = 25
+    cite_filter: str = "strict"          # strict | relaxed (--cite-filter)
+    taxon_groups: bool = False          # --taxon-groups
 
 
 @dataclass
@@ -149,6 +151,12 @@ def _process(slug, raw, meta, count, opts: Options, table, fallbacks: List[str])
     except Exception as e:  # noqa: BLE001
         log.warning("%s: legend failed (%r)", slug, e)
         legend, _ = [], fallbacks.append("legend")
+    if opts.taxon_groups:                      # group words (rodents, grasses) with the group's NCBITaxon ID
+        try:
+            legend = legend + group_entries("\n".join(s["clean"] for s in sents), legend)
+        except Exception as e:  # noqa: BLE001
+            log.warning("%s: taxon groups failed (%r)", slug, e)
+            fallbacks.append("taxon_groups")
     forms = species_forms(legend)
 
     # ---- step 6: classify citations / own-study cues ------------------------------------------
@@ -156,7 +164,7 @@ def _process(slug, raw, meta, count, opts: Options, table, fallbacks: List[str])
     survivors: List[Dict] = []
     for s in sents:
         try:
-            d = C.classify_sentence(s["clean"], forms)
+            d = C.classify_sentence(s["clean"], forms, opts.cite_filter == "relaxed", s["section"])
         except Exception as e:  # noqa: BLE001
             log.warning("%s: classify failed (%r); keeping sentence", slug, e)
             if "classify" not in fallbacks:
@@ -215,7 +223,7 @@ def _process(slug, raw, meta, count, opts: Options, table, fallbacks: List[str])
     pruned: List[Species] = []
     for sp in legend:
         forms_sp = [sp.name] + sp.variants
-        if any(re.search(r"(?<![\w])" + re.escape(f) + r"(?![\w])", shown) for f in forms_sp):
+        if any(re.search(r"(?<![\w])" + re.escape(f) + r"(?![\w])", shown, re.I if sp.group else 0) for f in forms_sp):
             pruned.append(sp)
     legend = pruned
     lines = [f"[{s['n']}] ({s['section']}) {s['compressed']}" for s in survivors]

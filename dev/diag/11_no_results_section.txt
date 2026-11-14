@@ -1,0 +1,9 @@
+3YNFB29I	{'abs': 10, 'cap': 5, 'dis': 56}
+4RFTRJCP	{'abs': 11, 'dis': 34, 'cap': 4}
+6DBK8P4E	{'abs': 10, 'dis': 33, 'con': 10}
+ANWITZVF	{'abs': 22, 'cap': 6, 'dis': 27, 'con': 4}
+C5H5V7NH	{'abs': 139, 'cap': 8}
+ECK26ZFG	{'abs': 8, 'dis': 15}
+FLNPSPIG	{'abs': 68, 'cap': 12}
+R7HU9C7W	{'abs': 13, 'cap': 21}
+XJ7ET7G6	{'abs': 9, 'con': 10, 'dis': 5}

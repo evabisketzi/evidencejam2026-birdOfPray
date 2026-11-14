@@ -4,7 +4,7 @@
 # A job is a file dev/jobs/queue/NAME.job (NAME: letters, digits, _ . -) with one line of key=value pairs, oldest first.
 # Only these keys and values are accepted (anything else: the job is REJECTED and logged, the runner keeps going):
 #   preprocess=sentence|paragraph|paragraph-chunks   prompt=<file in pipeline/prompt/>   cache=on|refresh|off
-#   set=gold4|murphy|all   thinking=on|off   max_tokens=<1000-16000>   refine=on|off   samples=1|2|3
+#   set=gold5|gold4|murphy|all   thinking=on|off   max_tokens=<1000-16000>   refine=on|off   samples=1|2|3
 # refine=on / samples=2|3 become --refine / --samples N only if the CURRENT pipeline has those flags (checked per job, so a
 # flag added later works without restarting the runner; otherwise the job is REJECTED); refine=off and samples=1 are the
 # pipeline defaults and pass no flag.  A job whose pipeline rejects a flag anyway (argparse error) FAILS with the reason
@@ -38,7 +38,7 @@ has_flag() {   # does the current pipeline accept this flag?
 
 # parse "$1" (job file) into ARGS / DESC; on a bad key or value set BAD and return 1
 parse_job() {
-  local pre=sentence prompt=system.txt cache=on set=gold4 thinking="" maxtok="" refine="" samples="" kv k v
+  local pre=sentence prompt=system.txt cache=on set=gold5 thinking="" maxtok="" refine="" samples="" kv k v
   BAD=""; ARGS=(); DESC=""
   for kv in $(head -1 "$1"); do
     k="${kv%%=*}"; v="${kv#*=}"
@@ -47,7 +47,7 @@ parse_job() {
       preprocess) [[ "$v" =~ ^(sentence|paragraph|paragraph-chunks)$ ]] && pre="$v" || BAD="$kv" ;;
       prompt) [[ "$v" =~ ^[A-Za-z0-9_.-]+$ ]] && [ -f "pipeline/prompt/$v" ] && prompt="$v" || BAD="$kv" ;;
       cache) [[ "$v" =~ ^(on|refresh|off)$ ]] && cache="$v" || BAD="$kv" ;;
-      set) [[ "$v" =~ ^(gold4|murphy|all)$ ]] && set="$v" || BAD="$kv" ;;
+      set) [[ "$v" =~ ^(gold5|gold4|murphy|all)$ ]] && set="$v" || BAD="$kv" ;;
       thinking) [[ "$v" =~ ^(on|off)$ ]] && thinking="$v" || BAD="$kv" ;;
       refine) [[ "$v" =~ ^(on|off)$ ]] && refine="$v" || BAD="$kv" ;;
       samples) [[ "$v" =~ ^[123]$ ]] && samples="$v" || BAD="$kv" ;;
@@ -58,6 +58,7 @@ parse_job() {
   done
   ARGS=(--preprocess "$pre" --prompt "$prompt" --concurrency 8)
   case "$set" in
+    gold5) ARGS+=(--docs YKQQZV93,4CB9X9XE,3KPITIV3,6HKWT4QG,ITXNQ843) ;;
     gold4) ARGS+=(--docs YKQQZV93,4CB9X9XE,3KPITIV3,6HKWT4QG) ;;
     murphy) ARGS+=(--docs YKQQZV93) ;;
   esac

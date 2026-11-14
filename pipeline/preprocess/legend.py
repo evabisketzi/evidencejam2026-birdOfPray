@@ -42,6 +42,7 @@ class Species:
     variants: List[str] = field(default_factory=list)
     taxid: Optional[int] = None
     count: int = 0
+    group: bool = False            # a group word (rodents, grasses) from data/taxon_groups.tsv, not a species of the paper
 
 
 def load_taxon_table(path: Optional[Path] = None) -> Dict[str, int]:
@@ -158,10 +159,56 @@ def build_legend(raw: str, cleaned_text: str, used_text: str, table: Optional[Di
     return out[:max_entries]
 
 
+GROUPS_TABLE = ROOT / "data" / "taxon_groups.tsv"
+_groups_cache: Dict[str, List[Tuple[str, int, List[str]]]] = {}
+
+
+def load_taxon_groups(path: Optional[Path] = None) -> List[Tuple[str, int, List[str]]]:
+    """(scientific name, NCBITaxon id, word forms) per group; IDs checked by hand against NCBI Taxonomy."""
+    path = Path(path) if path else GROUPS_TABLE
+    key = str(path)
+    if key not in _groups_cache:
+        rows: List[Tuple[str, int, List[str]]] = []
+        if path.exists():
+            with open(path, encoding="utf-8", newline="") as f:
+                for row in csv.reader(f, delimiter="\t"):
+                    if len(row) >= 3 and row[1].isdigit():
+                        rows.append((row[0], int(row[1]), [w.strip() for w in row[2].split(",") if w.strip()]))
+        _groups_cache[key] = rows
+    return _groups_cache[key]
+
+
+def group_entries(used_text: str, legend: List[Species], max_entries: int = 8, min_count: int = 2,
+                  path: Optional[Path] = None) -> List[Species]:
+    """--taxon-groups: legend entries for group words the paper uses ("rodents", "grasses").  The entry keeps the paper's
+    word as its name; the ID is the group's.  A group is skipped when a legend species already carries the word (a paper
+    whose "willow" is Salix bebbiana) or belongs to the group's genus."""
+    taken = " ; ".join(f for sp in legend for f in [sp.name] + sp.variants).lower()
+    genera = {sp.name.split()[0].lower() for sp in legend}
+    out: List[Species] = []
+    for sci, taxid, forms in load_taxon_groups(path):
+        if sci.lower() in genera:
+            continue
+        found = []
+        for f in forms:
+            n = len(re.findall(r"(?<![\w-])" + re.escape(f) + r"(?![\w-])", used_text, flags=re.I))
+            if n:
+                found.append((n, f))
+        total = sum(n for n, _ in found)
+        if total < min_count or any(re.search(r"(?<![\w-])" + re.escape(f) + r"(?![\w-])", taken) for _, f in found):
+            continue
+        found.sort(key=lambda x: -x[0])
+        out.append(Species(found[0][1], [f for _, f in found[1:]], taxid, total, True))
+    out.sort(key=lambda s: (-s.count, s.name))
+    return out[:max_entries]
+
+
 def species_forms(legend: Iterable[Species]) -> List[str]:
     """Forms usable for own-study / filter matching (binomials and abbreviations only)."""
     forms = []
     for sp in legend:
+        if sp.group:
+            continue
         forms.append(sp.name)
         forms.extend(v for v in sp.variants if re.fullmatch(r"[A-Z]\. [a-z]+", v))
     return forms

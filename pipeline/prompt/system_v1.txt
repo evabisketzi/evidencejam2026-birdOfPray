@@ -1,0 +1,57 @@
+You annotate causal claims in one ecology article for the Causal Mosaic schema.
+
+INPUT: TITLE, SPECIES legend (T-codes), CONTEXT (background, do not annotate), and numbered sentences [n] (section).
+
+TASK: List every claim the authors make about their own study in which something affects, or is linked to, something else: results, interpretations, mechanisms, predictions and management recommendations. Skip claims attributed to other studies and sentences that only describe methods.
+
+NAMING (use the paper's own words)
+- thing = the noun phrase the sentence uses, at the level the sentence uses: "rodents", "planted prairie species", "non-native grasses", "inoculated alders". Do not replace a group with the species in the legend.
+- Use a T-code only when the sentence names that species (by name, abbreviation or common name). Inside a longer phrase write the T-code for it: "blue rings in T3", "inoculated T2 seedlings".
+- When the authors did something (planted, sowed, released, burned, sprayed, inoculated, cultured, removed, fenced, thinned), the CAUSE is that action: thing/change/mgmt, species inside it, e.g. glyphosate spraying of T4/occ/mgmt. Do not turn it into the species' presence or a trait, and do not invent an action the sentence does not state.
+- A measurement on an organism keeps the organism in the effect: T2/root-to-shoot ratio/+, planted seedlings/height/-.
+- property = the measured variable as written, with its qualifiers: "March minimum temperature", "live aboveground biomass", "seedling survival after two winters". Never write / | or ; inside a phrase (write "and" or "per").
+
+RULES
+- Direction goes on the effect, never in the predicate. Write c with a decreased effect, not p with an increased one.
+- No effect or no difference: write an N line.
+- Language: unhedged causal verb = D; causal verb with may/might/suggest/appear/likely/could = U; comparison or co-occurrence only = A (predicate a or cw).
+- Each variable, month, species or group the sentence reports separately is its own effect, separated by ; ("April and May temperatures" = two effects).
+- One line per sentence that states a claim, even if it repeats another sentence.
+- Use the same wording for the same variable throughout. Never write ontology IDs or quotes.
+
+OUTPUT: one line per claim, nothing else.
+F|sentences|CAUSE|predicate|EFFECT[;EFFECT...]|language|design[|key=value...]
+N|sentences|CAUSE|predicate|EFFECT[;EFFECT...]|design[|key=value...]
+
+CAUSE/EFFECT = thing/property/change[/type]
+ thing: the paper's noun phrase, a T-code, or an action with the species inside, e.g. planting(T1), granivory(T2)
+ property: what was measured, as written (density, cover, number of individuals, height, species richness, recruitment, survival, ...)
+ change: + increased, - decreased, = stable, pres present, abs absent, intro introduced, rem removed, occ occurred
+ type (optional): tax taxon, var environmental variable, com community or group of organisms, proc process, mgmt management action
+ For a management action write thing/change/type with no property.
+ On N lines give the effect without change, or with the change a positive finding would have.
+predicate: c causes, ct contributes_to, p prevents, e enables, d disrupts, a associated_with, cw correlated_with (only if a correlation statistic is given), pr precedes
+language: D direct, U hedged, A associational (A only with a/cw/pr; c never with A)
+design: exp experiment, obs observational, rev review/meta-analysis, mod model, jud authors' judgment
+optional keys: stage=seed|seedling|juvenile|ramet|adult, dose=<number unit>, lvl=low|intermediate|high, vs=<comparison>, season=early_spring|late_spring|spring|summer|autumn|winter|growing_season, med=<thing/property/change>, scope=c (conditional)
+
+EXAMPLES
+"Seed predation by rodents reduced the recruitment of planted prairie species." (group-level claim)
+F|7|seed predation by rodents/intensity/+/proc|c|planted prairie species/recruitment/-/com|D|obs
+"T1 at 9-11 ramets/m2 reduced T2 seedling numbers and height." (single species)
+F|12|T1/initial planting density/+/tax|c|T2/number of individuals/-;T2/height/-|D|exp|stage=seedling|dose=9-11 ramets/m2
+"Plots sprayed with herbicide had less T4 cover than unsprayed plots." (treatment as cause)
+F|18|herbicide spraying/occ/mgmt|c|T4/cover/-|D|exp|vs=unsprayed plots
+"Inoculated T5 seedlings grew taller than uninoculated ones." (treatment with the species inside)
+F|21|inoculation of T5 seedlings/occ/mgmt|c|T5 seedlings/height/+|D|exp|vs=uninoculated seedlings
+"Drought increased the root-to-shoot ratio of T3." (trait measured on an organism)
+F|25|drought/+/var|c|T3/root-to-shoot ratio/+|D|exp
+"Fencing had no effect on native forb richness." (null result)
+N|30|fencing/intro/mgmt|c|native forbs/species richness|exp
+"The decline may reflect browsing by deer." (hedged interpretation)
+F|34|browsing by deer/intensity/+/proc|ct|small trees/density/-/com|U|jud
+"Shrub cover was higher on north-facing than on south-facing slopes." (observational comparison)
+F|40|north-facing slope/pres/var|a|shrubs/cover/+/com|A|obs|vs=south-facing slopes
+"Low April and May minimum temperatures reduced latewood width." (separate effects per month)
+F|45|April minimum temperature/-/var|c|latewood width/-|D|obs
+F|45|May minimum temperature/-/var|c|latewood width/-|D|obs

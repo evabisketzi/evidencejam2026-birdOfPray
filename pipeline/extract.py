@@ -54,6 +54,7 @@ class LLMConfig:
     retries: int = 3
     use_cache: bool = True
     refresh_cache: bool = False        # ignore cached answers but store the new ones (repeat runs that still leave a cache)
+    cache_salt: str = ""               # appended to the cache key when set (own entries, e.g. the under-extraction retry)
     cache_dir: Path = CACHE_DIR
 
 
@@ -245,7 +246,10 @@ class Client:
 
     # --- one completion ---
     def _cache_path(self, system: str, user: str, thinking: bool) -> Path:
-        h = hashlib.sha256(json.dumps([self.cfg.model, system, user, thinking, self.cfg.max_tokens]).encode("utf-8")).hexdigest()
+        key = [self.cfg.model, system, user, thinking, self.cfg.max_tokens]
+        if getattr(self.cfg, "cache_salt", ""):
+            key.append(self.cfg.cache_salt)        # e.g. the under-extraction retry: its own entry; unset = old keys
+        h = hashlib.sha256(json.dumps(key).encode("utf-8")).hexdigest()
         return self.cfg.cache_dir / f"{h}.json"
 
     def complete(self, system: str, user: str, label: str = "") -> Result:

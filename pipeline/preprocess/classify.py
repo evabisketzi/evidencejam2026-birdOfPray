@@ -165,9 +165,28 @@ class Decision:
     own_cue: bool = False
 
 
-def classify_sentence(sent: str, species_forms: Iterable[str] = ()) -> Decision:
+# --cite-filter relaxed (discussion / conclusions only): a cited sentence that refers back to the authors' own results
+# ("This creates ...", "It also suggests ...", "One implication is ...") or cites in support ("(see X 2001)") is the
+# authors' own claim; so is a lower-case continuation of a split sentence.
+_ANAPHORIC = re.compile(
+    r"^\W{0,3}(?:This|These|Such|Thus|Therefore|Hence|Consequently|Together|Taken together|Overall|In turn|"
+    r"(?:One|An|Another|A further) (?:implication|consequence|explanation|possibility)|"
+    r"It (?:also |thus |therefore )?(?:may|might|could|would|appears|seems|suggests|is likely|is possible|is important|"
+    r"indicates|implies|remains))\b")
+_SUPPORT_CITE = re.compile(r"\(\s*(?:see|e\.g\.|cf\.)\s", re.I)
+RELAXED_SECTIONS = ("dis", "con")
+
+
+def relaxed_own(sent: str, section: str) -> bool:
+    if section not in RELAXED_SECTIONS:
+        return False
+    s = sent.lstrip()
+    return bool(_ANAPHORIC.match(s) or _SUPPORT_CITE.search(s) or (s[:1].islower()))
+
+
+def classify_sentence(sent: str, species_forms: Iterable[str] = (), relaxed: bool = False, section: str = "") -> Decision:
     cites = find_citations(sent)
-    own = has_own_cue(sent, species_forms)
+    own = has_own_cue(sent, species_forms) or (relaxed and bool(cites) and relaxed_own(sent, section))
     if not cites:
         return Decision(True, "kept", sent, [], own)
     texts = [c.text for c in cites]

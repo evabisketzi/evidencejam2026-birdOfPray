@@ -116,3 +116,28 @@ direct (Murphy 33/39/11/17, 4CB9X9XE 2/48/31/19, 3KPITIV3 20/17/59/4, 6HKWT4QG 2
 - **Rejected variant:** keying on the scorer's normalised token sets (205 instead of 130 drops): it merges different claims
   ("→ Diversity" and "→ Species richness" share a token after normalisation), i.e. tuning to a scorer quirk.
 - **Tests:** `tests/test_pipeline.py::test_guard_drops_a_claim_repeated_in_the_same_sentence_but_keeps_other_sentences`.
+
+## 2026-11-14 — teammate's preprocess_paper.py update (team/main 9b5f13c) in `team_paper.py`  — KEPT (neutral within noise; stays in step with the team)
+- **Change:** `pipeline/preprocess/team_paper.py` replaced by the teammate's updated file (paragraph modes only).
+- **Why:** keep the paragraph models on the team's current preprocessing; offline visibility check in `dev/diag/13_preproc_three.md`.
+- **Type:** input-changing → 3 endpoint runs per arm, gold5, `cache=refresh` (jobs `tp_ctrl_pc_r1-3` old code, `tp_new_pc_r1-3` new code).
+- **Result (paragraph-chunks model), mean [range]:** Murphy std F1 0.541 [0.507–0.569] → 0.570 [0.559–0.591], strict 0.484 → 0.506,
+  loose 0.775 → 0.781, null recall 0.622 → 0.644 (all inside the ±0.04 run-to-run noise). Out-of-sample (mean of 4CB9X9XE,
+  3KPITIV3, 6HKWT4QG, ITXNQ843): std F1 0.066 [0.064–0.068] → 0.069 [0.066–0.075]; loose 0.215 [0.197–0.235] → 0.191 [0.185–0.202],
+  the drop coming from 6HKWT4QG (loose 0.508 → 0.377; its std F1 0.063 → 0.074). Tokens per paper 8,325+2,292 → 8,312+2,277.
+- **Sentence model:** not affected (does not use `team_paper.py`).
+- **Not measured:** the other 303 papers (no gold).
+
+## 2026-11-14 — prompt `system_v1.txt` (entities in the paper's words)  — REVERTED (not adopted; P* stays `system.txt`)
+- **Change:** prompt variant `pipeline/prompt/system_v1.txt`.
+- **Type:** input-changing → 3 endpoint runs per arm, gold5, `cache=refresh`. Controls on the same code state: `ctrl_sf_r1-3`
+  (sentence), `tp_new_pc_r1-3` (paragraph-chunks).
+- **Result (sentence model), mean [range]:** Murphy std F1 0.563 [0.550–0.569] → 0.284 [0.257–0.324], strict 0.494 → 0.256,
+  loose 0.847 → 0.791, null recall 0.600 → 0.111; out-of-sample (mean of 4) std F1 0.032 → 0.034, loose 0.176 → 0.067.
+  Tokens per paper 6,319+2,181 → 7,169+2,217.
+- **Result (paragraph-chunks model):** Murphy std F1 0.570 [0.559–0.591] → 0.279 [0.247–0.307], strict 0.506 → 0.265,
+  loose 0.781 → 0.849, null recall 0.644 → 0.400; out-of-sample std F1 0.069 → 0.036, loose 0.191 → 0.113.
+  Tokens per paper 8,312+2,277 → 9,213+2,324. Two of the three runs took 22–25 min (usually about 11).
+- **Reading:** entities are still found (Murphy loose F1 holds) but no longer match at the standard level, on both models,
+  far outside the noise. The causal-language accuracy on matched pairs was higher (0.70 / 0.76 vs 0.675 / 0.621), on far fewer pairs.
+- **Left in place:** the file `system_v1.txt` and its test are still in the working tree, unused (not deleted without the user's say).

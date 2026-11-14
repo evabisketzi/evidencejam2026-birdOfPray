@@ -978,3 +978,18 @@ def test_calibrate_language_hedges_only():
     assert calibrate_language("direct_causal", "exp", "Densities of 9 ramets/m2 significantly suppressed A. petiolata.") == "direct_causal"
     assert calibrate_language("direct_causal", "exp", "Higher densities likely killed seedlings.") == "direct_causal"   # gold keeps this direct
     assert calibrate_language("associational", "obs", "Cover may be higher.") == "associational"
+
+
+def test_every_system_v1_example_parses_including_long_paper_phrases():
+    text = (ROOT / "pipeline" / "prompt" / "system_v1.txt").read_text(encoding="utf-8").split("EXAMPLES")[1]
+    lines = [ln for ln in text.splitlines() if ln[:2] in ("F|", "N|")]
+    claims, bad = parse_text("\n".join(lines))
+    assert len(lines) >= 8 and not bad and len(claims) == len(lines)
+    side = sidecar()
+    side["species"] += [{"id": "T4", "name": "Bromus inermis", "ncbitaxon": None},
+                        {"id": "T5", "name": "Alnus viridis", "ncbitaxon": None}]       # the v1 examples use T1-T5
+    out = expand(lines, side)
+    names = {n["name"] for n in out.nodes.values()}
+    assert "Decreased recruitment of planted prairie species" in names          # a group in the paper's words
+    assert "Decreased April minimum temperature" in names                       # property with its qualifiers
+    assert not out.stats.get("unknown_tcode")

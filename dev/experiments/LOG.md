@@ -90,3 +90,10 @@ direct (Murphy 33/39/11/17, 4CB9X9XE 2/48/31/19, 3KPITIV3 20/17/59/4, 6HKWT4QG 2
 - **Rejected variants:** expanding before composing the name (changed template branches: "FMM cover soil type" -> "Floor
   mineral mix (FMM) of cover soil type"); naive plural stripping ("greenhouse gase").
 - **Tests:** `tests/test_abbrev.py` (3 tests); full suite 256 passed.
+
+## 2026-11-14 — keep "pH" lower-case in node names  — KEPT
+- **Change:** `pipeline/expand.py` `_cap()`: a name starting with a mixed-case term ("pH", "eDNA", "mRNA") is not capitalised.
+- **Why:** 6 node names in the full run read "PH" (the remaining pure-abbreviation names after the expansion experiment).
+- **Type:** post-processing → exact check.
+- **Result:** Murphy std F1 0.593 → 0.593 (sentence), 0.535 → 0.535 (paragraph-chunks); other gold papers identical.
+- **Tests:** `tests/test_abbrev.py::test_cap_keeps_mixed_case_terms`.

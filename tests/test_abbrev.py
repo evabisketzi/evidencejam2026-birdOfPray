@@ -36,3 +36,12 @@ def test_node_names_and_attributes_are_expanded_from_the_sidecar():
     assert names == ["Increased net ecosystem production (NEP)", "Increased volumetric moisture content (VMC) of soil"]
     attrs = [n.get("measured_attribute") for n in nodes.values() if n.get("measured_attribute")]
     assert attrs == ["volumetric moisture content (VMC)"]
+
+
+def test_cap_keeps_mixed_case_terms():
+    from pipeline.expand import _cap
+    assert _cap("pH") == "pH"
+    assert _cap("pH of soil") == "pH of soil"
+    assert _cap("eDNA detection") == "eDNA detection"
+    assert _cap("soil moisture") == "Soil moisture"
+    assert _cap("") == ""

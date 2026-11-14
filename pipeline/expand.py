@@ -65,7 +65,7 @@ class Expanded:
 
 
 def _cap(s: str) -> str:
-    return s[:1].upper() + s[1:] if s else s
+    return s[:1].upper() + s[1:] if s and not re.match(r"[a-z]+[A-Z]", s) else s     # keep 'pH', 'eDNA', 'mRNA'
 
 
 class Expander:

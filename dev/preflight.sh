@@ -8,14 +8,14 @@ set -uo pipefail
 cd "$(dirname "$0")/.."
 REPO="$(pwd)"; FULL=0; REF=HEAD
 while [ "$#" -gt 0 ]; do case "$1" in --full) FULL=1; shift ;; --ref) REF="$2"; shift 2 ;; *) echo "unknown option $1"; exit 2 ;; esac; done
-TMP="$(mktemp -d)"; WT="$TMP/checkout"; PORT=$((18000 + RANDOM % 1000)); FAIL=0
+SHA=""; TMP="$(mktemp -d)"; WT="$TMP/checkout"; PORT=$((18000 + RANDOM % 1000)); FAIL=0
 ok()   { echo "  PASS  $*"; }
 bad()  { echo "  FAIL  $*"; FAIL=1; }
 warn() { echo "  WARN  $*"; }
 cleanup() { [ -n "${MOCK:-}" ] && kill "$MOCK" 2>/dev/null; git -C "$REPO" worktree remove --force "$WT" >/dev/null 2>&1; rm -rf "$TMP"; }
 trap cleanup EXIT
 
-echo "== preflight for $(git rev-parse --short "$REF") ($(git log -1 --format=%s "$REF" | cut -c1-70))"
+SHA=$(git rev-parse --short "$REF"); echo "== preflight for $SHA ($(git log -1 --format=%s "$REF" | cut -c1-70))"
 echo "-- repository state"
 [ -z "$(git status --porcelain --untracked-files=no)" ] && ok "no uncommitted changes to tracked files" || warn "uncommitted changes to tracked files are NOT part of $REF"
 up=$(git rev-parse --abbrev-ref --symbolic-full-name '@{u}' 2>/dev/null)
@@ -28,7 +28,7 @@ now=$(date -u +%s); dl=$(date -u -d '2026-11-15 23:00' +%s); left=$(( (dl - now)
 [ "$left" -gt 0 ] && ok "judging snapshot in about $left h (Sun Nov 15, 6 p.m. EST)" || warn "the judging deadline has passed"
 
 echo "-- clean checkout of $REF"
-git worktree add -q --detach "$WT" "$REF" || { bad "git worktree add failed"; exit 1; }
+git worktree add -q --detach "$WT" "$SHA" || { bad "git worktree add failed"; exit 1; }
 cd "$WT"
 [ -x run.sh ] && ok "run.sh exists and is executable" || bad "run.sh missing or not executable"
 unpinned=$(grep -vE '^\s*(#|$|-r )' requirements.txt | grep -vE '==' || true)
@@ -65,5 +65,5 @@ echo "-- unit tests (in the clean checkout)"
 .venv/bin/python -m pytest -q tests > "$TMP/tests.log" 2>&1 && ok "$(tail -1 "$TMP/tests.log")" || { bad "tests: $(tail -1 "$TMP/tests.log")"; }
 
 echo
-[ "$FAIL" = 0 ] && echo "PREFLIGHT PASSED for $(git -C "$REPO" rev-parse --short "$REF")" || echo "PREFLIGHT FAILED"
+[ "$FAIL" = 0 ] && echo "PREFLIGHT PASSED for $SHA" || echo "PREFLIGHT FAILED"
 exit "$FAIL"

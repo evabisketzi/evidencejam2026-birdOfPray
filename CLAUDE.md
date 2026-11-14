@@ -16,9 +16,9 @@ written as YAML and JSON, with an LLM (Qwen on the shared BRINE endpoint).
 species legend, context) → 2 grounding (`grounding.py`, `data/terms.tsv`, `data/ncbitaxon_names.tsv`) → 3 LLM extraction
 (`extract.py`, prompt `prompt/system.txt`, one line per claim `F|...`/`N|...`) → 4 parse + expand (`parse.py`, `expand.py`) →
 5 guard + merge (`guard.py`) → 6 write + validate (`write.py`).
-- `--preprocess sentence` (default on `main`): our sentence filter. `paragraph`: the teammate's paragraph selection
-  (`preprocess/team_paper.py`, verbatim; adapter `team_adapter.py`). `paragraph-chunks`: the same, one LLM call per
-  paragraph chunk (default on branch `paragraph-chunks`).
+- `--preprocess paragraph-chunks` (default since 2026-11-14, see `reports/RESULTS.md`): the teammate's paragraph selection
+  (`preprocess/team_paper.py`, verbatim; adapter `team_adapter.py`), one LLM call per paragraph chunk. `paragraph`: the same,
+  whole paper in one call. `sentence`: our sentence filter. `sentence-chunks`: the sentence filter, one call per chunk.
 - The LLM cache is `.cache/extract/` (key = model + prompt + input + max_tokens): an unchanged input never costs tokens twice.
 
 ## Commands

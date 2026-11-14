@@ -1,5 +1,27 @@
 # Evidence Jam 2026 — Lane 1: Causal Annotation
 
+## Our submission
+
+```
+./run.sh corpus/ output/
+```
+
+Set `BRINE_URL`, `BRINE_MODEL` and `BRINE_API_KEY` first. The command creates its own virtual environment from the
+pinned `requirements.txt` and writes one merged CAMO graph to `output/camo_graph.yaml` and `output/camo_graph.json`,
+validated against `schema/causalmosaic.yaml`.
+
+How it works: code selects and numbers the text worth annotating, the model writes one short line per causal claim,
+and code turns those lines into CAMO nodes and edges, attaches ontology IDs, and repairs or drops anything the schema
+would reject. The model never writes YAML or IDs.
+
+| read this | for |
+|---|---|
+| [reports/METHOD.md](reports/METHOD.md) | the pipeline, stage by stage, and how we evaluate |
+| [reports/RESULTS.md](reports/RESULTS.md) | the numbers behind the submitted configuration, and what is not measured |
+| [dev/experiments/LOG.md](dev/experiments/LOG.md) | every experiment, kept or not |
+
+The rest of this file is the organisers' original description of the challenge.
+
 ## The challenge
 
 > **Create a script that annotates the scientific journal articles, contained in**

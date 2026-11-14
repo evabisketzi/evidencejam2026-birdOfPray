@@ -99,7 +99,7 @@ def process_one(row: Dict[str, str], corpus: Path, client: Client, system: str, 
 
 def run(corpus: Path, out_dir: Path, docs: Optional[List[str]] = None, limit: Optional[int] = None, concurrency: int = 4,
         thinking: bool = False, prompt: str = DEFAULT_PROMPT, use_cache: bool = True, max_input_tokens: int = 12000,
-        max_tokens: int = 3000, preprocess: str = "sentence", refresh_cache: bool = False, cite_filter: str = "strict",
+        max_tokens: int = 3000, preprocess: str = "paragraph-chunks", refresh_cache: bool = False, cite_filter: str = "strict",
         taxon_groups: bool = False, retry_underextraction: bool = False) -> int:
     t0 = time.time()
     opts = Options(cite_filter=cite_filter, taxon_groups=taxon_groups)
@@ -229,7 +229,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--concurrency", type=int, default=4)
     ap.add_argument("--thinking", choices=("on", "off"), default="off")
     ap.add_argument("--prompt", default=DEFAULT_PROMPT, help="file in pipeline/prompt/ (default system.txt)")
-    ap.add_argument("--preprocess", choices=("sentence", "sentence-chunks", "paragraph", "paragraph-chunks"), default="sentence", help="stage 1: sentence-level filtering (ours, default; sentence-chunks = the same sentences, one call per ~2,500-token chunk), paragraph-level scoring and selection (teammate's, team_paper.py; whole paper in one call), or the same with one call per paragraph chunk")
+    ap.add_argument("--preprocess", choices=("sentence", "sentence-chunks", "paragraph", "paragraph-chunks"), default="paragraph-chunks", help="stage 1: paragraph-level scoring and selection with one call per paragraph chunk (team_paper.py; default), the same with the whole paper in one call (paragraph), or sentence-level filtering (sentence; sentence-chunks = the same sentences, one call per ~2,500-token chunk)")
     ap.add_argument("--cite-filter", choices=("strict", "relaxed"), default="strict", help="relaxed: in discussion/conclusions also keep cited sentences that refer back to the authors' own results")
     ap.add_argument("--taxon-groups", action="store_true", help="group words (rodents, conifers, grasses, ...) get a SPECIES legend entry with the group's NCBITaxon ID")
     ap.add_argument("--retry-underextraction", action="store_true", help="retry a paper once (own cache entry) when claims per sentence fall below UNDER_EXTRACTION")

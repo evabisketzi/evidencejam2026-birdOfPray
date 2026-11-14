@@ -364,3 +364,15 @@ def test_threshold_only_moves_the_standard_level(tmp_path):
     assert lv(lo, "raw", "standard", "tp") == 1 and lv(hi, "raw", "standard", "tp") == 0
     assert lv(hi, "raw", "loose", "tp") == 1
     assert lo["sensitivity"]["raw"]["0.5"]["f1"] == 1.0 and lo["sensitivity"]["raw"]["0.6"]["f1"] == 0.0
+
+
+def test_scorer_labels_attribute_ids_from_terms_tsv_verified_or_not():
+    from dev.score.normalise import node_sig
+    n = node_sig({"id": "a", "name": "X", "entity_term": "NCBITaxon:3472", "measured_attribute": "PATO:0000119"})
+    assert n.attr_known and n.attr_groups == frozenset({"@height"})                 # verified row
+    n = node_sig({"id": "a", "name": "X", "entity_term": "NCBITaxon:3472", "measured_attribute": "PATO:0000049"})
+    assert n.attr_known and n.attr_tokens == frozenset({"intensity"})               # verified=no row: still a label
+    n = node_sig({"id": "a", "name": "X", "entity_term": "NCBITaxon:3472", "measured_attribute": "PATO:0000070"})
+    assert n.attr_groups == frozenset({"@count"})                                   # abundance
+    n = node_sig({"id": "a", "name": "X", "entity_term": "NCBITaxon:3472", "measured_attribute": "PATO:9999999"})
+    assert not n.attr_known                                                          # unknown IDs stay unlabelled

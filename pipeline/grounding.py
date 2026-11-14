@@ -61,7 +61,8 @@ def _terms(path: str = str(TERMS_TABLE)) -> Tuple[Dict[Tuple[str, str], str], Li
     with open(p, encoding="utf-8", newline="") as f:
         for r in csv.DictReader(f, delimiter="\t"):
             rows.append(r)
-            if (r.get("verified") or "").strip().lower() == "yes":
+            # only rows with an ID that a human marked verified=yes ever produce an ID; an empty curie stays free text
+            if (r.get("verified") or "").strip().lower() == "yes" and (r.get("curie") or "").strip():
                 verified[((r.get("kind") or "").strip().lower(), r["synonym"].strip().lower())] = r["curie"].strip()
     return verified, rows
 
@@ -74,4 +75,4 @@ def term_id(text: Optional[str], kind: str, path: str = str(TERMS_TABLE)) -> Opt
 
 
 def unverified_terms(path: str = str(TERMS_TABLE)) -> List[dict]:
-    return [r for r in _terms(path)[1] if (r.get("verified") or "").strip().lower() != "yes"]
+    return [r for r in _terms(path)[1] if (r.get("verified") or "").strip().lower() != "yes" or not (r.get("curie") or "").strip()]

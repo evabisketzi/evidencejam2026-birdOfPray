@@ -97,6 +97,8 @@ class Result:
     seconds: float = 0.0
     cached: bool = False
     thinking_mode: str = "off"            # off (kwargs) | off (/no_think) | on
+    think_returned: bool = False          # did the reply contain a <think> block (before it was stripped)?
+    raw: str = ""                         # the reply exactly as the endpoint sent it
 
 
 class Client:
@@ -163,7 +165,8 @@ class Client:
         if self.cfg.use_cache and cp.exists():
             try:
                 d = json.loads(cp.read_text(encoding="utf-8"))
-                return Result(d["text"], d["prompt_tokens"], d["completion_tokens"], d.get("seconds", 0.0), True, d.get("mode", "off"))
+                return Result(d["text"], d["prompt_tokens"], d["completion_tokens"], d.get("seconds", 0.0), True, d.get("mode", "off"),
+                              bool(d.get("think", False)), d.get("raw", d["text"]))
             except Exception:  # noqa: BLE001
                 pass
         t0 = time.time()
@@ -194,17 +197,19 @@ class Client:
         usage = body.get("usage") or {}
         pt = int(usage.get("prompt_tokens") or (len(system) + len(user)) / CHARS_PER_TOKEN)
         ct = int(usage.get("completion_tokens") or len(text) / CHARS_PER_TOKEN)
+        raw_reply, had_think = text, bool(re.search(r"<think>", text, re.I))
         text = strip_thinking(text)
         secs = time.time() - t0
         self.modes_seen[mode] = self.modes_seen.get(mode, 0) + 1
         if self.cfg.use_cache:
             try:
                 cp.parent.mkdir(parents=True, exist_ok=True)
-                cp.write_text(json.dumps({"text": text, "prompt_tokens": pt, "completion_tokens": ct, "seconds": secs, "mode": mode}),
+                cp.write_text(json.dumps({"text": text, "prompt_tokens": pt, "completion_tokens": ct, "seconds": secs, "mode": mode,
+                                         "think": had_think, "raw": raw_reply}),
                               encoding="utf-8")
             except OSError:
                 pass
-        return Result(text, pt, ct, secs, False, mode)
+        return Result(text, pt, ct, secs, False, mode, had_think, raw_reply)
 
 
 # ----------------------------------------------------------------------------------------------- chunking

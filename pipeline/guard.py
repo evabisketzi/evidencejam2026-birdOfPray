@@ -234,10 +234,12 @@ def integrity(slug: str, nodes: Dict[str, dict], edges: List[dict], doc_ids: set
 
 
 # ----------------------------------------------------------------------------------------------- merge
-def source_document(row: Dict[str, str]) -> dict:
+def source_document(row: Dict[str, str], doi: Optional[str] = None) -> dict:
+    """`doi` (from the index or the markdown fallback, see pipeline.doi) overrides the raw index.csv cell."""
     d: dict = {"document_id": row["slug"]}
-    if row.get("doi", "").strip():
-        d["doi"] = row["doi"].strip()
+    doi = (doi if doi is not None else row.get("doi", "")).strip()
+    if doi:
+        d["doi"] = doi
     if row.get("title", "").strip():
         d["title"] = row["title"].strip()
     authors = [a.strip() for a in (row.get("authors") or "").split(";") if a.strip()]
@@ -253,7 +255,7 @@ def source_document(row: Dict[str, str]) -> dict:
 
 
 def merge(index_rows: Sequence[Dict[str, str]], per_doc: Dict[str, Tuple[Dict[str, dict], List[dict]]],
-          created: Optional[str] = None) -> dict:
+          created: Optional[str] = None, dois: Optional[Dict[str, str]] = None) -> dict:
     """One CausalGraph.  Every article in index.csv gets a source_documents entry, whether or not extraction worked."""
     nodes: List[dict] = []
     edges: List[dict] = []
@@ -268,7 +270,7 @@ def merge(index_rows: Sequence[Dict[str, str]], per_doc: Dict[str, Tuple[Dict[st
         "provenance": {"causal_mosaic_version": SCHEMA_VERSION,
                        "created": created or _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
                        "source_corpus": "Evidence Jam 2026 Lane 1 corpus (ecological restoration articles)"},
-        "source_documents": [source_document(r) for r in index_rows],
+        "source_documents": [source_document(r, (dois or {}).get(r["slug"])) for r in index_rows],
         "nodes": nodes, "edges": edges,
     }
 

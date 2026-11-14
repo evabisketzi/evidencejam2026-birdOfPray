@@ -5,3 +5,4 @@ __pycache__/
 .pytest_cache/
 dev/score_out/
 .venv/
+dev/out/

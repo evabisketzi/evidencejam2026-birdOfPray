@@ -60,6 +60,24 @@ ATTR_LABELS: Dict[str, str] = {
     "http://www.fao.org/aims/aos/cwr.owl#populationsize": "population size",
 }
 
+def _load_term_labels() -> None:
+    """Add labels for every ID in data/terms.tsv (verified or not: labelling only, never used to emit IDs).  The label column
+    wins, with any parenthetical note removed; the hand-checked labels above take priority."""
+    p = ROOT / "data" / "terms.tsv"
+    if not p.exists():
+        return
+    import csv
+    with open(p, encoding="utf-8", newline="") as f:
+        for row in csv.DictReader(f, delimiter="\t"):
+            curie = (row.get("curie") or "").strip().lower()
+            if not curie or curie in ATTR_LABELS:
+                continue
+            label = re.sub(r"\s*\(.*$", "", row.get("label") or "").strip() or (row.get("synonym") or "").strip()
+            if label:
+                ATTR_LABELS[curie] = label
+
+
+_load_term_labels()
 _ID_RE = re.compile(r"^(?:[A-Za-z][A-Za-z0-9_.\-]*:\S+|https?://\S+)$")
 
 

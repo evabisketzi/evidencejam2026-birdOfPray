@@ -16,12 +16,14 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 from .expand import expand_claims
-from .extract import Client, ConfigError, DEFAULT_PROMPT, LLMError, config_from_env, extract_paper, load_prompt
+from .extract import Client, ConfigError, DEFAULT_PROMPT, LLMError, ROOT, config_from_env, extract_paper, load_prompt
+from .parse import check_sentences, parse_text
+from . import doi as doimod
 from .guard import guard_paper, merge
 from .preprocess.assemble import Options, process_paper
 from .preprocess.legend import load_taxon_table
 from .preprocess.tokens import get_counter
-from .write import summary, validate_outputs, write_outputs
+from .write import summary, validate_outputs, validate_yaml_file, write_outputs, write_yaml
 
 log = logging.getLogger("pipeline")
 
@@ -87,7 +89,9 @@ def run(corpus: Path, out_dir: Path, docs: Optional[List[str]] = None, limit: Op
             if done % 10 == 0 or done == len(futs):
                 log.info("%d/%d papers done (%d failed)", done, len(futs), sum(1 for o in outcomes if o["error"]))
     per_doc = {o["doc"]: (o["nodes"], o["edges"]) for o in outcomes}
-    graph = merge(index, per_doc)                                          # raises if there is not a single edge
+    dois = doimod.resolve_all(index, corpus)                               # DOI fallback for rows with an empty DOI cell
+    graph = merge(index, per_doc, dois={s: d.doi for s, d in dois.items()})   # raises if there is not a single edge
+    doimod.write_report(out_dir / "doi_report.csv", index, dois)
     yp, jp = write_outputs(graph, out_dir)
     errors, validators = validate_outputs(graph, yp, jp)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -99,7 +103,7 @@ def run(corpus: Path, out_dir: Path, docs: Optional[List[str]] = None, limit: Op
     with open(out_dir / "run_log.json", "w", encoding="utf-8") as f:
         json.dump({"prompt": pname, "thinking": "on" if thinking else "off", "model": cfg.model, "tokenizer": tok_name,
                    "papers": [{k: v for k, v in o.items() if k not in ("nodes", "edges")} for o in outcomes]}, f, indent=1)
-    print(summary(graph, outcomes, time.time() - t0, validators))
+    print(summary(graph, outcomes, time.time() - t0, validators, doimod.counts(dois)))
     if errors:
         print(f"VALIDATION FAILED ({len(errors)} problems):", file=sys.stderr)
         for e in errors[:20]:
@@ -108,10 +112,70 @@ def run(corpus: Path, out_dir: Path, docs: Optional[List[str]] = None, limit: Op
     return 0
 
 
+def run_smoke(slug: str, corpus: Path, out_dir: Path, prompt: str = DEFAULT_PROMPT, max_tokens: int = 3000) -> int:
+    """One real call on one paper, with the cache bypassed, to measure the endpoint before a full run."""
+    from urllib.parse import urlparse
+    import os
+
+    names = ("BRINE_URL", "BRINE_MODEL", "BRINE_API_KEY")
+    print("environment: " + ", ".join(f"{n} {'set' if os.environ.get(n, '').strip() else 'MISSING'}" for n in names))
+    cfg = config_from_env(thinking=False, use_cache=False, max_tokens=max_tokens)      # raises ConfigError naming what is missing
+    pname, system = load_prompt(prompt)
+    index = read_index(corpus)
+    row = next((r for r in index if r["slug"] == slug), None)
+    if row is None:
+        raise ConfigError(f"--smoke: {slug} is not in index.csv")
+    print(f"endpoint host: {urlparse(cfg.url).hostname}   model: {cfg.model}   prompt: {pname}   thinking: off   cache: bypassed")
+    count, _ = get_counter(allow_download=False)
+    raw = (corpus / f"{slug}.md").read_text(encoding="utf-8", errors="replace")
+    pre = process_paper(slug, raw, row, count, Options(), load_taxon_table())
+    valid = [s["n"] for s in pre.sidecar["sentences"]]
+    print(f"input: {len(pre.txt):,} characters, {len(valid)} numbered sentences (estimated {int(len(pre.txt) / 3.5):,} tokens)")
+    client = Client(cfg)
+    try:
+        r = client.complete(system, pre.txt)
+    except LLMError as e:
+        print(f"CALL FAILED: {e}", file=sys.stderr)
+        return 1
+    mode = {"off (kwargs)": "accepted (chat_template_kwargs enable_thinking=false)",
+            "off (/no_think)": "REJECTED, fell back to /no_think in the user message"}.get(r.thinking_mode, r.thinking_mode)
+    tps = r.completion_tokens / r.seconds if r.seconds else float("nan")
+    claims, bad = parse_text(r.text)
+    n_f, n_n = sum(1 for c in claims if c.kind == "F"), sum(1 for c in claims if c.kind == "N")
+    kept, dropped = check_sentences(claims, valid)
+    print(f"thinking-off parameter: {mode}")
+    print(f"<think> block returned: {'YES (stripped before parsing)' if r.think_returned else 'no'}")
+    print(f"tokens: prompt {r.prompt_tokens:,}, completion {r.completion_tokens:,}")
+    print(f"seconds: {r.seconds:.1f}   completion tokens per second: {tps:.1f}")
+    print(f"lines parsed: {n_f} F + {n_n} N; unparseable: {len(bad)}; claims citing only unknown sentences: {dropped}")
+    for b in bad[:5]:
+        print(f"  unparseable: {b[:140]}")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    rp = out_dir / f"smoke_{slug}.txt"
+    rp.write_text(r.raw or r.text, encoding="utf-8")
+    print(f"raw response saved: {rp}")
+    exp = expand_claims(slug, kept, pre.sidecar)
+    nodes, edges, stats = guard_paper(slug, exp.nodes, exp.edges)
+    if not edges:
+        print("no edges survived expansion and the guard: nothing to write or validate")
+        return 1
+    graph = merge([row], {slug: (nodes, edges)})
+    gp = write_yaml(graph, out_dir / f"smoke_{slug}.yaml")
+    errors, ran = validate_yaml_file(graph, gp)
+    print(f"graph saved: {gp}  ({len(edges)} edges, {len(nodes)} nodes, {sum(1 for e in edges if e.get('negated'))} null results; "
+          f"guard: {dict(stats) or 'no repairs needed'})")
+    print("validation: " + ran + (" -> OK, no errors" if not errors else f" -> {len(errors)} PROBLEMS"))
+    for e in errors[:10]:
+        print("  " + e, file=sys.stderr)
+    return 1 if errors else 0
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     ap = argparse.ArgumentParser(prog="pipeline.main", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("corpus")
-    ap.add_argument("output")
+    ap.add_argument("corpus", nargs="?")
+    ap.add_argument("output", nargs="?")
+    ap.add_argument("--smoke", metavar="SLUG", help="one real call on this paper (cache bypassed), reported and saved under dev/out/")
+    ap.add_argument("--smoke-dir", default=str(ROOT / "dev" / "out"), help=argparse.SUPPRESS)
     ap.add_argument("--docs", help="comma-separated slugs (default: all)")
     ap.add_argument("--limit", type=int, help="only the first N papers")
     ap.add_argument("--concurrency", type=int, default=4)
@@ -124,6 +188,10 @@ def main(argv: Optional[List[str]] = None) -> int:
     a = ap.parse_args(argv)
     logging.basicConfig(level=logging.DEBUG if a.verbose else logging.INFO, format="%(asctime)s %(levelname)s %(message)s", datefmt="%H:%M:%S")
     try:
+        if a.smoke:
+            return run_smoke(a.smoke, Path(a.corpus) if a.corpus else ROOT / "corpus", Path(a.smoke_dir), a.prompt, a.max_tokens)
+        if not a.corpus or not a.output:
+            ap.error("corpus and output directories are required (or use --smoke SLUG)")
         return run(Path(a.corpus), Path(a.output), [d.strip() for d in a.docs.split(",") if d.strip()] if a.docs else None, a.limit,
                    a.concurrency, a.thinking == "on", a.prompt, not a.no_cache, a.max_input_tokens, a.max_tokens)
     except (ConfigError, RuntimeError) as e:

@@ -22,12 +22,40 @@ class _NoAliasDumper(_Base):  # type: ignore[misc, valid-type]
         return True
 
 
+def write_yaml(graph: dict, path) -> Path:
+    p = Path(path)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    with open(p, "w", encoding="utf-8") as f:
+        yaml.dump(graph, f, Dumper=_NoAliasDumper, allow_unicode=True, sort_keys=False, width=4096, default_flow_style=False)
+    return p
+
+
+def validate_yaml_file(graph: dict, path: Path, linkml: bool = True) -> Tuple[List[str], str]:
+    """Re-read one YAML file and validate it (JSON Schema + whole-graph checks, and linkml-validate when installed)."""
+    errors: List[str] = []
+    try:
+        with open(path, encoding="utf-8") as f:
+            data = yaml.safe_load(f)
+        exc = validate_graph(data)
+        if exc is not None:
+            errors.append(f"{Path(path).name}: JSON Schema: {exc.name}: {exc.message[:160]}")
+    except Exception as e:  # noqa: BLE001
+        errors.append(f"{Path(path).name}: cannot be read back ({type(e).__name__}: {str(e)[:100]})")
+    errors += final_integrity(graph)[:20]
+    ran = "JSON Schema"
+    if linkml and shutil.which("linkml-validate"):
+        errors += _linkml(Path(path))
+        ran += " + linkml-validate"
+    else:
+        ran += " (linkml-validate not installed here, so it was not run)"
+    return errors, ran
+
+
 def write_outputs(graph: dict, out_dir) -> Tuple[Path, Path]:
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     yp, jp = out / "camo_graph.yaml", out / "camo_graph.json"
-    with open(yp, "w", encoding="utf-8") as f:
-        yaml.dump(graph, f, Dumper=_NoAliasDumper, allow_unicode=True, sort_keys=False, width=4096, default_flow_style=False)
+    write_yaml(graph, yp)
     with open(jp, "w", encoding="utf-8") as f:
         json.dump(graph, f, ensure_ascii=False, indent=1)
     return yp, jp
@@ -68,7 +96,7 @@ def validate_outputs(graph: dict, yaml_path: Path, json_path: Path, linkml: bool
     return errors, ran
 
 
-def summary(graph: dict, outcomes: List[dict], seconds: float, validators: str) -> str:
+def summary(graph: dict, outcomes: List[dict], seconds: float, validators: str, doi_counts: Optional[Dict[str, int]] = None) -> str:
     docs = len(graph["source_documents"])
     done = [o for o in outcomes if not o.get("error")]
     failed = [o for o in outcomes if o.get("error")]
@@ -78,6 +106,7 @@ def summary(graph: dict, outcomes: List[dict], seconds: float, validators: str) 
     n = max(1, len(outcomes))
     lines = [
         f"papers: {len(done)} processed, {len(failed)} failed (of {len(outcomes)} attempted; {docs} documents in source_documents)",
+        *( [f"DOIs: {doi_counts['index']} from index.csv, {doi_counts['markdown']} recovered from the markdown, {doi_counts['none']} none"] if doi_counts else [] ),
         f"graph: {len(graph['edges'])} edges, {len(graph['nodes'])} nodes, {nulls} null results",
         f"tokens: prompt {pt:,} + completion {ct:,} = {pt + ct:,}; per paper {pt / n:,.0f} + {ct / n:,.0f}",
         f"validation: {validators}",

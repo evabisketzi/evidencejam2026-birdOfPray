@@ -133,7 +133,7 @@ def test_f12_two_effects_dose_stage_and_experiment_features():
     subj, obj = out.nodes[e1["subject"]], out.nodes[e1["object"]]
     assert subj["entity_term"] == "NCBITaxon:3472" and subj["entity_type"] == "taxon" and subj["state_or_change_qualifier"] == "increased"
     assert subj["name"] == "Increased initial planting density of Sanguinaria canadensis"
-    assert obj["entity_term"] == "NCBITaxon:126270" and obj["measured_attribute"] == "number of individuals"
+    assert obj["entity_term"] == "NCBITaxon:126270" and obj["measured_attribute"] == "PATO:0000070"   # verified term
     assert obj["state_or_change_qualifier"] == "decreased" and obj["life_stage"] == "germinant_or_seedling"
     assert obj["source_spans"][0]["section"] == "abstract" and obj["source_spans"][0]["start_char"] == 1200
 
@@ -209,11 +209,49 @@ def test_dose_parsing_variants():
     assert p("high") is None
 
 
-def test_unverified_terms_never_become_ids():
-    out = expand(["F|1|T1/height/+|c|T2/length/-|D|exp"])
-    attrs = {n.get("measured_attribute") for n in out.nodes.values()}
-    assert attrs == {"height", "length"}                                   # PATO candidates exist but verified=no
-    assert term_id("height", "attribute") is None and len(unverified_terms()) > 5
+def test_expansion_emits_an_id_only_for_verified_rows():
+    out = expand(["F|1|T1/density/+|c|T2/abundance/-|D|exp", "F|2|T1/height/+|c|T2/intensity/-|U|obs",
+                  "F|3|soil/precipitation/+|c|T2/persistence/-|U|obs"])
+    attrs = {n["name"]: n.get("measured_attribute") for n in out.nodes.values()}
+    assert attrs["Increased density of Sanguinaria canadensis"] == "density"                  # no ID: stays free text
+    assert attrs["Decreased abundance of Alliaria petiolata"] == "PATO:0000070"               # verified=yes
+    assert attrs["Increased height of Sanguinaria canadensis"] == "PATO:0000119"              # verified=yes
+    assert attrs["Decreased intensity of Alliaria petiolata"] == "intensity"                  # verified=no -> free text
+    assert attrs["Decreased persistence of Alliaria petiolata"] == "persistence"
+    assert attrs["Increased precipitation of soil"] == "precipitation"                        # precipitation has no ID
+    soil = next(n for n in out.nodes.values() if n["name"].endswith("of soil"))
+    assert soil["entity_term"] == "ENVO:00001998"                                             # entity-kind row, verified
+
+
+def test_term_table_decisions_as_agreed():
+    rows = {r["synonym"]: r for r in csv.DictReader(open(ROOT / "data" / "terms.tsv", encoding="utf-8"), delimiter="\t")}
+    yes = {"height": "PATO:0000119", "length": "PATO:0000122", "diameter": "PATO:0001334", "width": "PATO:0000921",
+           "depth": "PATO:0001595", "thickness": "PATO:0000915", "area": "PATO:0001323", "volume": "PATO:0000918",
+           "mass": "PATO:0000125", "size": "PATO:0000117", "age": "PATO:0000011", "temperature": "PATO:0000146",
+           "rate": "PATO:0000161", "frequency": "PATO:0000044", "soil": "ENVO:00001998", "canopy": "ENVO:01001242",
+           "fire": "ENVO:01000786", "season": "ENVO:03000096", "abundance": "PATO:0000070", "number of individuals": "PATO:0000070"}
+    for s, c in yes.items():
+        assert (rows[s]["curie"], rows[s]["verified"]) == (c, "yes"), s
+    assert rows["abundance"]["label"] == "amount (used for abundance per README/schema examples)"
+    for s in ("intensity", "persistence"):
+        assert rows[s]["verified"] == "no" and rows[s]["curie"]
+    for s in ("density", "precipitation"):
+        assert rows[s]["verified"] == "no" and rows[s]["curie"] == ""
+    assert not [s for s, r in rows.items() if r["curie"] in ("PATO:0000574", "PATO:0001019")]
+
+
+def test_term_lookup_ignores_unverified_empty_and_wrong_kind_rows(tmp_path):
+    p = tmp_path / "terms.tsv"
+    p.write_text("synonym\tcurie\tlabel\tkind\tverified\nheight\tPATO:0000119\theight\tattribute\tyes\n"
+                 "soil\tENVO:00001998\tsoil\tentity\tyes\nintensity\tPATO:0000049\tintensity\tattribute\tno\n"
+                 "density\t\tdensity\tattribute\tyes\n", encoding="utf-8")
+    sp = str(p)
+    assert term_id("Height ", "attribute", sp) == "PATO:0000119"
+    assert term_id("height", "entity", sp) is None                    # wrong kind
+    assert term_id("soil", "entity", sp) == "ENVO:00001998"
+    assert term_id("intensity", "attribute", sp) is None              # verified=no
+    assert term_id("density", "attribute", sp) is None                # verified=yes but no ID: still free text
+    assert {r["synonym"] for r in unverified_terms(sp)} == {"intensity", "density"}
 
 
 def test_grounding_taxon_lookup():
@@ -565,3 +603,196 @@ def test_missing_environment_exits_2_with_the_names_only(monkeypatch, tmp_path, 
         monkeypatch.delenv(v, raising=False)
     assert m.main([str(ROOT / "corpus"), str(tmp_path / "o")]) == 2
     assert "BRINE_URL" in capsys.readouterr().err
+
+
+# =================================================================================== DOI fallback
+from pipeline import doi as doimod
+
+
+def _md(tmp_path, slug, lines):
+    (tmp_path / f"{slug}.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def test_doi_from_the_first_line_of_a_real_article():
+    info = doimod.resolve({"slug": "4CB9X9XE", "doi": ""}, ROOT / "corpus")
+    assert (info.doi, info.source, info.line) == ("10.1111/1365-2664.12886", "markdown", 1)
+
+
+def test_index_doi_always_wins(tmp_path):
+    _md(tmp_path, "A", ["doi: 10.1111/other.1"])
+    info = doimod.resolve({"slug": "A", "doi": " 10.9999/index.doi "}, tmp_path)
+    assert (info.doi, info.source) == ("10.9999/index.doi", "index")
+
+
+def test_a_data_repository_doi_on_a_dryad_line_is_ignored(tmp_path):
+    _md(tmp_path, "A", ["Data available at Dryad: https://doi.org/10.5061/dryad.abc123", "Article doi:10.1111/real.2020.1."])
+    info = doimod.resolve({"slug": "A", "doi": ""}, tmp_path)
+    assert info.doi == "10.1111/real.2020.1" and info.line == 2
+    _md(tmp_path, "B", ["see zenodo 10.5281/zenodo.123", "figshare 10.6084/m9.figshare.9", "PANGAEA 10.1594/PANGAEA.1"])
+    assert doimod.resolve({"slug": "B", "doi": ""}, tmp_path).source == "none"
+
+
+def test_two_different_candidates_give_none_but_the_same_doi_twice_is_fine(tmp_path):
+    _md(tmp_path, "A", ["doi: 10.1111/aaa.1", "also cited: 10.2222/bbb.2"])
+    assert doimod.resolve({"slug": "A", "doi": ""}, tmp_path).source == "none"
+    _md(tmp_path, "B", ["[10.1111/aaa.1](https://doi.org/10.1111/AAA.1)."])
+    info = doimod.resolve({"slug": "B", "doi": ""}, tmp_path)
+    assert info.source == "markdown" and info.doi.lower() == "10.1111/aaa.1"
+
+
+@pytest.mark.parametrize("line,expected", [
+    ("DOI: 10.1111/abc.123.", "10.1111/abc.123"), ("https://doi.org/10.1007/s11056-013-9373-9,", "10.1007/s11056-013-9373-9"),
+    ("(doi:10.1139/S07-038);", "10.1139/S07-038"), ("**10.1016/j.foreco.2019.117839**", "10.1016/j.foreco.2019.117839"),
+    ("<https://doi.org/10.1093/foo/bar>", "10.1093/foo/bar"), ("see [link](https://doi.org/10.1000/x.y) here", "10.1000/x.y"),
+])
+def test_wrapping_and_trailing_punctuation_are_stripped(line, expected):
+    assert doimod.find_doi([line])[0] == expected
+
+
+def test_matches_in_the_first_15_lines_are_preferred_and_reference_lines_skipped():
+    lines = ["title"] * 2 + ["doi: 10.1111/early.1"] + ["x"] * 26 + ["doi: 10.2222/late.2"]
+    assert doimod.find_doi(lines) == ("10.1111/early.1", 3)
+    late_only = ["x"] * 20 + ["doi: 10.2222/late.2"]
+    assert doimod.find_doi(late_only) == ("10.2222/late.2", 21)
+    assert doimod.find_doi(["x"] * 41 + ["doi: 10.2222/too.late.2"])[0] is None          # beyond the first 40 lines
+    assert doimod.find_doi(["- Smith, J. 2001. A paper. doi:10.3333/ref.1"])[0] is None   # reference-list line
+
+
+def test_merge_uses_the_recovered_doi_and_the_run_writes_the_report(monkeypatch, tmp_path):
+    row = {"slug": "S", "doi": "", "title": "t", "authors": "A, B", "year": "2000", "journal": "J"}
+    assert "doi" not in source_document(row) and source_document(row, "10.1/x")["doi"] == "10.1/x"
+    assert source_document({**row, "doi": "10.9/idx"})["doi"] == "10.9/idx"
+    m = _patch_client(monkeypatch, tmp_path)
+    out = tmp_path / "out"
+    assert m.run(ROOT / "corpus", out, docs=["4CB9X9XE"], use_cache=False) == 0
+    rep = list(csv.DictReader(open(out / "doi_report.csv", encoding="utf-8")))
+    assert list(rep[0]) == ["slug", "doi", "source", "line_number"] and len(rep) == 308
+    assert {r["source"] for r in rep} == {"index", "none"}                               # nothing recoverable in this corpus
+    g = json.loads((out / "camo_graph.json").read_text(encoding="utf-8"))
+    assert sum(1 for d in g["source_documents"] if d.get("doi")) == 285
+
+
+# =================================================================================== --smoke against a mock endpoint
+import threading
+from http.server import BaseHTTPRequestHandler, HTTPServer
+
+KEY = "mock-secret-key-123"
+
+
+class _Mock:
+    def __init__(self, reject_kwargs=False, think=False):
+        self.requests = []
+        outer = self
+
+        class H(BaseHTTPRequestHandler):
+            def log_message(self, *a):
+                pass
+
+            def do_POST(self):
+                body = json.loads(self.rfile.read(int(self.headers.get("Content-Length", 0))))
+                outer.requests.append(body)
+                if outer_reject and "chat_template_kwargs" in body:
+                    return self._send(400, {"error": {"message": "extra field chat_template_kwargs not permitted"}})
+                user = body["messages"][1]["content"]
+                nums = [int(x) for x in re.findall(r"^\[(\d+)\] ", user, re.M)]
+                lines = [f"F|{n}|T1/density/+|c|T2/cover/-|D|exp" for n in nums[:3]] + [f"N|{nums[3]}|T1/density/+|c|T2/height|exp", "F|garbage"]
+                text = ("<think>let me think</think>\n" if outer_think else "") + "\n".join(lines)
+                self._send(200, {"choices": [{"message": {"content": text}}], "usage": {"prompt_tokens": 1234, "completion_tokens": 56}})
+
+            def _send(self, code, obj):
+                data = json.dumps(obj).encode()
+                self.send_response(code)
+                self.send_header("Content-Length", str(len(data)))
+                self.end_headers()
+                self.wfile.write(data)
+
+        outer_reject, outer_think = reject_kwargs, think
+        self.srv = HTTPServer(("127.0.0.1", 0), H)
+        self.port = self.srv.server_address[1]
+        threading.Thread(target=self.srv.serve_forever, daemon=True).start()
+
+    def close(self):
+        self.srv.shutdown()
+
+
+@pytest.fixture
+def mock_env(monkeypatch):
+    made = []
+
+    def make(**kw):
+        m = _Mock(**kw)
+        made.append(m)
+        monkeypatch.setenv("BRINE_URL", f"http://127.0.0.1:{m.port}/v1")
+        monkeypatch.setenv("BRINE_MODEL", "mock-model")
+        monkeypatch.setenv("BRINE_API_KEY", KEY)
+        return m
+    yield make
+    for m in made:
+        m.close()
+
+
+def smoke(tmp_path, capsys):
+    import pipeline.main as m
+    rc = m.main(["--smoke", "4CB9X9XE", "--smoke-dir", str(tmp_path / "dev_out")])
+    cap = capsys.readouterr()
+    return rc, cap.out, cap.err
+
+
+def test_smoke_reports_everything_and_saves_both_files(mock_env, tmp_path, capsys):
+    srv = mock_env()
+    rc, out, err = smoke(tmp_path, capsys)
+    assert rc == 0, err
+    assert "endpoint host: 127.0.0.1" in out and "model: mock-model" in out and "thinking: off" in out
+    assert "BRINE_URL set, BRINE_MODEL set, BRINE_API_KEY set" in out
+    assert "thinking-off parameter: accepted" in out and "<think> block returned: no" in out
+    assert "tokens: prompt 1,234, completion 56" in out and "completion tokens per second:" in out and "seconds:" in out
+    assert "lines parsed: 3 F + 1 N; unparseable: 1" in out
+    assert "validation:" in out and "OK, no errors" in out
+    d = tmp_path / "dev_out"
+    assert (d / "smoke_4CB9X9XE.txt").read_text().count("\n") >= 4
+    import yaml
+    g = yaml.safe_load((d / "smoke_4CB9X9XE.yaml").read_text(encoding="utf-8"))
+    assert [x["document_id"] for x in g["source_documents"]] == ["4CB9X9XE"] and g["edges"] and validate_graph(g) is None
+    assert len(srv.requests) == 1 and srv.requests[0]["chat_template_kwargs"] == {"enable_thinking": False}
+    assert KEY not in out and KEY not in err and KEY not in (d / "smoke_4CB9X9XE.yaml").read_text()
+
+
+def test_smoke_reports_the_no_think_fallback(mock_env, tmp_path, capsys):
+    srv = mock_env(reject_kwargs=True)
+    rc, out, err = smoke(tmp_path, capsys)
+    assert rc == 0, err
+    assert "REJECTED, fell back to /no_think" in out
+    assert srv.requests[-1]["messages"][1]["content"].startswith("/no_think\n") and "chat_template_kwargs" not in srv.requests[-1]
+
+
+def test_smoke_reports_a_think_block_and_keeps_the_raw_reply(mock_env, tmp_path, capsys):
+    mock_env(think=True)
+    rc, out, err = smoke(tmp_path, capsys)
+    assert rc == 0, err
+    assert "<think> block returned: YES" in out and "lines parsed: 3 F + 1 N" in out
+    assert "<think>let me think</think>" in (tmp_path / "dev_out" / "smoke_4CB9X9XE.txt").read_text()
+
+
+def test_smoke_bypasses_the_cache(mock_env, tmp_path, capsys):
+    srv = mock_env()
+    smoke(tmp_path, capsys)
+    smoke(tmp_path, capsys)
+    assert len(srv.requests) == 2
+
+
+def test_smoke_with_missing_environment_exits_2_and_names_only_the_missing_ones(monkeypatch, tmp_path, capsys):
+    for v in ("BRINE_URL", "BRINE_MODEL", "BRINE_API_KEY"):
+        monkeypatch.delenv(v, raising=False)
+    monkeypatch.setenv("BRINE_API_KEY", KEY)
+    rc, out, err = smoke(tmp_path, capsys)
+    assert rc == 2
+    assert "BRINE_URL MISSING" in out and "BRINE_MODEL MISSING" in out and "BRINE_API_KEY set" in out
+    assert "BRINE_URL" in err and "BRINE_MODEL" in err and KEY not in out and KEY not in err
+    assert not (tmp_path / "dev_out").exists()
+
+
+def test_smoke_on_an_unknown_slug_is_a_clear_error(mock_env, tmp_path, capsys):
+    mock_env()
+    import pipeline.main as m
+    assert m.main(["--smoke", "NOPE1234", "--smoke-dir", str(tmp_path / "o")]) == 2
+    assert "not in index.csv" in capsys.readouterr().err

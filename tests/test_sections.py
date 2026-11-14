@@ -25,6 +25,41 @@ def test_fuzzy_headings_only_move_forward():
     assert heading_code_fuzzy("### Methods of analysis", "res") is None      # would go backwards
 
 
+def test_parenthetical_heading_and_reference_subheadings():
+    # ECK26ZFG
+    assert heading_code("# Results (interim results for the ponderosa pine site only)") == "res"
+    # ANWITZVF, 3YNFB29I, R7HU9C7W: subsections ABOUT reference sites are not the reference list
+    assert heading_code_fuzzy("### SHIFTING REFERENCE CONDITION", "res") is None
+    assert heading_code_fuzzy("### Comparisons with reference streams", "res") is None
+    assert heading_code_fuzzy("## 2.1.2 Reference sites", "met") is None
+    assert heading_code_fuzzy("## REFERENCES CITED", "dis") == "ref"
+    assert heading_code_fuzzy("# Literature Cited and References", "dis") == "ref"
+
+
+def test_results_subsections_after_reference_subheading_are_kept():
+    md = ("# Title\n\n## Abstract\n\nWe tested X. We found Y.\n\n## Methods\n\nWe sampled lakes.\n\n### Results\n\n"
+          "### SHIFTING REFERENCE CONDITION\n\nReference richness rose over time.\n\n### ASSESSMENT OF RECOVERY\n\n"
+          "Richness recovered in two lakes.\n\n### Discussion\n\nRecovery is slow.\n\n### References\n\n"
+          "Smith, J. 2000. A paper. Journal 1:1.\n")
+    kept, sr = tagged(md)
+    assert [t for t, _ in kept] == ["abs", "res", "res", "dis"]
+
+
+def test_topic_headings_after_data_analysis_become_results():
+    # 6DBK8P4E / 4RFTRJCP: Methods ... Data analysis, then result topics, then Discussion, no Results heading
+    md = ("# Title\n\n## Abstract\n\nWe tested X. We found Y.\n\n## Methods\n\n## Study site\n\nA fen.\n\n"
+          "### Carbon gas exchange\n\nChambers were used.\n\n# Data analysis\n\nWe used ANOVA.\n\n"
+          "# Climate and hydrology\n\nThe summer was dry.\n\n### Carbon gas exchanges\n\nUptake fell.\n\n"
+          "## Discussion\n\nDry years matter.\n")
+    kept, sr = tagged(md)
+    assert [(t, x.strip()) for t, x in kept] == [("abs", "We tested X. We found Y."), ("res", "The summer was dry."),
+                                         ("res", "Uptake fell."), ("dis", "Dry years matter.")]
+    assert "results_after_analysis" in sr.fallbacks
+    # without an analysis subsection nothing is forced (frameworks / reports keep their structure)
+    kept, sr = tagged(md.replace("# Data analysis", "# Sampling"))
+    assert [t for t, _ in kept] == ["abs", "dis"]
+
+
 def test_intro_and_methods_are_cut_results_discussion_kept():
     md = ("# Title\n\n## Abstract\n\n" + "We tested X. " * 3 + "\n\n## Introduction\n\nIntro text here. More intro.\n\n"
           "## Methods\n\nWe planted plots.\n\n## Results\n\nCover rose.\n\n## Discussion\n\nIt worked.\n\n"

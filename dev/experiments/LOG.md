@@ -43,3 +43,29 @@ direct (Murphy 33/39/11/17, 4CB9X9XE 2/48/31/19, 3KPITIV3 20/17/59/4, 6HKWT4QG 2
   presence 141 → 0, double action 4 → 0, repeated taxon 2 → 0, adjective-as-thing 2 → 0 (17 borderline cases remain).
 - **Paragraph-chunks model:** same code path; Murphy std F1 0.535 → 0.535, other papers unchanged.
 - **Tests:** `test_entity_type_defaults_when_no_type_code_is_given` updated ("Mowing" instead of "Occurrence of mowing").
+
+## 2026-11-14 — results-section detection fixes  — KEPT
+- **Change:** `pipeline/preprocess/sections.py`: (1) the fuzzy `ref` rule matched any heading containing "reference",
+  including "pre*ference*s" ("Herbivore Forage Preferences", "Host preference of EM fungi"), "Reference sites" and "Shifting
+  reference condition", which sent results/discussion into the dropped reference list; it now needs the heading to start or end
+  with references / literature cited / bibliograph* / works cited. (2) exact headings are retried without a parenthetical
+  ("Results (interim results for …)"). (3) `_results_after_analysis`: with Methods and Discussion but no Results heading, the
+  subheadings after the last statistics/analysis subsection of Methods become Results (fallback `results_after_analysis`).
+  (4) a fuzzy Conclusions heading ("2.1.2 Implications") is ignored before Results (exposed by (1) in thesis MPWDHPDB).
+- **Why:** `dev/diag/11_no_results_section.txt`: 9 papers had 0 `res` sentences; heading dumps showed the causes above.
+- **Type:** preprocessing (input-changing), but measured exactly offline: pre.txt of all 308 papers × both stage-1 models
+  before/after.
+- **Result:** gold papers (YKQQZV93, 4CB9X9XE, 3KPITIV3, 6HKWT4QG) byte-identical for BOTH models → gold scores unchanged by
+  construction (same cache key; no endpoint runs needed or made). Res sentences before → after: 3YNFB29I 0→36, 4RFTRJCP 0→29,
+  6DBK8P4E 0→39, ANWITZVF 0→21, ECK26ZFG 0→8, R7HU9C7W 0→126 (+30 dis, +15 con; thesis), C5H5V7NH/FLNPSPIG/XJ7ET7G6 0→0
+  (report, short communication, framework: intentionally untouched). Collateral recoveries from the "preference" bug:
+  DLHT9LI3 res 52→109, IDBWDU97 14→151, GGD3VPZ4 19→26, R9QX7FQG dis 15→39; 6 others differ only in captions/legend.
+  Sentence-model input tokens 1,659,884 → 1,684,187 (+1.5 %, all in the 16 changed papers).
+- **Paragraph-chunks model:** paragraph selection unchanged; only the SPECIES legend / CONTEXT line differ in 10 papers
+  (built from our section detection); input tokens 1,822,308 → 1,822,681.
+- **Not measured:** extraction quality on the changed papers (no gold for them); output-token change needs a full run.
+- **Rejected variant:** squashed-key `startswith("references")` (matched "Reference sites"); `bibliography` without `\w*`
+  (lost the French "Bibliographie" of EKQPGZD6, leaking its source list into `con`).
+- **Tests:** `tests/test_sections.py`: `test_parenthetical_heading_and_reference_subheadings`,
+  `test_results_subsections_after_reference_subheading_are_kept`, `test_topic_headings_after_data_analysis_become_results`;
+  full suite 253 passed.

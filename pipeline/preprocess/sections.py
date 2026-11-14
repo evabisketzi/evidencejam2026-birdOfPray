@@ -69,7 +69,12 @@ def heading_code(par: str) -> Optional[str]:
     if not s or len(s) > 90 or "\n" in s:
         return None
     key = re.sub(r"[^a-z]", "", s.lower())
-    return _HEADINGS.get(key)
+    code = _HEADINGS.get(key)
+    if code is None and "(" in s:
+        # "Results (interim results for the ponderosa pine site only)"
+        bare = re.sub(r"\([^)]*\)?", " ", s)
+        code = _HEADINGS.get(re.sub(r"[^a-z]", "", bare.lower())) if bare.strip() else None
+    return code
 
 
 def is_heading(par: str) -> bool:
@@ -137,6 +142,10 @@ _METHODS_START = ("studysite", "studyarea", "experimentaldesign", "sitedescripti
                   "studysystem", "studydesign", "materials")
 
 
+_REF_WORDS = r"(?:references|literature\s+cited|bibliograph\w*|cited\s+literature|works\s+cited)"
+_REF_HEADING = re.compile(rf"^{_REF_WORDS}\b|\b{_REF_WORDS}$", re.I)
+
+
 def heading_code_fuzzy(par: str, current: str) -> Optional[str]:
     """Looser mapping for markdown headings such as 'Analysis and Results'.  Only accepted when it moves
     forward through the paper, so 'Methods of analysis' inside Results cannot pull us back to Methods."""
@@ -145,7 +154,9 @@ def heading_code_fuzzy(par: str, current: str) -> Optional[str]:
         return None
     key = re.sub(r"[^a-z]", "", s.lower())
     code = None
-    if "reference" in key or "literaturecited" in key or "bibliograph" in key:
+    if _REF_HEADING.search(s.strip()):
+        # only a heading that IS a reference list: not "Shifting reference condition", "Reference sites",
+        # "Comparisons with reference streams" (results / methods subsections about reference sites)
         code = "ref"
     elif "acknowledg" in key:
         code = "ack"
@@ -161,6 +172,8 @@ def heading_code_fuzzy(par: str, current: str) -> Optional[str]:
         code = "int"
     elif "abstract" in key:
         code = "abs"
+    if code == "con" and _STAGE.get(current, 0) < _STAGE["res"]:
+        return None          # "2.1.2 Implications" inside a thesis literature review is not the paper's conclusion
     if code and _STAGE[code] >= _STAGE.get(current, 0):
         return code
     return None
@@ -195,6 +208,28 @@ def _assign(paras: List[Para], non_imrad: bool) -> List[str]:
                         seen.append("res")
         p.section = cur
     return seen
+
+
+_ANALYSIS_HEADING = re.compile(r"statistic|analys", re.I)
+
+
+def _results_after_analysis(paras: List[Para]) -> bool:
+    """Papers with Methods and Discussion but no Results heading, whose results sit under topic subheadings
+    after the (conventionally last) statistics / data-analysis subsection of Methods.  Relabel the paragraphs from
+    the first subheading after that subsection up to Discussion as Results.  Returns True if anything changed."""
+    dis_i = next((i for i, p in enumerate(paras) if p.section == "dis"), None)
+    if dis_i is None:
+        return False
+    met_heads = [i for i in range(dis_i) if paras[i].section == "met" and paras[i].kind in ("heading", "subheading")]
+    ana = [i for i in met_heads if _ANALYSIS_HEADING.search(heading_text(paras[i].text)[0])]
+    if not ana:
+        return False
+    after = [i for i in met_heads if i > ana[-1]]
+    if not after or any(paras[i].section != "met" for i in range(after[0], dis_i)):
+        return False
+    for i in range(after[0], dis_i):
+        paras[i].section = "res"
+    return True
 
 
 # ----------------------------------------------------------------------------- front matter
@@ -262,6 +297,9 @@ def detect_sections(cleaned: Mapped, title: str = "") -> SectionResult:
         seen = _assign(paras, non_imrad=True)
         if "res" in seen:
             res.fallbacks.append("no_results_heading")
+    elif "res" not in seen and "met" in seen and "dis" in seen and _results_after_analysis(paras):
+        seen.insert(seen.index("dis"), "res")
+        res.fallbacks.append("results_after_analysis")
     res.sections_detected = seen
     body_codes = [c for c in seen if c in ("abs", "int", "met", "res", "dis", "con", "lim")]
     has_abs = "abs" in seen

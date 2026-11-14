@@ -12,7 +12,7 @@ from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 import yaml
 
 from .load import EdgeRec, collapse
-from .match import DEFAULT_THRESHOLD, DocMatch, match_document
+from .match import DEFAULT_THRESHOLD, DocMatch, entity_agree, match_document
 from .normalise import ROOT, STOP
 from .report import readable_edge
 
@@ -142,12 +142,19 @@ class DocResult:
     match: DocMatch = field(repr=False, default=None)
 
 
-def _reason(pair) -> str:
+def _reason(pair, null_mismatch: bool = False) -> Tuple[str, str]:
+    """(code, human text) for an edge without a standard match."""
     if pair is None:
-        return "no loose match (the pair of entities was not found)"
+        if null_mismatch:
+            return "null_mismatch", "right entities, but one side is a null result and the other a positive claim (null flags disagree)"
+        return "no_loose_match", "no loose match (the pair of entities was not found)"
     if pair.opposite:
-        return "right entities, opposite direction"
-    return f"right entities, object attribute differs (similarity {pair.obj_attr:.2f})"
+        return "opposite_direction", "right entities, opposite direction"
+    return "attribute_differs", f"right entities, object attribute differs (similarity {pair.obj_attr:.2f})"
+
+
+def _null_mismatch(g, P) -> bool:
+    return any(g.null != p.null and entity_agree(g.subj, p.subj) and entity_agree(g.obj, p.obj) for p in P)
 
 
 def _doc_result(doc, pred_doc, G, P, findings, threshold) -> DocResult:
@@ -183,19 +190,21 @@ def _doc_result(doc, pred_doc, G, P, findings, threshold) -> DocResult:
         lp = by_g.get(i)
         best = lp.j if lp else (int(m.near[i].argmax()) if len(P) else None)
         sim = (lp.obj_attr if lp else (float(m.near[i, best]) if best is not None else None))
+        code, text = _reason(lp, _null_mismatch(g, P)) if best is not None else ("no_prediction", "no predicted edges for this document")
         fn_list.append({"doc": doc, "finding": ", ".join(g.finding_ids) or None, "gold_edge": g.edge_id,
                         "sentence": (g.sentences[0] if g.sentences else None), "gold": readable_edge(g),
                         "best_candidate": readable_edge(P[best]) if best is not None else None, "best_sim": sim,
-                        "reason": _reason(lp) if best is not None else "no predicted edges for this document"})
+                        "reason": text, "reason_code": code})
     for j, p in enumerate(P):
         if j in pm:
             continue
         lp = by_p.get(j)
         best = lp.i if lp else (int(m.near[:, j].argmax()) if len(G) else None)
         sim = (lp.obj_attr if lp else (float(m.near[best, j]) if best is not None else None))
+        code, text = _reason(lp, any(g.null != p.null and entity_agree(g.subj, p.subj) and entity_agree(g.obj, p.obj) for g in G)) if len(G) else ("no_gold", "no gold edges")
         fp_list.append({"doc": doc, "pred_edge": p.edge_id, "sentence": (p.sentences[0] if p.sentences else None),
                         "pred": readable_edge(p), "nearest_gold": readable_edge(G[best]) if best is not None else None,
-                        "nearest_sim": sim, "reason": _reason(lp) if len(G) else "no gold edges"})
+                        "nearest_sim": sim, "reason": text, "reason_code": code})
     return DocResult(doc, pred_doc, len(G), len(P), levels, null, find, ps, Counter(p.predicate for p in P), fn_list, fp_list, m)
 
 

@@ -43,7 +43,7 @@ def validate_yaml_file(graph: dict, path: Path, linkml: bool = True) -> Tuple[Li
         errors.append(f"{Path(path).name}: cannot be read back ({type(e).__name__}: {str(e)[:100]})")
     errors += final_integrity(graph)[:20]
     ran = "JSON Schema"
-    if linkml and shutil.which("linkml-validate"):
+    if linkml and linkml_exe():
         errors += _linkml(Path(path))
         ran += " + linkml-validate"
     else:
@@ -61,8 +61,18 @@ def write_outputs(graph: dict, out_dir) -> Tuple[Path, Path]:
     return yp, jp
 
 
-def _linkml(path: Path) -> List[str]:
+def linkml_exe() -> Optional[str]:
+    """linkml-validate on PATH, or beside the running interpreter (a venv's bin/ is usually not on PATH)."""
+    import sys
     exe = shutil.which("linkml-validate")
+    if exe:
+        return exe
+    cand = Path(sys.executable).parent / "linkml-validate"
+    return str(cand) if cand.exists() else None
+
+
+def _linkml(path: Path) -> List[str]:
+    exe = linkml_exe()
     if not exe:
         return []
     schema = Path(__file__).resolve().parent.parent / "schema" / "causalmosaic.yaml"
@@ -88,7 +98,7 @@ def validate_outputs(graph: dict, yaml_path: Path, json_path: Path, linkml: bool
             errors.append(f"{p.name}: JSON Schema: {exc.name}: {exc.message[:160]}")
     errors += final_integrity(graph)[:20]
     ran = "JSON Schema"
-    if linkml and shutil.which("linkml-validate"):
+    if linkml and linkml_exe():
         errors += _linkml(json_path) + _linkml(yaml_path)
         ran += " + linkml-validate"
     else:

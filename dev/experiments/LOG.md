@@ -69,3 +69,24 @@ direct (Murphy 33/39/11/17, 4CB9X9XE 2/48/31/19, 3KPITIV3 20/17/59/4, 6HKWT4QG 2
 - **Tests:** `tests/test_sections.py`: `test_parenthetical_heading_and_reference_subheadings`,
   `test_results_subsections_after_reference_subheading_are_kept`, `test_topic_headings_after_data_analysis_become_results`;
   full suite 253 passed.
+
+## 2026-11-14 — paper-defined abbreviations expanded in node names  — KEPT (neutral on gold; readability)
+- **Change:** new `pipeline/preprocess/abbrev.py`: Schwartz-Hearst detection of "long form (ABBR)" / "(ABBR, unit)"
+  definitions over the whole cleaned paper, stored in the sidecar as `abbreviations` (never shown to the model: pre.txt
+  unchanged). `pipeline/expand.py`: node names are composed from the model's own words, then each defined abbreviation is
+  expanded once, keeping it in brackets ("Soil VMC" -> "Soil volumetric moisture content (VMC)"); `measured_attribute` is
+  expanded too (grounding tries the expanded, then the original attribute). No expansion inside brackets or when the long
+  form is already written. Sentence-initial capitals dropped ("acid mine drainage"), names kept ("Sørensen's ..."), plural
+  definitions singularised ("(GHGs)" -> greenhouse gas).
+- **Why:** pure-abbreviation node names ("NEP", "AMD", "Occurrence of MLTT") are unreadable for judges and downstream lanes.
+- **Type:** post-processing → exact check on cached output.
+- **Result (sentence model):** Murphy std F1 0.593 → 0.593; 4CB9X9XE / 3KPITIV3 / 6HKWT4QG identical (no defined abbreviation
+  reaches a gold-paper node). Corpus (all 308 cached papers, `dev/diag/abbrev_names.py sentence --head-sections`):
+  1,691 definitions found; pure-abbreviation names 148 → 87 (remaining: undefined chemical symbols "Soil P", "NH4-N", "PH"
+  (= pH capitalised by `_cap`), "GEPmax"); 655 names changed in 111 papers. Random sample of 45 changed names: ~40 correct
+  and clearer, the rest odd but not wrong (e.g. "BLM-TU" with a long paper definition).
+- **Paragraph-chunks model:** same expand code and the same sidecar (the adapter copies it); Murphy std F1 0.535 → 0.535,
+  other gold papers identical. Corpus count not possible: only the 4 gold papers are cached for this model.
+- **Rejected variants:** expanding before composing the name (changed template branches: "FMM cover soil type" -> "Floor
+  mineral mix (FMM) of cover soil type"); naive plural stripping ("greenhouse gase").
+- **Tests:** `tests/test_abbrev.py` (3 tests); full suite 256 passed.

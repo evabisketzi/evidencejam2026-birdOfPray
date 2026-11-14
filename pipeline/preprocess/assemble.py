@@ -7,6 +7,7 @@ from dataclasses import dataclass, field
 from typing import Callable, Dict, List, Optional
 
 from . import classify as C
+from .abbrev import find_abbreviations
 from .clean import clean
 from .context import build_context
 from .filter import apply_filter
@@ -32,6 +33,15 @@ class PaperResult:
     txt: str
     sidecar: Dict
     report: Dict
+
+
+def _abbreviations(text: str, slug: str) -> Dict[str, str]:
+    """Paper-defined abbreviations for node names (sidecar only: never shown to the model)."""
+    try:
+        return find_abbreviations(text)
+    except Exception as e:  # noqa: BLE001 - optional
+        log.warning("%s: abbreviation detection failed (%r)", slug, e)
+        return {}
 
 
 def _fallback_sections(cleaned: Mapped) -> SectionResult:
@@ -224,6 +234,7 @@ def _process(slug, raw, meta, count, opts: Options, table, fallbacks: List[str])
                       for s in survivors],
         "dropped": dropped,
         "sections_detected": sr.sections_detected,
+        "abbreviations": _abbreviations(cleaned.s, slug),
         "fallbacks": fallbacks,
     }
     counts = {

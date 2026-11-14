@@ -9,6 +9,7 @@ from typing import Dict, List, Optional, Tuple
 
 from . import grounding
 from .parse import Claim, Var, parse_var
+from .preprocess.abbrev import expand_abbreviations
 
 log = logging.getLogger(__name__)
 
@@ -73,6 +74,7 @@ class Expander:
         self.side = side
         self.sent = {int(s["n"]): s for s in side.get("sentences", [])}
         self.species = {sp["id"]: sp for sp in side.get("species", [])}
+        self.abbrev = side.get("abbreviations") or {}
         self.context = (side.get("context") or "")
         self.alltext = " ".join(s.get("clean") or "" for s in self.sent.values()) + " " + self.context
         self.out = Expanded()
@@ -152,11 +154,14 @@ class Expander:
             else:
                 entity_term = grounding.term_id(word, "entity") or word
                 applied = None
-            prop = var.prop
-            name = compose_name(change, prop, text)
+            prop = expand_abbreviations(var.prop, self.abbrev) if var.prop else var.prop
+            # name from the model's own words first (keeps the name templates), then paper-defined abbreviations expanded:
+            # 'Soil VMC' -> 'Soil volumetric moisture content (VMC)'
+            name = expand_abbreviations(compose_name(change, var.prop, text), self.abbrev)
             node = {"id": nid, "name": _cap(name), "entity_type": self.entity_type(var, kind, word), "entity_term": entity_term}
             if prop:
-                node["measured_attribute"] = grounding.term_id(prop, "attribute") or prop
+                node["measured_attribute"] = (grounding.term_id(prop, "attribute") or grounding.term_id(var.prop, "attribute")
+                                              or prop)
             if change:
                 node["state_or_change_qualifier"] = CHANGE_ENUM[change]
             if applied:

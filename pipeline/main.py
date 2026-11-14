@@ -20,7 +20,7 @@ from .extract import Client, ConfigError, DEFAULT_PROMPT, LLMError, ROOT, config
 from .parse import check_sentences, parse_text
 from . import doi as doimod
 from .guard import guard_paper, merge
-from .preprocess.assemble import Options, process_paper
+from .preprocess.assemble import Options, process_paper as process_paper_ours
 from .preprocess.legend import load_taxon_table
 from .preprocess.tokens import get_counter
 from .write import summary, validate_outputs, validate_yaml_file, write_outputs, write_yaml
@@ -28,23 +28,39 @@ from .write import summary, validate_outputs, validate_yaml_file, write_outputs,
 log = logging.getLogger("pipeline")
 
 
+def get_preprocessor(name: str):
+    if name == "paragraph-chunks":
+        from .preprocess.team_adapter import process_paper_team_chunks
+        return process_paper_team_chunks
+    if name in ("paragraph", "team"):
+        from .preprocess.team_adapter import process_paper_team
+        return process_paper_team
+    if name not in ("sentence", "ours"):
+        raise ConfigError(f"--preprocess must be 'sentence', 'paragraph' or 'paragraph-chunks', not {name!r}")
+    return process_paper_ours
+
+
+process_paper = process_paper_ours
+
+
 def read_index(corpus: Path) -> List[Dict[str, str]]:
     with open(corpus / "index.csv", encoding="utf-8", newline="") as f:
         return [r for r in csv.DictReader(f) if r.get("slug")]
 
 
-def process_one(row: Dict[str, str], corpus: Path, client: Client, system: str, count, table, max_input_tokens: int) -> dict:
+def process_one(row: Dict[str, str], corpus: Path, client: Client, system: str, count, table, max_input_tokens: int,
+                pre_fn=None) -> dict:
     slug = row["slug"]
     out = {"doc": slug, "error": None, "prompt_tokens": 0, "completion_tokens": 0, "seconds": 0.0, "chunks": 0,
            "nodes": {}, "edges": [], "stats": {}}
     t0 = time.time()
     try:
         raw = (corpus / f"{slug}.md").read_text(encoding="utf-8", errors="replace")
-        pre = process_paper(slug, raw, row, count, Options(), table)                          # stage 1 (+2: legend IDs)
+        pre = (pre_fn or process_paper)(slug, raw, row, count, Options(), table)               # stage 1 (+2: legend IDs)
         valid = [s["n"] for s in pre.sidecar["sentences"]]
         if not valid:
             raise RuntimeError("preprocessing kept no sentences")
-        ex = extract_paper(client, system, pre.txt, valid, max_input_tokens, slug)            # stage 3
+        ex = extract_paper(client, system, pre.txt, valid, max_input_tokens, slug, pre.sidecar.get("chunk_texts"))   # stage 3
         out.update(prompt_tokens=ex.prompt_tokens, completion_tokens=ex.completion_tokens, seconds=ex.seconds, chunks=ex.chunks)
         exp = expand_claims(slug, ex.claims, pre.sidecar)                                     # stage 4
         nodes, edges, stats = guard_paper(slug, exp.nodes, exp.edges)                         # stage 5 (per paper)
@@ -63,8 +79,9 @@ def process_one(row: Dict[str, str], corpus: Path, client: Client, system: str, 
 
 def run(corpus: Path, out_dir: Path, docs: Optional[List[str]] = None, limit: Optional[int] = None, concurrency: int = 4,
         thinking: bool = False, prompt: str = DEFAULT_PROMPT, use_cache: bool = True, max_input_tokens: int = 12000,
-        max_tokens: int = 3000) -> int:
+        max_tokens: int = 3000, preprocess: str = "sentence") -> int:
     t0 = time.time()
+    pre_fn = get_preprocessor(preprocess)
     cfg = config_from_env(thinking, use_cache, max_tokens)                 # raises ConfigError if a variable is missing
     pname, system = load_prompt(prompt)
     index = read_index(corpus)
@@ -83,7 +100,7 @@ def run(corpus: Path, out_dir: Path, docs: Optional[List[str]] = None, limit: Op
     outcomes: List[dict] = []
     done = 0
     with ThreadPoolExecutor(max_workers=max(1, concurrency)) as pool:
-        futs = [pool.submit(process_one, r, corpus, client, system, count, table, max_input_tokens) for r in todo]
+        futs = [pool.submit(process_one, r, corpus, client, system, count, table, max_input_tokens, pre_fn) for r in todo]
         for f in futs:
             outcomes.append(f.result())
             done += 1
@@ -102,7 +119,7 @@ def run(corpus: Path, out_dir: Path, docs: Optional[List[str]] = None, limit: Op
         for o in outcomes:
             w.writerow([o["doc"], o["prompt_tokens"], o["completion_tokens"], f"{o['seconds']:.2f}", o["chunks"], "on" if thinking else "off"])
     with open(out_dir / "run_log.json", "w", encoding="utf-8") as f:
-        json.dump({"prompt": pname, "thinking": "on" if thinking else "off", "model": cfg.model, "tokenizer": tok_name,
+        json.dump({"prompt": pname, "preprocess": preprocess, "thinking": "on" if thinking else "off", "model": cfg.model, "tokenizer": tok_name,
                    "papers": [{k: v for k, v in o.items() if k not in ("nodes", "edges")} for o in outcomes]}, f, indent=1)
     print(summary(graph, outcomes, time.time() - t0, validators, doimod.counts(dois)))
     if errors:
@@ -182,6 +199,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--concurrency", type=int, default=4)
     ap.add_argument("--thinking", choices=("on", "off"), default="off")
     ap.add_argument("--prompt", default=DEFAULT_PROMPT, help="file in pipeline/prompt/ (default system.txt)")
+    ap.add_argument("--preprocess", choices=("sentence", "paragraph", "paragraph-chunks"), default="sentence", help="stage 1: sentence-level filtering (ours, default), paragraph-level scoring and selection (teammate's, team_paper.py; whole paper in one call), or the same with one call per paragraph chunk")
     ap.add_argument("--no-cache", action="store_true")
     ap.add_argument("--max-input-tokens", type=int, default=12000)
     ap.add_argument("--max-tokens", type=int, default=3000)
@@ -194,7 +212,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         if not a.corpus or not a.output:
             ap.error("corpus and output directories are required (or use --smoke SLUG)")
         return run(Path(a.corpus), Path(a.output), [d.strip() for d in a.docs.split(",") if d.strip()] if a.docs else None, a.limit,
-                   a.concurrency, a.thinking == "on", a.prompt, not a.no_cache, a.max_input_tokens, a.max_tokens)
+                   a.concurrency, a.thinking == "on", a.prompt, not a.no_cache, a.max_input_tokens, a.max_tokens, a.preprocess)
     except (ConfigError, RuntimeError) as e:
         print(f"error: {e}", file=sys.stderr)
         return 2 if isinstance(e, ConfigError) else 1

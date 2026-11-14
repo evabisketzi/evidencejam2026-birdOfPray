@@ -1,0 +1,2954 @@
+# CAMO CausalGraph - Sebastian-Azcona, Hacke & Hamann (2020)
+# Front. Plant Sci. 11:208, doi:10.3389/fpls.2020.00208 (CC BY 4.0)
+# Validate: linkml-validate -s schema/causalmosaic.yaml -C CausalGraph <this file>
+graph_id: camo:graph/sebastian-azcona-2020-fpls-00208
+schema_version: 0.10.0
+provenance:
+  ontology_framework: ELMO + CAMO (CAMO v0.10.0 with unreleased additions)
+  causal_mosaic_version: 0.10.0
+  created: '2026-11-13T12:00:00Z'
+  source_corpus: 'Single article: Sebastian-Azcona, Hacke & Hamann 2020, Front. Plant Sci. 11:208'
+  project: EcoWeaver
+source_documents:
+- document_id: 10.3389/fpls.2020.00208
+  doi: 10.3389/fpls.2020.00208
+  title: 'Xylem Anomalies as Indicators of Maladaptation to Climate in Forest Trees: Implications for Assisted Migration'
+  authors:
+  - Jaime Sebastian-Azcona
+  - Uwe Hacke
+  - Andreas Hamann
+  year: 2020
+  journal: Frontiers in Plant Science
+  study_coordinates:
+  - latitude: 55.2833
+    longitude: -113.1667
+    coordinate_uncertainty_m: 1850
+    coordinate_location_basis:
+    - exact_site
+    geodetic_datum: WGS84
+  study_country: CA
+  study_state_or_province: Alberta
+  study_period_start: '1982'
+  study_period_end: '2017'
+  study_temporal_note: Provenance trial planted 1982 with 4-year-old seedlings; increment cores collected summer 2017; ring years 1983-2016 analysed. Site climate 1982-2016 and origin climate (1961-1990 normals) from ClimateNA v5.21.
+  study_design: randomized_experiment
+  sample_size_value: 115
+  sample_size_unit: increment cores (one tree each)
+  sampling_effort_protocol: 24 of 43 provenances (six ecozones) in a randomized complete block design (5 blocks, five-tree row plots, 2.5 x 2.5 m); one 5-mm core at ~50 cm height from one tree of average height and DBH per row plot; 5 of 120 cores excluded for quality; 15-20 um microtome sections double-stained with safranin and astra blue, scored at 100x and 200x by a single observer
+  is_sampling_effort_reported: true
+nodes:
+- id: causal_mosaic:decreased_march_minimum_temperature_at_the_test_site_237a
+  name: Decreased March minimum temperature at the test site
+  entity_type: environmental_variable
+  entity_term: ENVO:00002005
+  measured_attribute: March mean minimum temperature
+  state_or_change_qualifier: decreased
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: Initial frost rings were associated to cold minimum temperatures in March (pseudo-R2 = 0.12, p < 0.001).
+    section: results
+- id: causal_mosaic:increased_april_minimum_temperature_at_the_test_site_0227
+  name: Increased April minimum temperature at the test site
+  entity_type: environmental_variable
+  entity_term: ENVO:00002005
+  measured_attribute: April mean minimum temperature
+  state_or_change_qualifier: increased
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: By contrast, spring frost rings were associated with mild temperatures in April (R2 = 0.38, p < 0.001) and May (Figure 4).
+    section: results
+- id: causal_mosaic:increased_may_minimum_temperature_at_the_test_site_9e55
+  name: Increased May minimum temperature at the test site
+  entity_type: environmental_variable
+  entity_term: ENVO:00002005
+  measured_attribute: May mean minimum temperature
+  state_or_change_qualifier: increased
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: By contrast, spring frost rings were associated with mild temperatures in April (R2 = 0.38, p < 0.001) and May (Figure 4).
+    section: results
+- id: causal_mosaic:decreased_may_mean_temperature_at_the_test_site_b46e
+  name: Decreased May mean temperature at the test site
+  entity_type: environmental_variable
+  entity_term: ENVO:00002005
+  measured_attribute: May mean temperature
+  state_or_change_qualifier: decreased
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: As shown in Figures 4, 5, a high percentage of light rings was formed in years that were characterized by cold temperatures at the beginning and end of the growing season (see large pink circles in Figure 5 for 1996, 2000, and 2004).
+    section: results
+- id: causal_mosaic:decreased_june_mean_temperature_at_the_test_site_d7d4
+  name: Decreased June mean temperature at the test site
+  entity_type: environmental_variable
+  entity_term: ENVO:00002005
+  measured_attribute: June mean temperature
+  state_or_change_qualifier: decreased
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: The monthly variables that were most related to the presence of light rings were high average temperatures in May (R2 = 0.30, p < 0.001), June (R2 = 0.31, p < 0.001), and September (R2 = 0.19, p < 0.001).
+    section: results
+- id: causal_mosaic:decreased_september_mean_temperature_at_the_test_site_5d94
+  name: Decreased September mean temperature at the test site
+  entity_type: environmental_variable
+  entity_term: ENVO:00002005
+  measured_attribute: September mean temperature
+  state_or_change_qualifier: decreased
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: The monthly variables that were most related to the presence of light rings were high average temperatures in May (R2 = 0.30, p < 0.001), June (R2 = 0.31, p < 0.001), and September (R2 = 0.19, p < 0.001).
+    section: results
+- id: causal_mosaic:decreased_august_precipitation_at_the_test_site_c8f6
+  name: Decreased August precipitation at the test site
+  entity_type: environmental_variable
+  entity_term: precipitation
+  measured_attribute: August total precipitation
+  state_or_change_qualifier: decreased
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: In our study, the occurrence of blue rings was correlated with low temperatures in September and low precipitation in August.
+    section: discussion
+- id: causal_mosaic:increased_september_precipitation_at_the_test_site_8008
+  name: Increased September precipitation at the test site
+  entity_type: environmental_variable
+  entity_term: precipitation
+  measured_attribute: September total precipitation
+  state_or_change_qualifier: increased
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: Finally, the formation of double rings was favored by warm and dry summers characterized by highly negative climate moisture indices, combined with a sudden increase in precipitation in September.
+    section: results
+- id: causal_mosaic:decreased_summer_climate_moisture_index_at_the_test_site_36ac
+  name: Decreased summer climate moisture index at the test site
+  entity_type: environmental_variable
+  entity_term: climatic water balance
+  measured_attribute: summer climate moisture index (precipitation minus Hargreaves reference evaporation)
+  state_or_change_qualifier: decreased
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: Finally, the formation of double rings was favored by warm and dry summers characterized by highly negative climate moisture indices, combined with a sudden increase in precipitation in September.
+    section: results
+- id: causal_mosaic:decreased_growing_season_length_at_the_test_site_3ecb
+  name: Decreased growing season length at the test site
+  entity_type: environmental_variable
+  entity_term: growing season
+  measured_attribute: PATO:0000122
+  state_or_change_qualifier: decreased
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: (2) light rings represent thin cell walls caused by an insufficient growing season length, most prevalent in southern sources;
+    section: abstract
+- id: causal_mosaic:earlier_end_of_the_growing_season_at_the_test_site_e0ee
+  name: Earlier end of the growing season at the test site
+  entity_type: environmental_variable
+  entity_term: growing season
+  measured_attribute: end date (day of year)
+  state_or_change_qualifier: decreased
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: (3) blue rings were caused by a failure to complete lignification of new wood due to an early end of the growing season;
+    section: abstract
+- id: causal_mosaic:late_spring_frost_event_at_the_test_site_6d2b
+  name: Late spring frost event at the test site
+  entity_type: environmental_process
+  entity_term: late spring frost event
+  state_or_change_qualifier: occurred
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: The position depended on whether the damaged xylem was observed within the first three tracheid rows of the year (initial frost rings), likely caused by damage in the cambium prior to the onset of xylem formation (Figure 2a), or after the third tracheid row (spring frost rings) which corresponds to damage induce by a late spring frost event (Figure 2b).
+    section: methods
+- id: causal_mosaic:interrupted_lignification_of_latewood_tracheid_cell_walls_in_92f0
+  name: Interrupted lignification of latewood tracheid cell walls in Picea glauca
+  entity_type: environmental_process
+  entity_term: GO:0009809
+  state_or_change_qualifier: interrupted
+  applied_to:
+  - entity_type: taxon
+    entity_term: NCBITaxon:3330
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: (3) blue rings were caused by a failure to complete lignification of new wood due to an early end of the growing season;
+    section: abstract
+- id: causal_mosaic:interrupted_xylem_development_summer_growth_cessation_in_pic_af53
+  name: Interrupted xylem development (summer growth cessation) in Picea glauca
+  entity_type: environmental_process
+  entity_term: GO:0010089
+  state_or_change_qualifier: interrupted
+  applied_to:
+  - entity_type: taxon
+    entity_term: NCBITaxon:3330
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: For example, in this study doublerings were an early sign of growth cessation due to summer drought observed in populations adapted to cooler and wetter environments.
+    section: conclusion
+- id: causal_mosaic:later_onset_of_autumn_cold_hardiness_in_picea_glauca_c820
+  name: Later onset of autumn cold hardiness in Picea glauca
+  entity_type: taxon
+  entity_term: NCBITaxon:3330
+  measured_attribute: day of year of cold hardiness onset
+  state_or_change_qualifier: increased
+  life_stage: mixed_or_whole_population
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: The fact that these xylem anomalies were more frequent in provenances originating from lower latitudes (Table 2 and Supplementary Figure S1) is consistent with a more extensive use of the growing season and a later onset of cold hardiness in these trees at our study site (Sebastian-Azcona et al., 2019).
+    section: discussion
+- id: causal_mosaic:increased_tree_age_of_picea_glauca_618d
+  name: Increased tree age of Picea glauca
+  entity_type: taxon
+  entity_term: NCBITaxon:3330
+  measured_attribute: PATO:0000011
+  state_or_change_qualifier: increased
+  life_stage: mixed_or_whole_population
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: Almost all frost rings were formed prior to 2000 (Figure 3); i.e. in the first decade of a tree's life, while trees were small.
+    section: results
+- id: causal_mosaic:increased_stem_diameter_of_picea_glauca_6065
+  name: Increased stem diameter of Picea glauca
+  entity_type: taxon
+  entity_term: NCBITaxon:3330
+  measured_attribute: PATO:0001334
+  state_or_change_qualifier: increased
+  life_stage: mixed_or_whole_population
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: A possible explanation for the higher resistance of bigger trees to frost damage is that thicker stems, especially if accompanied by a thicker bark, are able to accumulate more heat so that they can maintain temperatures above freezing in the stem even if outside temperatures drop below 0°C (Molina et al., 2016).
+    section: discussion
+- id: causal_mosaic:increased_canopy_closure_of_the_picea_glauca_stand_0b17
+  name: Increased canopy closure of the Picea glauca stand
+  entity_type: environmental_variable
+  entity_term: Picea glauca stand canopy
+  measured_attribute: canopy closure
+  state_or_change_qualifier: increased
+  applied_to:
+  - entity_type: taxon
+    entity_term: NCBITaxon:3330
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: In addition, a stand comprised of small saplings will experience more dynamic temperature variations than a closed stand formed by larger trees (Krasowski and Simpson, 2001).
+    section: discussion
+- id: causal_mosaic:increased_initial_frost_ring_frequency_in_picea_glauca_85a4
+  name: Increased initial frost ring frequency in Picea glauca
+  entity_type: taxon
+  entity_term: NCBITaxon:3330
+  measured_attribute: initial frost ring frequency (proportion of annual rings)
+  state_or_change_qualifier: increased
+  life_stage: mixed_or_whole_population
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: Initial frost rings that appeared right at the beginning of the tree ring were associated with low temperatures in March, i.e. before the beginning of the growing season. This indicates that the cambium can be damaged by a severe frost before the tree starts that year's growth, so the very first cells produced by the tree will be damaged.
+    section: discussion
+- id: causal_mosaic:increased_spring_frost_ring_frequency_in_picea_glauca_daab
+  name: Increased spring frost ring frequency in Picea glauca
+  entity_type: taxon
+  entity_term: NCBITaxon:3330
+  measured_attribute: spring frost ring frequency (proportion of annual rings)
+  state_or_change_qualifier: increased
+  life_stage: mixed_or_whole_population
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: By contrast, spring frost rings were associated with mild temperatures in April (R2 = 0.38, p < 0.001) and May (Figure 4).
+    section: results
+- id: causal_mosaic:decreased_frost_ring_frequency_in_picea_glauca_5245
+  name: Decreased frost ring frequency in Picea glauca
+  entity_type: taxon
+  entity_term: NCBITaxon:3330
+  measured_attribute: frost ring frequency, initial and spring combined (proportion of annual rings)
+  state_or_change_qualifier: decreased
+  life_stage: mixed_or_whole_population
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: Almost all frost rings were formed prior to 2000 (Figure 3); i.e. in the first decade of a tree's life, while trees were small.
+    section: results
+- id: causal_mosaic:increased_light_ring_frequency_in_picea_glauca_dd7f
+  name: Increased light ring frequency in Picea glauca
+  entity_type: taxon
+  entity_term: NCBITaxon:3330
+  measured_attribute: light ring frequency (proportion of annual rings)
+  state_or_change_qualifier: increased
+  life_stage: mixed_or_whole_population
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: As shown in Figures 4, 5, a high percentage of light rings was formed in years that were characterized by cold temperatures at the beginning and end of the growing season (see large pink circles in Figure 5 for 1996, 2000, and 2004).
+    section: results
+- id: causal_mosaic:increased_blue_ring_frequency_in_picea_glauca_4bdb
+  name: Increased blue ring frequency in Picea glauca
+  entity_type: taxon
+  entity_term: NCBITaxon:3330
+  measured_attribute: blue ring frequency (proportion of annual rings)
+  state_or_change_qualifier: increased
+  life_stage: mixed_or_whole_population
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: Blue rings were associated with cool temperatures in September (R2 = 0.17, p < 0.001); dry conditions in August also contributed to their formation (R2 = 0.12, p < 0.001).
+    section: results
+- id: causal_mosaic:decreased_blue_ring_frequency_in_picea_glauca_7382
+  name: Decreased blue ring frequency in Picea glauca
+  entity_type: taxon
+  entity_term: NCBITaxon:3330
+  measured_attribute: blue ring frequency (proportion of annual rings)
+  state_or_change_qualifier: decreased
+  life_stage: mixed_or_whole_population
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: We detected blue rings in only 1.6% of the rings. In all of these cases they occurred in rings formed prior to 2001.
+    section: results
+- id: causal_mosaic:increased_double_ring_frequency_in_picea_glauca_0333
+  name: Increased double ring frequency in Picea glauca
+  entity_type: taxon
+  entity_term: NCBITaxon:3330
+  measured_attribute: double ring frequency (proportion of annual rings)
+  state_or_change_qualifier: increased
+  life_stage: mixed_or_whole_population
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: Finally, the formation of double rings was favored by warm and dry summers characterized by highly negative climate moisture indices, combined with a sudden increase in precipitation in September.
+    section: results
+- id: causal_mosaic:light_ring_frequency_in_picea_glauca_90cd
+  name: Light ring frequency in Picea glauca
+  entity_type: taxon
+  entity_term: NCBITaxon:3330
+  measured_attribute: light ring frequency (proportion of annual rings)
+  life_stage: mixed_or_whole_population
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: Light and double rings appeared throughout the lifetime of the trees (Figure 3), i.e. their formation was independent of a tree's age or size.
+    section: results
+- id: causal_mosaic:double_ring_frequency_in_picea_glauca_9c81
+  name: Double ring frequency in Picea glauca
+  entity_type: taxon
+  entity_term: NCBITaxon:3330
+  measured_attribute: double ring frequency (proportion of annual rings)
+  life_stage: mixed_or_whole_population
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: Light and double rings appeared throughout the lifetime of the trees (Figure 3), i.e. their formation was independent of a tree's age or size.
+    section: results
+- id: causal_mosaic:increased_light_ring_intensity_in_picea_glauca_83e4
+  name: Increased light ring intensity in Picea glauca
+  entity_type: taxon
+  entity_term: NCBITaxon:3330
+  measured_attribute: light ring intensity score
+  state_or_change_qualifier: increased
+  life_stage: mixed_or_whole_population
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: The latitude of the seed sources was negatively correlated with the intensity of light, blue, and double rings (Table 2).
+    section: results
+- id: causal_mosaic:increased_blue_ring_intensity_in_picea_glauca_bc53
+  name: Increased blue ring intensity in Picea glauca
+  entity_type: taxon
+  entity_term: NCBITaxon:3330
+  measured_attribute: blue ring intensity score
+  state_or_change_qualifier: increased
+  life_stage: mixed_or_whole_population
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: The latitude of the seed sources was negatively correlated with the intensity of light, blue, and double rings (Table 2).
+    section: results
+- id: causal_mosaic:increased_double_ring_intensity_in_picea_glauca_ff47
+  name: Increased double ring intensity in Picea glauca
+  entity_type: taxon
+  entity_term: NCBITaxon:3330
+  measured_attribute: double ring intensity score
+  state_or_change_qualifier: increased
+  life_stage: mixed_or_whole_population
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: The latitude of the seed sources was negatively correlated with the intensity of light, blue, and double rings (Table 2).
+    section: results
+- id: causal_mosaic:increased_latewood_xylem_anomaly_frequency_in_picea_glauca_209f
+  name: Increased latewood xylem anomaly frequency in Picea glauca
+  entity_type: taxon
+  entity_term: NCBITaxon:3330
+  measured_attribute: latewood anomaly frequency (light, blue and double rings)
+  state_or_change_qualifier: increased
+  life_stage: mixed_or_whole_population
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: By contrast, provenances from southern regions with longer and warmer growing conditions showed an increased presence of latewood anomalies. These southern populations showed thin and unlignified cell walls in years when cold temperatures arrived before they could finish the last stages of xylem formation, indicating a potential maladaptation to the shorter growing seasons in the study site.
+    section: conclusion
+- id: causal_mosaic:increased_overall_xylem_anomaly_frequency_in_picea_glauca_eeb1
+  name: Increased overall xylem anomaly frequency in Picea glauca
+  entity_type: taxon
+  entity_term: NCBITaxon:3330
+  measured_attribute: overall xylem anomaly frequency (frost, light, blue and double rings)
+  state_or_change_qualifier: increased
+  life_stage: mixed_or_whole_population
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: Local provenances collected near the planting site showed the least overall amount of xylem anomalies. This indicates that they are correctly adapted to the environment in which they occur, and that xylem anomalies should be at a minimum when planting stock is correctly matched to their optimal growing conditions.
+    section: conclusion
+- id: causal_mosaic:decreased_latitude_of_the_seed_source_origin_695c
+  name: Decreased latitude of the seed-source origin
+  entity_type: environmental_variable
+  entity_term: seed-source (provenance) origin location
+  measured_attribute: latitude
+  state_or_change_qualifier: decreased
+  applied_to:
+  - entity_type: taxon
+    entity_term: NCBITaxon:3330
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: The latitude of the seed sources was negatively correlated with the intensity of light, blue, and double rings (Table 2).
+    section: results
+- id: causal_mosaic:increased_mean_annual_temperature_at_the_seed_source_origin_aec1
+  name: Increased mean annual temperature at the seed-source origin
+  entity_type: environmental_variable
+  entity_term: ENVO:00002005
+  measured_attribute: mean annual temperature at provenance origin (1961-1990 normal)
+  state_or_change_qualifier: increased
+  applied_to:
+  - entity_type: taxon
+    entity_term: NCBITaxon:3330
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: Mean annual temperature and the end of the frost free period were positively correlated with these latewood anomalies, meaning that these anomalies were more prevalent in provenances from regions with warm and long growing seasons.
+    section: results
+- id: causal_mosaic:later_end_of_the_frost_free_period_at_the_seed_source_origin_fea6
+  name: Later end of the frost-free period at the seed-source origin
+  entity_type: environmental_variable
+  entity_term: frost-free period
+  measured_attribute: end date at provenance origin (eFFP, 1961-1990 normal)
+  state_or_change_qualifier: increased
+  applied_to:
+  - entity_type: taxon
+    entity_term: NCBITaxon:3330
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: Mean annual temperature and the end of the frost free period were positively correlated with these latewood anomalies, meaning that these anomalies were more prevalent in provenances from regions with warm and long growing seasons.
+    section: results
+- id: causal_mosaic:increased_mean_coldest_month_temperature_at_the_seed_source__e039
+  name: Increased mean coldest month temperature at the seed-source origin
+  entity_type: environmental_variable
+  entity_term: ENVO:00002005
+  measured_attribute: mean coldest month temperature at provenance origin (1961-1990 normal)
+  state_or_change_qualifier: increased
+  applied_to:
+  - entity_type: taxon
+    entity_term: NCBITaxon:3330
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: Provenances that showed a higher percentage of blue rings usually came from areas with a late end of the growing season, relatively mild winters and high precipitation levels (Table 2).
+    section: results
+- id: causal_mosaic:increased_mean_annual_precipitation_at_the_seed_source_origi_b15a
+  name: Increased mean annual precipitation at the seed-source origin
+  entity_type: environmental_variable
+  entity_term: precipitation
+  measured_attribute: mean annual precipitation at provenance origin (1961-1990 normal)
+  state_or_change_qualifier: increased
+  applied_to:
+  - entity_type: taxon
+    entity_term: NCBITaxon:3330
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: Provenances that showed a higher percentage of blue rings usually came from areas with a late end of the growing season, relatively mild winters and high precipitation levels (Table 2).
+    section: results
+- id: causal_mosaic:transfer_of_cold_boreal_picea_glauca_seed_sources_to_the_cen_7173
+  name: Transfer of Cold Boreal Picea glauca seed sources to the central Alberta test site
+  entity_type: management_intervention
+  entity_term: seed transfer from Cold Boreal ecozone to central Alberta (Continental Boreal)
+  state_or_change_qualifier: occurred
+  applied_to:
+  - entity_type: taxon
+    entity_term: NCBITaxon:3330
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: Provenances from the most northern ecozone (Cold Boreal) were the most vulnerable to spring frosts, but had very low instances of light, double, and blue rings.
+    section: results
+- id: causal_mosaic:transfer_of_montane_picea_glauca_seed_sources_to_the_central_99db
+  name: Transfer of Montane Picea glauca seed sources to the central Alberta test site
+  entity_type: management_intervention
+  entity_term: seed transfer from Montane ecozone to central Alberta (Continental Boreal)
+  state_or_change_qualifier: occurred
+  applied_to:
+  - entity_type: taxon
+    entity_term: NCBITaxon:3330
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: Provenances native to the ecozone in which the study site was located (Continental Boreal) showed a high resistance to all types of anomalies.
+    section: results
+- id: causal_mosaic:transfer_of_mild_boreal_picea_glauca_seed_sources_to_the_cen_0922
+  name: Transfer of Mild Boreal Picea glauca seed sources to the central Alberta test site
+  entity_type: management_intervention
+  entity_term: seed transfer from Mild Boreal ecozone to central Alberta (Continental Boreal)
+  state_or_change_qualifier: occurred
+  applied_to:
+  - entity_type: taxon
+    entity_term: NCBITaxon:3330
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: Specifically, provenances from the Temperate Mixedwood and the Mild Boreal ecozones showed the highest proportion of light rings, while trees from the humid Maritime ecozone had the highest occurrence of blue and double rings (Table 1).
+    section: results
+- id: causal_mosaic:transfer_of_temperate_mixedwood_picea_glauca_seed_sources_to_c2ae
+  name: Transfer of Temperate Mixedwood Picea glauca seed sources to the central Alberta test site
+  entity_type: management_intervention
+  entity_term: seed transfer from Temperate Mixedwood ecozone to central Alberta (Continental Boreal)
+  state_or_change_qualifier: occurred
+  applied_to:
+  - entity_type: taxon
+    entity_term: NCBITaxon:3330
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: Specifically, provenances from the Temperate Mixedwood and the Mild Boreal ecozones showed the highest proportion of light rings, while trees from the humid Maritime ecozone had the highest occurrence of blue and double rings (Table 1).
+    section: results
+- id: causal_mosaic:transfer_of_maritime_picea_glauca_seed_sources_to_the_centra_2e88
+  name: Transfer of Maritime Picea glauca seed sources to the central Alberta test site
+  entity_type: management_intervention
+  entity_term: seed transfer from Maritime ecozone to central Alberta (Continental Boreal)
+  state_or_change_qualifier: occurred
+  applied_to:
+  - entity_type: taxon
+    entity_term: NCBITaxon:3330
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: Specifically, provenances from the Temperate Mixedwood and the Mild Boreal ecozones showed the highest proportion of light rings, while trees from the humid Maritime ecozone had the highest occurrence of blue and double rings (Table 1).
+    section: results
+- id: causal_mosaic:northward_transfer_of_picea_glauca_seed_sources_from_warmer__6a62
+  name: Northward transfer of Picea glauca seed sources from warmer, longer-season origins
+  entity_type: management_intervention
+  entity_term: seed transfer from warmer, lower-latitude origins to a cooler, shorter-season site
+  state_or_change_qualifier: occurred
+  applied_to:
+  - entity_type: taxon
+    entity_term: NCBITaxon:3330
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: By contrast, provenances from southern regions with longer and warmer growing conditions showed an increased presence of latewood anomalies. These southern populations showed thin and unlignified cell walls in years when cold temperatures arrived before they could finish the last stages of xylem formation, indicating a potential maladaptation to the shorter growing seasons in the study site.
+    section: conclusion
+- id: causal_mosaic:seed_transfer_of_picea_glauca_too_far_poleward_or_upward_in__4b67
+  name: Seed transfer of Picea glauca too far poleward or upward in elevation in assisted migration
+  entity_type: management_intervention
+  entity_term: assisted migration seed transfer beyond the climatic optimum
+  state_or_change_qualifier: occurred
+  applied_to:
+  - entity_type: taxon
+    entity_term: NCBITaxon:3330
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: When such anomalies are observed in assisted migration schemes to address climate change, it would indicate that seed sources have been moved too far poleward or upward in elevation.
+    section: conclusion
+- id: causal_mosaic:planting_local_climatically_matched_picea_glauca_seed_source_a2ac
+  name: Planting local, climatically matched Picea glauca seed sources
+  entity_type: management_intervention
+  entity_term: use of local seed source (planting stock matched to site climate)
+  state_or_change_qualifier: occurred
+  applied_to:
+  - entity_type: taxon
+    entity_term: NCBITaxon:3330
+  annotator: camo_agent:claude-opus-5-5
+  source_spans:
+  - text: Local provenances collected near the planting site showed the least overall amount of xylem anomalies. This indicates that they are correctly adapted to the environment in which they occur, and that xylem anomalies should be at a minimum when planting stock is correctly matched to their optimal growing conditions.
+    section: conclusion
+edges:
+- id: e01_marTmin_initFrost
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:decreased_march_minimum_temperature_at_the_test_site_237a
+  predicate: correlated_with
+  object: causal_mosaic:increased_initial_frost_ring_frequency_in_picea_glauca_85a4
+  negated: false
+  causal_language: associational
+  original_sentence: Initial frost rings were associated to cold minimum temperatures in March (pseudo-R2 = 0.12, p < 0.001).
+  ecosystem_context: plantations
+  comparator: &id001
+  - status: implicitly_assumed
+    comparator_type: spatial_or_temporal_control
+    comparator_description: Other years of the 1983-2016 ring series (inter-annual climate gradient at the same trees)
+  philosophical_accounts:
+  - probabilistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: &id002
+    status: asserted
+    evidence_for_direction: theoretical
+  temporal_ordering: implicitly_assumed
+  moderation:
+    status: explicitly_asserted
+    moderator_node_ids:
+    - causal_mosaic:increased_tree_age_of_picea_glauca_618d
+    - causal_mosaic:increased_stem_diameter_of_picea_glauca_6065
+    interaction_type: quantitative
+  strength:
+    status: explicitly_asserted
+    quantitative_value: marginal pseudo-R2 = 0.12, p < 0.001
+    quantitative_numeric: 0.12
+    effect_metric: variance_explained
+    qualitative_descriptor: weak
+    significance: significant
+    analysis_method: mixed_model
+  specificity: not_addressed
+  stability: explicitly_denied
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    - 'young, small trees: frost rings formed almost only in the first ~15 years after planting'
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+    temporal_scope: 1983-2016, effectively c. 1983-2000
+  evidential_basis: &id003
+    evidence_types:
+    - observational_longitudinal
+    evidence_objects:
+    - correlation
+  certainty_grade: not_assessed
+  temporal_extent:
+    observation_grain: annual
+    duration_text: Tree-ring years 1983-2016 (34 growing seasons after planting in 1982)
+    time_since_intervention_months: 420
+    time_since_intervention_text: cores taken summer 2017, 35 years after planting
+    observation_seasons:
+    - early_spring
+  source_spans:
+  - text: Initial frost rings were associated to cold minimum temperatures in March (pseudo-R2 = 0.12, p < 0.001).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: Stability denied and moderation by tree age/size recorded because the Discussion states frost rings appeared almost only in the first 15 years although favourable climate persisted. Fig. 4 caption says the GLMMs model anomaly 'intensity', while the Results text says occurrence; the frequency node follows the Results text.
+- id: e02_marTmin_initFrost_mech
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:decreased_march_minimum_temperature_at_the_test_site_237a
+  predicate: causes
+  object: causal_mosaic:increased_initial_frost_ring_frequency_in_picea_glauca_85a4
+  negated: false
+  causal_language: uncertain_causal
+  original_sentence: Initial frost rings that appeared right at the beginning of the tree ring were associated with low temperatures in March, i.e. before the beginning of the growing season. This indicates that the cambium can be damaged by a severe frost before the tree starts that year's growth, so the very first cells produced by the tree will be damaged.
+  ecosystem_context: plantations
+  comparator: &id004
+  - status: not_addressed
+    comparator_type: not_applicable
+  philosophical_accounts:
+  - mechanistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: &id005
+    status: asserted
+    evidence_for_direction: temporal_precedence
+  temporal_ordering: explicitly_asserted
+  mediation:
+    status: explicitly_asserted
+    pathway_description: Severe frost before growth onset damages the dormant vascular cambium, so the first tracheids of the new ring are malformed
+  specificity: not_addressed
+  stability: not_addressed
+  scope: prototypical
+  determinism: not_addressed
+  proximate_distal: distal
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  evidential_basis: &id008
+    evidence_types:
+    - theoretical
+    evidence_objects:
+    - mechanism
+  certainty_grade: not_assessed
+  fcm_weight: 0.42
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct 1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    duration_text: Tree-ring years 1983-2016 (34 growing seasons after planting in 1982)
+    time_since_intervention_months: 420
+    time_since_intervention_text: cores taken summer 2017, 35 years after planting
+    observation_seasons:
+    - early_spring
+  source_spans:
+  - text: Initial frost rings that appeared right at the beginning of the tree ring were associated with low temperatures in March, i.e. before the beginning of the growing season. This indicates that the cambium can be damaged by a severe frost before the tree starts that year's growth, so the very first cells produced by the tree will be damaged.
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.8
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+- id: e03_aprTmin_springFrost
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:increased_april_minimum_temperature_at_the_test_site_0227
+  predicate: correlated_with
+  object: causal_mosaic:increased_spring_frost_ring_frequency_in_picea_glauca_daab
+  negated: false
+  causal_language: associational
+  original_sentence: By contrast, spring frost rings were associated with mild temperatures in April (R2 = 0.38, p < 0.001) and May (Figure 4).
+  ecosystem_context: plantations
+  comparator: *id001
+  philosophical_accounts:
+  - probabilistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id002
+  temporal_ordering: not_addressed
+  moderation:
+    status: explicitly_asserted
+    moderator_node_ids:
+    - causal_mosaic:increased_tree_age_of_picea_glauca_618d
+    - causal_mosaic:increased_stem_diameter_of_picea_glauca_6065
+    interaction_type: quantitative
+  strength:
+    status: explicitly_asserted
+    quantitative_value: marginal pseudo-R2 = 0.38, p < 0.001
+    quantitative_numeric: 0.38
+    effect_metric: variance_explained
+    qualitative_descriptor: moderate
+    significance: significant
+    analysis_method: mixed_model
+  specificity: not_addressed
+  stability: explicitly_denied
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    - 'young, small trees: frost rings formed almost only in the first ~15 years after planting'
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id003
+  certainty_grade: not_assessed
+  temporal_extent:
+    observation_grain: annual
+    duration_text: Tree-ring years 1983-2016 (34 growing seasons after planting in 1982)
+    time_since_intervention_months: 420
+    time_since_intervention_text: cores taken summer 2017, 35 years after planting
+    observation_seasons:
+    - spring
+  source_spans:
+  - text: By contrast, spring frost rings were associated with mild temperatures in April (R2 = 0.38, p < 0.001) and May (Figure 4).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+- id: e04_mayTmin_springFrost
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:increased_may_minimum_temperature_at_the_test_site_9e55
+  predicate: correlated_with
+  object: causal_mosaic:increased_spring_frost_ring_frequency_in_picea_glauca_daab
+  negated: false
+  causal_language: associational
+  original_sentence: By contrast, spring frost rings were associated with mild temperatures in April (R2 = 0.38, p < 0.001) and May (Figure 4).
+  ecosystem_context: plantations
+  comparator: *id001
+  philosophical_accounts:
+  - probabilistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id002
+  temporal_ordering: not_addressed
+  strength:
+    status: implicitly_assumed
+    significance: not_reported
+    analysis_method: mixed_model
+    quantitative_value: shown in Fig. 4 only; no R2 given in text
+  specificity: not_addressed
+  stability: explicitly_denied
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id003
+  certainty_grade: not_assessed
+  temporal_extent:
+    observation_grain: annual
+    duration_text: Tree-ring years 1983-2016 (34 growing seasons after planting in 1982)
+    time_since_intervention_months: 420
+    time_since_intervention_text: cores taken summer 2017, 35 years after planting
+    observation_seasons:
+    - spring
+  source_spans:
+  - text: By contrast, spring frost rings were associated with mild temperatures in April (R2 = 0.38, p < 0.001) and May (Figure 4).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.75
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: May association is stated without a statistic; value only in Fig. 4 (not available).
+- id: e05_aprTmin_springFrost_mech
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:increased_april_minimum_temperature_at_the_test_site_0227
+  predicate: contributes_to
+  object: causal_mosaic:increased_spring_frost_ring_frequency_in_picea_glauca_daab
+  negated: false
+  causal_language: uncertain_causal
+  original_sentence: Spring frost rings on the other hand were related to high temperatures in April and May. We suggest that these higher temperatures will advance the start of the growing season for that year, making trees more vulnerable to a late spring frost.
+  ecosystem_context: plantations
+  comparator: *id004
+  philosophical_accounts:
+  - mechanistic
+  - inus_component
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id005
+  temporal_ordering: explicitly_asserted
+  mediation:
+    status: explicitly_asserted
+    pathway_description: Warm April-May advances the start of the growing season (cambial reactivation), exposing active cambium to a subsequent late spring frost
+  moderation:
+    status: explicitly_asserted
+    moderator_node_ids:
+    - causal_mosaic:late_spring_frost_event_at_the_test_site_6d2b
+    interaction_type: synergistic
+  specificity: not_addressed
+  stability: not_addressed
+  scope: prototypical
+  determinism: not_addressed
+  proximate_distal: distal
+  contributing_sole: contributing_cause
+  reversibility: not_addressed
+  proportionality: not_addressed
+  evidential_basis:
+    evidence_types:
+    - theoretical
+    - observational_longitudinal
+    evidence_objects:
+    - both
+  certainty_grade: not_assessed
+  fcm_weight: 0.24
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct 1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    duration_text: Tree-ring years 1983-2016 (34 growing seasons after planting in 1982)
+    time_since_intervention_months: 420
+    time_since_intervention_text: cores taken summer 2017, 35 years after planting
+    observation_seasons:
+    - spring
+  source_spans:
+  - text: Spring frost rings on the other hand were related to high temperatures in April and May. We suggest that these higher temperatures will advance the start of the growing season for that year, making trees more vulnerable to a late spring frost.
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.75
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: Warmth only increases vulnerability; a late frost event is still required (INUS, recorded as synergistic moderation by the late-frost node). Authors cite Montwé et al. (2018) 'false spring' in Pinus contorta as analogy.
+- id: e06_lateFrost_springFrost
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:late_spring_frost_event_at_the_test_site_6d2b
+  predicate: causes
+  object: causal_mosaic:increased_spring_frost_ring_frequency_in_picea_glauca_daab
+  negated: false
+  causal_language: direct_causal
+  original_sentence: The position depended on whether the damaged xylem was observed within the first three tracheid rows of the year (initial frost rings), likely caused by damage in the cambium prior to the onset of xylem formation (Figure 2a), or after the third tracheid row (spring frost rings) which corresponds to damage induce by a late spring frost event (Figure 2b).
+  ecosystem_context: plantations
+  comparator: *id004
+  philosophical_accounts:
+  - mechanistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction:
+    status: asserted
+    evidence_for_direction: theoretical
+  temporal_ordering: implicitly_assumed
+  specificity: not_addressed
+  stability: not_addressed
+  scope: prototypical
+  determinism: not_addressed
+  proximate_distal: proximate
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  evidential_basis: &id007
+    evidence_types:
+    - mechanistic_study
+    evidence_objects:
+    - mechanism
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct 1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    duration_text: Tree-ring years 1983-2016 (34 growing seasons after planting in 1982)
+    time_since_intervention_months: 420
+    time_since_intervention_text: cores taken summer 2017, 35 years after planting
+    observation_seasons:
+    - spring
+  source_spans:
+  - text: The position depended on whether the damaged xylem was observed within the first three tracheid rows of the year (initial frost rings), likely caused by damage in the cambium prior to the onset of xylem formation (Figure 2a), or after the third tracheid row (spring frost rings) which corresponds to damage induce by a late spring frost event (Figure 2b).
+    section: methods
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.8
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: Classification criterion in Methods (anatomical position of damage), i.e. near-definitional.
+- id: e07_mayT_light
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:decreased_may_mean_temperature_at_the_test_site_b46e
+  predicate: correlated_with
+  object: causal_mosaic:increased_light_ring_frequency_in_picea_glauca_dd7f
+  negated: false
+  causal_language: associational
+  original_sentence: The monthly variables that were most related to the presence of light rings were high average temperatures in May (R2 = 0.30, p < 0.001), June (R2 = 0.31, p < 0.001), and September (R2 = 0.19, p < 0.001).
+  ecosystem_context: plantations
+  comparator: *id001
+  philosophical_accounts:
+  - probabilistic
+  - inus_component
+  necessity: not_addressed
+  sufficiency: explicitly_denied
+  direction: *id002
+  temporal_ordering: not_addressed
+  moderation:
+    status: explicitly_asserted
+    moderator_node_ids:
+    - causal_mosaic:decreased_september_mean_temperature_at_the_test_site_5d94
+    interaction_type: synergistic
+  strength:
+    status: explicitly_asserted
+    quantitative_value: marginal pseudo-R2 = 0.3, p < 0.001
+    quantitative_numeric: 0.3
+    effect_metric: variance_explained
+    qualitative_descriptor: weak
+    significance: significant
+    analysis_method: mixed_model
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: contributing_cause
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id003
+  certainty_grade: not_assessed
+  temporal_extent:
+    observation_grain: annual
+    duration_text: Tree-ring years 1983-2016 (34 growing seasons after planting in 1982)
+    time_since_intervention_months: 420
+    time_since_intervention_text: cores taken summer 2017, 35 years after planting
+    observation_seasons:
+    - growing_season
+  source_spans: &id006
+  - text: As shown in Figures 4, 5, a high percentage of light rings was formed in years that were characterized by cold temperatures at the beginning and end of the growing season (see large pink circles in Figure 5 for 1996, 2000, and 2004).
+    section: results
+  - text: A cold beginning of the growing season alone (e.g. 2009 in Figure 5A) or cold end of the growing season alone (e.g. 1992 in Figure 5B) did not induce the formation of light rings.
+    section: results
+  - text: The monthly variables that were most related to the presence of light rings were high average temperatures in May (R2 = 0.30, p < 0.001), June (R2 = 0.31, p < 0.001), and September (R2 = 0.19, p < 0.001).
+    section: results
+  - text: The three years with the highest presence of light rings (1996, 2000, and 2004) correspond to the three coldest May and June temperatures of the study period and below-average September temperatures.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.6
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: 'DIRECTION CONFLICT IN SOURCE: the Results sentence says light rings were most related to ''high average temperatures'' in May, June and September, but the preceding sentence, Fig. 5 and its caption, the Discussion (''formed in response to low temperatures'') and the Abstract (''insufficient growing season length'') all state cold temperatures. Annotated as decreased temperature; the R2 values are taken from the conflicting sentence. Verify against Fig. 4 signs. INUS structure: cold early season (May-June) and cold late season (September) were each insufficient alone (2009, 1992) but jointly produced light-ring years (1996, 2000, 2004).'
+- id: e08_junT_light
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:decreased_june_mean_temperature_at_the_test_site_d7d4
+  predicate: correlated_with
+  object: causal_mosaic:increased_light_ring_frequency_in_picea_glauca_dd7f
+  negated: false
+  causal_language: associational
+  original_sentence: The monthly variables that were most related to the presence of light rings were high average temperatures in May (R2 = 0.30, p < 0.001), June (R2 = 0.31, p < 0.001), and September (R2 = 0.19, p < 0.001).
+  ecosystem_context: plantations
+  comparator: *id001
+  philosophical_accounts:
+  - probabilistic
+  - inus_component
+  necessity: not_addressed
+  sufficiency: explicitly_denied
+  direction: *id002
+  temporal_ordering: not_addressed
+  moderation:
+    status: explicitly_asserted
+    moderator_node_ids:
+    - causal_mosaic:decreased_september_mean_temperature_at_the_test_site_5d94
+    interaction_type: synergistic
+  strength:
+    status: explicitly_asserted
+    quantitative_value: marginal pseudo-R2 = 0.31, p < 0.001
+    quantitative_numeric: 0.31
+    effect_metric: variance_explained
+    qualitative_descriptor: weak
+    significance: significant
+    analysis_method: mixed_model
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: contributing_cause
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id003
+  certainty_grade: not_assessed
+  temporal_extent:
+    observation_grain: annual
+    duration_text: Tree-ring years 1983-2016 (34 growing seasons after planting in 1982)
+    time_since_intervention_months: 420
+    time_since_intervention_text: cores taken summer 2017, 35 years after planting
+    observation_seasons:
+    - growing_season
+  source_spans: *id006
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.6
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: 'DIRECTION CONFLICT IN SOURCE: the Results sentence says light rings were most related to ''high average temperatures'' in May, June and September, but the preceding sentence, Fig. 5 and its caption, the Discussion (''formed in response to low temperatures'') and the Abstract (''insufficient growing season length'') all state cold temperatures. Annotated as decreased temperature; the R2 values are taken from the conflicting sentence. Verify against Fig. 4 signs. INUS structure: cold early season (May-June) and cold late season (September) were each insufficient alone (2009, 1992) but jointly produced light-ring years (1996, 2000, 2004).'
+- id: e09_sepT_light
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:decreased_september_mean_temperature_at_the_test_site_5d94
+  predicate: correlated_with
+  object: causal_mosaic:increased_light_ring_frequency_in_picea_glauca_dd7f
+  negated: false
+  causal_language: associational
+  original_sentence: The monthly variables that were most related to the presence of light rings were high average temperatures in May (R2 = 0.30, p < 0.001), June (R2 = 0.31, p < 0.001), and September (R2 = 0.19, p < 0.001).
+  ecosystem_context: plantations
+  comparator: *id001
+  philosophical_accounts:
+  - probabilistic
+  - inus_component
+  necessity: not_addressed
+  sufficiency: explicitly_denied
+  direction: *id002
+  temporal_ordering: not_addressed
+  moderation:
+    status: explicitly_asserted
+    moderator_node_ids:
+    - causal_mosaic:decreased_may_mean_temperature_at_the_test_site_b46e
+    - causal_mosaic:decreased_june_mean_temperature_at_the_test_site_d7d4
+    interaction_type: synergistic
+  strength:
+    status: explicitly_asserted
+    quantitative_value: marginal pseudo-R2 = 0.19, p < 0.001
+    quantitative_numeric: 0.19
+    effect_metric: variance_explained
+    qualitative_descriptor: weak
+    significance: significant
+    analysis_method: mixed_model
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: contributing_cause
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id003
+  certainty_grade: not_assessed
+  temporal_extent:
+    observation_grain: annual
+    duration_text: Tree-ring years 1983-2016 (34 growing seasons after planting in 1982)
+    time_since_intervention_months: 420
+    time_since_intervention_text: cores taken summer 2017, 35 years after planting
+    observation_seasons:
+    - growing_season
+  source_spans: *id006
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.6
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: 'DIRECTION CONFLICT IN SOURCE: the Results sentence says light rings were most related to ''high average temperatures'' in May, June and September, but the preceding sentence, Fig. 5 and its caption, the Discussion (''formed in response to low temperatures'') and the Abstract (''insufficient growing season length'') all state cold temperatures. Annotated as decreased temperature; the R2 values are taken from the conflicting sentence. Verify against Fig. 4 signs. INUS structure: cold early season (May-June) and cold late season (September) were each insufficient alone (2009, 1992) but jointly produced light-ring years (1996, 2000, 2004).'
+- id: e10_gsLength_light
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:decreased_growing_season_length_at_the_test_site_3ecb
+  predicate: causes
+  object: causal_mosaic:increased_light_ring_frequency_in_picea_glauca_dd7f
+  negated: false
+  causal_language: direct_causal
+  original_sentence: (2) light rings represent thin cell walls caused by an insufficient growing season length, most prevalent in southern sources;
+  ecosystem_context: plantations
+  comparator: *id004
+  philosophical_accounts:
+  - mechanistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id002
+  temporal_ordering: not_addressed
+  mediation:
+    status: explicitly_asserted
+    pathway_description: Cold early season limits carbon assimilation (less substrate for xylogenesis); cold late season restricts carbon mobilisation and deposition into latewood cell walls, giving thin-walled latewood
+  moderation:
+    status: explicitly_asserted
+    moderator_node_ids:
+    - causal_mosaic:decreased_latitude_of_the_seed_source_origin_695c
+    interaction_type: quantitative
+  specificity: explicitly_asserted
+  stability: not_addressed
+  scope: prototypical
+  determinism: not_addressed
+  proximate_distal: distal
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  evidential_basis:
+    evidence_types:
+    - observational_longitudinal
+    - theoretical
+    evidence_objects:
+    - both
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct 1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    duration_text: Tree-ring years 1983-2016 (34 growing seasons after planting in 1982)
+    time_since_intervention_months: 420
+    time_since_intervention_text: cores taken summer 2017, 35 years after planting
+    observation_seasons:
+    - growing_season
+  source_spans:
+  - text: (2) light rings represent thin cell walls caused by an insufficient growing season length, most prevalent in southern sources;
+    section: abstract
+  - text: Low temperatures at the beginning of the growing season can limit carbon assimilation reducing the amount of resources available for xylogenesis, while low temperatures at the end of the growing season may restrict carbon mobilization and deposition rates in the cell wall (Deslauriers et al., 2009; Castagneri et al., 2017).
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.8
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: '''Most prevalent in southern sources'' recorded as moderation by origin latitude. Specificity asserted: the paper''s thesis is that each anomaly type is a signature of a particular maladaptation.'
+- id: e11_sepT_blue
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:decreased_september_mean_temperature_at_the_test_site_5d94
+  predicate: correlated_with
+  object: causal_mosaic:increased_blue_ring_frequency_in_picea_glauca_4bdb
+  negated: false
+  causal_language: associational
+  original_sentence: Blue rings were associated with cool temperatures in September (R2 = 0.17, p < 0.001); dry conditions in August also contributed to their formation (R2 = 0.12, p < 0.001).
+  ecosystem_context: plantations
+  comparator: *id001
+  philosophical_accounts:
+  - probabilistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id002
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: marginal pseudo-R2 = 0.17, p < 0.001
+    quantitative_numeric: 0.17
+    effect_metric: variance_explained
+    qualitative_descriptor: weak
+    significance: significant
+    analysis_method: mixed_model
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id003
+  certainty_grade: not_assessed
+  temporal_extent:
+    observation_grain: annual
+    duration_text: Tree-ring years 1983-2016 (34 growing seasons after planting in 1982)
+    time_since_intervention_months: 420
+    time_since_intervention_text: cores taken summer 2017, 35 years after planting
+    observation_seasons:
+    - autumn
+  source_spans:
+  - text: Blue rings were associated with cool temperatures in September (R2 = 0.17, p < 0.001); dry conditions in August also contributed to their formation (R2 = 0.12, p < 0.001).
+    section: results
+  - text: In our study, the occurrence of blue rings was correlated with low temperatures in September and low precipitation in August.
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+- id: e12_augPpt_blue
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:decreased_august_precipitation_at_the_test_site_c8f6
+  predicate: contributes_to
+  object: causal_mosaic:increased_blue_ring_frequency_in_picea_glauca_4bdb
+  negated: false
+  causal_language: direct_causal
+  original_sentence: Blue rings were associated with cool temperatures in September (R2 = 0.17, p < 0.001); dry conditions in August also contributed to their formation (R2 = 0.12, p < 0.001).
+  ecosystem_context: plantations
+  comparator: *id001
+  philosophical_accounts:
+  - probabilistic
+  - inus_component
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id002
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: marginal pseudo-R2 = 0.12, p < 0.001
+    quantitative_numeric: 0.12
+    effect_metric: variance_explained
+    qualitative_descriptor: weak
+    significance: significant
+    analysis_method: mixed_model
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: contributing_cause
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id003
+  certainty_grade: not_assessed
+  fcm_weight: 0.4
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct 1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    duration_text: Tree-ring years 1983-2016 (34 growing seasons after planting in 1982)
+    time_since_intervention_months: 420
+    time_since_intervention_text: cores taken summer 2017, 35 years after planting
+    observation_seasons:
+    - summer
+  source_spans:
+  - text: Blue rings were associated with cool temperatures in September (R2 = 0.17, p < 0.001); dry conditions in August also contributed to their formation (R2 = 0.12, p < 0.001).
+    section: results
+  - text: In our study, the occurrence of blue rings was correlated with low temperatures in September and low precipitation in August.
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: Results name 'dry conditions in August'; Discussion specifies low August precipitation, used for the node. 'also contributed' read as an unhedged contributing-cause claim.
+- id: e13_gsEnd_lignif
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:earlier_end_of_the_growing_season_at_the_test_site_e0ee
+  predicate: causes
+  object: causal_mosaic:interrupted_lignification_of_latewood_tracheid_cell_walls_in_92f0
+  negated: false
+  causal_language: direct_causal
+  original_sentence: (3) blue rings were caused by a failure to complete lignification of new wood due to an early end of the growing season;
+  ecosystem_context: plantations
+  comparator: *id004
+  philosophical_accounts:
+  - mechanistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id002
+  temporal_ordering: implicitly_assumed
+  specificity: explicitly_asserted
+  stability: not_addressed
+  scope: prototypical
+  determinism: not_addressed
+  proximate_distal: distal
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  evidential_basis:
+    evidence_types:
+    - mechanistic_study
+    - observational_longitudinal
+    evidence_objects:
+    - both
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct 1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    duration_text: Tree-ring years 1983-2016 (34 growing seasons after planting in 1982)
+    time_since_intervention_months: 420
+    time_since_intervention_text: cores taken summer 2017, 35 years after planting
+    observation_seasons:
+    - autumn
+  source_spans:
+  - text: (3) blue rings were caused by a failure to complete lignification of new wood due to an early end of the growing season;
+    section: abstract
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+- id: e14_lignif_blue
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:interrupted_lignification_of_latewood_tracheid_cell_walls_in_92f0
+  predicate: causes
+  object: causal_mosaic:increased_blue_ring_frequency_in_picea_glauca_4bdb
+  negated: false
+  causal_language: direct_causal
+  original_sentence: Blue rings are formed as a result of incomplete lignification.
+  ecosystem_context: plantations
+  comparator: *id004
+  philosophical_accounts:
+  - mechanistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction:
+    status: asserted
+    evidence_for_direction: theoretical
+  temporal_ordering: not_addressed
+  specificity: not_addressed
+  stability: not_addressed
+  scope: universal
+  determinism: not_addressed
+  proximate_distal: proximate
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  evidential_basis: *id007
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct 1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    duration_text: Tree-ring years 1983-2016 (34 growing seasons after planting in 1982)
+    time_since_intervention_months: 420
+    time_since_intervention_text: cores taken summer 2017, 35 years after planting
+    observation_seasons:
+    - autumn
+  source_spans:
+  - text: Blue rings are formed as a result of incomplete lignification.
+    section: discussion
+  - text: (3) blue rings were caused by a failure to complete lignification of new wood due to an early end of the growing season;
+    section: abstract
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.9
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: 'Constitutive/definitional link: a blue ring is latewood whose tracheid walls stain blue (unlignified) with safranin-astra blue (Fig. 2d).'
+- id: e15_cmi_double
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:decreased_summer_climate_moisture_index_at_the_test_site_36ac
+  predicate: enables
+  object: causal_mosaic:increased_double_ring_frequency_in_picea_glauca_0333
+  negated: false
+  causal_language: direct_causal
+  original_sentence: Finally, the formation of double rings was favored by warm and dry summers characterized by highly negative climate moisture indices, combined with a sudden increase in precipitation in September.
+  ecosystem_context: plantations
+  comparator: *id001
+  philosophical_accounts:
+  - probabilistic
+  - inus_component
+  necessity: not_addressed
+  sufficiency: explicitly_denied
+  direction: *id005
+  temporal_ordering: explicitly_asserted
+  moderation:
+    status: explicitly_asserted
+    moderator_node_ids:
+    - causal_mosaic:increased_september_precipitation_at_the_test_site_8008
+    interaction_type: synergistic
+  strength:
+    status: implicitly_assumed
+    significance: not_reported
+    analysis_method: mixed_model
+    quantitative_value: R2 only in Fig. 4 (CMI model); peak years 1998 and 2015
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: contributing_cause
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id003
+  certainty_grade: not_assessed
+  fcm_weight: 0.5
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct 1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    duration_text: Tree-ring years 1983-2016 (34 growing seasons after planting in 1982)
+    time_since_intervention_months: 420
+    time_since_intervention_text: cores taken summer 2017, 35 years after planting
+    observation_seasons:
+    - summer
+    - autumn
+  source_spans:
+  - text: Finally, the formation of double rings was favored by warm and dry summers characterized by highly negative climate moisture indices, combined with a sudden increase in precipitation in September.
+    section: results
+  - text: The highest percentage of double rings was observed in 1998 and 2015 (Figure 3); years with a very dry summer causing the formation of a narrow band of latewood tracheids, followed by a sudden increase in precipitation in September, which led to the transient formation of wider tracheids (Figures 2c, 4).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.8
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: 'Conjunctive cause (''combined with''): dry summer then September rain spike.'
+- id: e16_sepPpt_double
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:increased_september_precipitation_at_the_test_site_8008
+  predicate: enables
+  object: causal_mosaic:increased_double_ring_frequency_in_picea_glauca_0333
+  negated: false
+  causal_language: direct_causal
+  original_sentence: Finally, the formation of double rings was favored by warm and dry summers characterized by highly negative climate moisture indices, combined with a sudden increase in precipitation in September.
+  ecosystem_context: plantations
+  comparator: *id001
+  philosophical_accounts:
+  - probabilistic
+  - inus_component
+  necessity: not_addressed
+  sufficiency: explicitly_denied
+  direction: *id005
+  temporal_ordering: explicitly_asserted
+  moderation:
+    status: explicitly_asserted
+    moderator_node_ids:
+    - causal_mosaic:decreased_summer_climate_moisture_index_at_the_test_site_36ac
+    interaction_type: synergistic
+  strength:
+    status: implicitly_assumed
+    significance: not_reported
+    analysis_method: mixed_model
+    quantitative_value: R2 only in Fig. 4 (CMI model); peak years 1998 and 2015
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: contributing_cause
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id003
+  certainty_grade: not_assessed
+  fcm_weight: 0.5
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct 1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    duration_text: Tree-ring years 1983-2016 (34 growing seasons after planting in 1982)
+    time_since_intervention_months: 420
+    time_since_intervention_text: cores taken summer 2017, 35 years after planting
+    observation_seasons:
+    - summer
+    - autumn
+  source_spans:
+  - text: Finally, the formation of double rings was favored by warm and dry summers characterized by highly negative climate moisture indices, combined with a sudden increase in precipitation in September.
+    section: results
+  - text: The highest percentage of double rings was observed in 1998 and 2015 (Figure 3); years with a very dry summer causing the formation of a narrow band of latewood tracheids, followed by a sudden increase in precipitation in September, which led to the transient formation of wider tracheids (Figures 2c, 4).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.8
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: 'Conjunctive cause (''combined with''): dry summer then September rain spike.'
+- id: e17_cmi_xylemDev
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:decreased_summer_climate_moisture_index_at_the_test_site_36ac
+  predicate: causes
+  object: causal_mosaic:interrupted_xylem_development_summer_growth_cessation_in_pic_af53
+  negated: false
+  causal_language: direct_causal
+  original_sentence: For example, in this study doublerings were an early sign of growth cessation due to summer drought observed in populations adapted to cooler and wetter environments.
+  ecosystem_context: plantations
+  comparator: *id004
+  philosophical_accounts:
+  - mechanistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id002
+  temporal_ordering: not_addressed
+  moderation:
+    status: explicitly_asserted
+    moderator_node_ids:
+    - causal_mosaic:transfer_of_maritime_picea_glauca_seed_sources_to_the_centra_2e88
+    interaction_type: quantitative
+  specificity: not_addressed
+  stability: not_addressed
+  scope: contingent
+  determinism: not_addressed
+  proximate_distal: distal
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    - populations adapted to cooler and wetter environments (e.g. Maritime)
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis:
+    evidence_types:
+    - observational_longitudinal
+    - theoretical
+    evidence_objects:
+    - both
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct 1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    duration_text: Tree-ring years 1983-2016 (34 growing seasons after planting in 1982)
+    time_since_intervention_months: 420
+    time_since_intervention_text: cores taken summer 2017, 35 years after planting
+    observation_seasons:
+    - summer
+  source_spans:
+  - text: For example, in this study doublerings were an early sign of growth cessation due to summer drought observed in populations adapted to cooler and wetter environments.
+    section: conclusion
+  - text: Double rings appear when there is an environmental constraint to xylem formation within the growing season leading to the formation of a band of latewood-like cells. This constraint is usually caused by summer droughts (Hoffer and Tardif, 2009; De Micco et al., 2016).
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.75
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+- id: e18_xylemDev_double
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:interrupted_xylem_development_summer_growth_cessation_in_pic_af53
+  predicate: causes
+  object: causal_mosaic:increased_double_ring_frequency_in_picea_glauca_0333
+  negated: false
+  causal_language: direct_causal
+  original_sentence: Double rings appear when there is an environmental constraint to xylem formation within the growing season leading to the formation of a band of latewood-like cells. This constraint is usually caused by summer droughts (Hoffer and Tardif, 2009; De Micco et al., 2016).
+  ecosystem_context: plantations
+  comparator: *id004
+  philosophical_accounts:
+  - mechanistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction:
+    status: asserted
+    evidence_for_direction: theoretical
+  temporal_ordering: not_addressed
+  specificity: not_addressed
+  stability: not_addressed
+  scope: prototypical
+  determinism: not_addressed
+  proximate_distal: proximate
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  evidential_basis: *id008
+  certainty_grade: not_assessed
+  fcm_weight: 0.7
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct 1.0, uncertain 0.6)'
+  temporal_extent:
+    observation_grain: annual
+    duration_text: Tree-ring years 1983-2016 (34 growing seasons after planting in 1982)
+    time_since_intervention_months: 420
+    time_since_intervention_text: cores taken summer 2017, 35 years after planting
+    observation_seasons:
+    - summer
+    - autumn
+  source_spans:
+  - text: Double rings appear when there is an environmental constraint to xylem formation within the growing season leading to the formation of a band of latewood-like cells. This constraint is usually caused by summer droughts (Hoffer and Tardif, 2009; De Micco et al., 2016).
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.8
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+- id: e19_age_frost
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:increased_tree_age_of_picea_glauca_618d
+  predicate: associated_with
+  object: causal_mosaic:decreased_frost_ring_frequency_in_picea_glauca_5245
+  negated: false
+  causal_language: associational
+  original_sentence: Almost all frost rings were formed prior to 2000 (Figure 3); i.e. in the first decade of a tree's life, while trees were small.
+  ecosystem_context: plantations
+  comparator: &id009
+  - status: implicitly_assumed
+    comparator_type: spatial_or_temporal_control
+    comparator_description: Rings formed after c. 2000, when the same trees were older and larger
+  philosophical_accounts:
+  - regularity
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction:
+    status: asserted
+    evidence_for_direction: theoretical
+  temporal_ordering: not_addressed
+  strength:
+    status: implicitly_assumed
+    significance: not_tested
+    analysis_method: descriptive_only
+    quantitative_value: frost rings in 13.7% of all rings, almost all before 2000 (Fig. 3)
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id003
+  certainty_grade: not_assessed
+  temporal_extent:
+    observation_grain: annual
+    duration_months: 216
+    duration_text: frost-ring formation confined to c. 1983-2000
+  source_spans:
+  - text: Almost all frost rings were formed prior to 2000 (Figure 3); i.e. in the first decade of a tree's life, while trees were small.
+    section: results
+  - text: Frost rings appeared almost exclusively in the first 15 years after planting although favorable climate conditions for their formation persisted in subsequent decades.
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: 'Age framing is inconsistent in the source: ''prior to 2000'' is ~18 years after planting (trees planted 1982 as 4-year-old seedlings), yet is glossed as ''the first decade of a tree''s life''; the Discussion says ''first 15 years after planting''.'
+- id: e20_diam_frost
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:increased_stem_diameter_of_picea_glauca_6065
+  predicate: causes
+  object: causal_mosaic:decreased_frost_ring_frequency_in_picea_glauca_5245
+  negated: false
+  causal_language: uncertain_causal
+  original_sentence: A possible explanation for the higher resistance of bigger trees to frost damage is that thicker stems, especially if accompanied by a thicker bark, are able to accumulate more heat so that they can maintain temperatures above freezing in the stem even if outside temperatures drop below 0°C (Molina et al., 2016).
+  ecosystem_context: plantations
+  comparator: *id004
+  philosophical_accounts:
+  - mechanistic
+  - transmission
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction:
+    status: asserted
+    evidence_for_direction: theoretical
+  temporal_ordering: not_addressed
+  mediation:
+    status: explicitly_asserted
+    pathway_description: Larger stems store more heat, keeping cambial temperature above freezing during frost events
+  moderation:
+    status: explicitly_asserted
+    moderator_node_ids:
+    - causal_mosaic:increased_bark_thickness_of_picea_glauca_b5f5
+    interaction_type: synergistic
+  specificity: not_addressed
+  stability: not_addressed
+  scope: prototypical
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  evidential_basis: *id008
+  certainty_grade: not_assessed
+  fcm_weight: 0.42
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct 1.0, uncertain 0.6)'
+  source_spans:
+  - text: A possible explanation for the higher resistance of bigger trees to frost damage is that thicker stems, especially if accompanied by a thicker bark, are able to accumulate more heat so that they can maintain temperatures above freezing in the stem even if outside temperatures drop below 0°C (Molina et al., 2016).
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.7
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: Hedged explanation ('A possible explanation') drawing on Molina et al. (2016).
+- id: e21_canopy_frost
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:increased_canopy_closure_of_the_picea_glauca_stand_0b17
+  predicate: causes
+  object: causal_mosaic:decreased_frost_ring_frequency_in_picea_glauca_5245
+  negated: false
+  causal_language: uncertain_causal
+  original_sentence: In addition, a stand comprised of small saplings will experience more dynamic temperature variations than a closed stand formed by larger trees (Krasowski and Simpson, 2001).
+  ecosystem_context: plantations
+  comparator: *id004
+  philosophical_accounts:
+  - mechanistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction:
+    status: asserted
+    evidence_for_direction: theoretical
+  temporal_ordering: not_addressed
+  mediation:
+    status: explicitly_asserted
+    pathway_description: Closed canopy damps stand-level temperature extremes
+  specificity: not_addressed
+  stability: not_addressed
+  scope: prototypical
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: contributing_cause
+  reversibility: not_addressed
+  proportionality: not_addressed
+  evidential_basis: *id008
+  certainty_grade: not_assessed
+  fcm_weight: 0.42
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct 1.0, uncertain 0.6)'
+  source_spans:
+  - text: In addition, a stand comprised of small saplings will experience more dynamic temperature variations than a closed stand formed by larger trees (Krasowski and Simpson, 2001).
+    section: discussion
+  - text: A possible explanation for the higher resistance of bigger trees to frost damage is that thicker stems, especially if accompanied by a thicker bark, are able to accumulate more heat so that they can maintain temperatures above freezing in the stem even if outside temperatures drop below 0°C (Molina et al., 2016).
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.6
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: Offered as an additional explanation for age-dependence of frost rings; the sentence states the microclimate premise and leaves the frost-ring consequence implicit.
+- id: e22_age_light_null
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:increased_tree_age_of_picea_glauca_618d
+  predicate: associated_with
+  object: causal_mosaic:light_ring_frequency_in_picea_glauca_90cd
+  negated: true
+  causal_language: no_relationship
+  original_sentence: Light and double rings appeared throughout the lifetime of the trees (Figure 3), i.e. their formation was independent of a tree's age or size.
+  ecosystem_context: plantations
+  comparator: *id009
+  philosophical_accounts:
+  - regularity
+  necessity: not_addressed
+  sufficiency: not_addressed
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    significance: not_tested
+    analysis_method: descriptive_only
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id003
+  certainty_grade: not_assessed
+  temporal_extent:
+    observation_grain: annual
+    duration_text: Tree-ring years 1983-2016 (34 growing seasons after planting in 1982)
+    time_since_intervention_months: 420
+    time_since_intervention_text: cores taken summer 2017, 35 years after planting
+  source_spans:
+  - text: Light and double rings appeared throughout the lifetime of the trees (Figure 3), i.e. their formation was independent of a tree's age or size.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: Null result from visual inspection of Fig. 3; no test reported.
+- id: e23_age_double_null
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:increased_tree_age_of_picea_glauca_618d
+  predicate: associated_with
+  object: causal_mosaic:double_ring_frequency_in_picea_glauca_9c81
+  negated: true
+  causal_language: no_relationship
+  original_sentence: Light and double rings appeared throughout the lifetime of the trees (Figure 3), i.e. their formation was independent of a tree's age or size.
+  ecosystem_context: plantations
+  comparator: *id009
+  philosophical_accounts:
+  - regularity
+  necessity: not_addressed
+  sufficiency: not_addressed
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    significance: not_tested
+    analysis_method: descriptive_only
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id003
+  certainty_grade: not_assessed
+  temporal_extent:
+    observation_grain: annual
+    duration_text: Tree-ring years 1983-2016 (34 growing seasons after planting in 1982)
+    time_since_intervention_months: 420
+    time_since_intervention_text: cores taken summer 2017, 35 years after planting
+  source_spans:
+  - text: Light and double rings appeared throughout the lifetime of the trees (Figure 3), i.e. their formation was independent of a tree's age or size.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: Null result from visual inspection of Fig. 3; no test reported.
+- id: e24_age_blue
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:increased_tree_age_of_picea_glauca_618d
+  predicate: associated_with
+  object: causal_mosaic:decreased_blue_ring_frequency_in_picea_glauca_7382
+  negated: false
+  causal_language: associational
+  original_sentence: We detected blue rings in only 1.6% of the rings. In all of these cases they occurred in rings formed prior to 2001.
+  ecosystem_context: plantations
+  comparator: *id009
+  philosophical_accounts:
+  - regularity
+  necessity: not_addressed
+  sufficiency: not_addressed
+  temporal_ordering: not_addressed
+  strength:
+    status: implicitly_assumed
+    significance: not_tested
+    analysis_method: descriptive_only
+    quantitative_value: blue rings in 1.6% of rings, all before 2001
+  specificity: not_addressed
+  stability: implicitly_assumed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id003
+  certainty_grade: not_assessed
+  source_spans:
+  - text: We detected blue rings in only 1.6% of the rings. In all of these cases they occurred in rings formed prior to 2001.
+    section: results
+  - text: Our finding that blue rings were primarily formed in the first 10 years of the trees' life agrees with the data of Montwé et al. (2018), who observed significantly lower severity of blue rings with increasing diameter.
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: 'Age framing is inconsistent in the source: ''prior to 2001'' is ~18 years after planting (trees planted 1982 as 4-year-old seedlings), yet is glossed as ''the first decade of a tree''s life''; the Discussion says ''first 15 years after planting''. Consistency with Montwé et al. (2018) noted (stability across studies).'
+- id: e25_montane_initFrost
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:transfer_of_montane_picea_glauca_seed_sources_to_the_central_99db
+  predicate: associated_with
+  object: causal_mosaic:increased_initial_frost_ring_frequency_in_picea_glauca_85a4
+  negated: false
+  causal_language: associational
+  original_sentence: Provenances native to the ecozone in which the study site was located (Continental Boreal) showed a high resistance to all types of anomalies.
+  ecosystem_context: plantations
+  comparator: &id010
+  - status: explicitly_asserted
+    comparator_type: untreated_control
+    comparator_description: Local provenances from the Continental Boreal ecozone (the test-site ecozone; no climatic transfer)
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: &id011
+    status: asserted
+    evidence_for_direction: experimental
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: 10.3% (SE 2.0) vs 3.2% (SE 0.6) of rings, Continental Boreal comparator; Tukey letters b vs a; difference 7.1 percentage points
+    quantitative_numeric: 7.1
+    effect_metric: raw_mean_difference
+    significance: significant
+    alpha: 0.05
+    analysis_method: mixed_model
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: &id012
+    evidence_types:
+    - randomized_experiment
+    evidence_objects:
+    - correlation
+  certainty_grade: not_assessed
+  temporal_extent: &id013
+    observation_grain: annual
+    duration_text: anomaly frequency pooled over ring years 1983-2016
+    time_since_intervention_months: 420
+    time_since_intervention_text: 35 years after planting (cores 2017)
+  source_spans:
+  - text: 'Table 1 | The frequency (in percent) of tree ring anomalies in trees representing six Canadian ecozones. Montane: initial frost ring 10.3 (2.0), letter b; Continental Boreal: 3.2 (0.6), letter a.'
+    section: results
+  - text: Provenances native to the ecozone in which the study site was located (Continental Boreal) showed a high resistance to all types of anomalies.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: Table-derived; the text does not single out Montane sources.
+- id: e26_coldBoreal_springFrost
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:transfer_of_cold_boreal_picea_glauca_seed_sources_to_the_cen_7173
+  predicate: associated_with
+  object: causal_mosaic:increased_spring_frost_ring_frequency_in_picea_glauca_daab
+  negated: false
+  causal_language: associational
+  original_sentence: Provenances from the most northern ecozone (Cold Boreal) were the most vulnerable to spring frosts, but had very low instances of light, double, and blue rings.
+  ecosystem_context: plantations
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: 12.8% (SE 2.0) vs 7.9% (SE 0.9) of rings, Continental Boreal comparator; Tukey letters a vs a; difference 4.9 percentage points
+    quantitative_numeric: 4.9
+    effect_metric: raw_mean_difference
+    significance: not_significant
+    alpha: 0.05
+    analysis_method: mixed_model
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent: *id013
+  source_spans:
+  - text: Provenances from the most northern ecozone (Cold Boreal) were the most vulnerable to spring frosts, but had very low instances of light, double, and blue rings.
+    section: results
+  - text: 'Table 1 | The frequency (in percent) of tree ring anomalies in trees representing six Canadian ecozones. Cold Boreal: spring frost ring 12.8 (2.0), letter a; Continental Boreal: 7.9 (0.9), letter a.'
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.8
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: 'TEXT-TABLE MISMATCH: the text calls Cold Boreal sources ''the most vulnerable to spring frosts'', but all six ecozones share Tukey letter ''a'' for spring frost rings in Table 1, i.e. no significant difference. Not encoded as a null result because the authors do not claim absence of a relationship.'
+- id: e27_mildBoreal_light
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:transfer_of_mild_boreal_picea_glauca_seed_sources_to_the_cen_0922
+  predicate: associated_with
+  object: causal_mosaic:increased_light_ring_frequency_in_picea_glauca_dd7f
+  negated: false
+  causal_language: associational
+  original_sentence: Specifically, provenances from the Temperate Mixedwood and the Mild Boreal ecozones showed the highest proportion of light rings, while trees from the humid Maritime ecozone had the highest occurrence of blue and double rings (Table 1).
+  ecosystem_context: plantations
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: 9.7% (SE 1.1) vs 5.7% (SE 0.8) of rings, Continental Boreal comparator; Tukey letters c vs ab; difference 4.0 percentage points
+    quantitative_numeric: 4.0
+    effect_metric: raw_mean_difference
+    significance: significant
+    alpha: 0.05
+    analysis_method: mixed_model
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent: *id013
+  source_spans:
+  - text: 'Table 1 | The frequency (in percent) of tree ring anomalies in trees representing six Canadian ecozones. Mild Boreal: light ring 9.7 (1.1), c; Continental Boreal 5.7 (0.8), ab.'
+    section: results
+  - text: Specifically, provenances from the Temperate Mixedwood and the Mild Boreal ecozones showed the highest proportion of light rings, while trees from the humid Maritime ecozone had the highest occurrence of blue and double rings (Table 1).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+- id: e28_tempMixed_light
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:transfer_of_temperate_mixedwood_picea_glauca_seed_sources_to_c2ae
+  predicate: associated_with
+  object: causal_mosaic:increased_light_ring_frequency_in_picea_glauca_dd7f
+  negated: false
+  causal_language: associational
+  original_sentence: Specifically, provenances from the Temperate Mixedwood and the Mild Boreal ecozones showed the highest proportion of light rings, while trees from the humid Maritime ecozone had the highest occurrence of blue and double rings (Table 1).
+  ecosystem_context: plantations
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: 11.0% (SE 1.6) vs 5.7% (SE 0.8) of rings, Continental Boreal comparator; Tukey letters c vs ab; difference 5.3 percentage points
+    quantitative_numeric: 5.3
+    effect_metric: raw_mean_difference
+    significance: significant
+    alpha: 0.05
+    analysis_method: mixed_model
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent: *id013
+  source_spans:
+  - text: 'Table 1 | The frequency (in percent) of tree ring anomalies in trees representing six Canadian ecozones. Temperate Mixedwood: light ring 11.0 (1.6), c; Continental Boreal 5.7 (0.8), ab.'
+    section: results
+  - text: Specifically, provenances from the Temperate Mixedwood and the Mild Boreal ecozones showed the highest proportion of light rings, while trees from the humid Maritime ecozone had the highest occurrence of blue and double rings (Table 1).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+- id: e29_maritime_blue
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:transfer_of_maritime_picea_glauca_seed_sources_to_the_centra_2e88
+  predicate: associated_with
+  object: causal_mosaic:increased_blue_ring_frequency_in_picea_glauca_4bdb
+  negated: false
+  causal_language: associational
+  original_sentence: Specifically, provenances from the Temperate Mixedwood and the Mild Boreal ecozones showed the highest proportion of light rings, while trees from the humid Maritime ecozone had the highest occurrence of blue and double rings (Table 1).
+  ecosystem_context: plantations
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: 4.7% (SE 1.1) vs 0.3% (SE 0.2) of rings, Continental Boreal comparator; Tukey letters c vs a; difference 4.4 percentage points
+    quantitative_numeric: 4.4
+    effect_metric: raw_mean_difference
+    significance: significant
+    alpha: 0.05
+    analysis_method: mixed_model
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent: *id013
+  source_spans:
+  - text: 'Table 1 | The frequency (in percent) of tree ring anomalies in trees representing six Canadian ecozones. Maritime: blue ring 4.7 (1.1), c; Continental Boreal 0.3 (0.2), a.'
+    section: results
+  - text: Specifically, provenances from the Temperate Mixedwood and the Mild Boreal ecozones showed the highest proportion of light rings, while trees from the humid Maritime ecozone had the highest occurrence of blue and double rings (Table 1).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+- id: e30_maritime_double
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:transfer_of_maritime_picea_glauca_seed_sources_to_the_centra_2e88
+  predicate: associated_with
+  object: causal_mosaic:increased_double_ring_frequency_in_picea_glauca_0333
+  negated: false
+  causal_language: associational
+  original_sentence: Specifically, provenances from the Temperate Mixedwood and the Mild Boreal ecozones showed the highest proportion of light rings, while trees from the humid Maritime ecozone had the highest occurrence of blue and double rings (Table 1).
+  ecosystem_context: plantations
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: 7.0% (SE 1.3) vs 3.3% (SE 0.6) of rings, Continental Boreal comparator; Tukey letters b vs a; difference 3.7 percentage points
+    quantitative_numeric: 3.7
+    effect_metric: raw_mean_difference
+    significance: significant
+    alpha: 0.05
+    analysis_method: mixed_model
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent: *id013
+  source_spans:
+  - text: 'Table 1 | The frequency (in percent) of tree ring anomalies in trees representing six Canadian ecozones. Maritime: double ring 7.0 (1.3), b; Continental Boreal 3.3 (0.6), a.'
+    section: results
+  - text: Specifically, provenances from the Temperate Mixedwood and the Mild Boreal ecozones showed the highest proportion of light rings, while trees from the humid Maritime ecozone had the highest occurrence of blue and double rings (Table 1).
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+- id: e31_tempMixed_blue
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:transfer_of_temperate_mixedwood_picea_glauca_seed_sources_to_c2ae
+  predicate: associated_with
+  object: causal_mosaic:increased_blue_ring_frequency_in_picea_glauca_4bdb
+  negated: false
+  causal_language: associational
+  original_sentence: Table 1 | The frequency (in percent) of tree ring anomalies in trees representing six Canadian ecozones.
+  ecosystem_context: plantations
+  comparator: *id010
+  philosophical_accounts:
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: 3.1% (SE 0.8) vs 0.3% (SE 0.2) of rings, Continental Boreal comparator; Tukey letters bc vs a; difference 2.8 percentage points
+    quantitative_numeric: 2.8
+    effect_metric: raw_mean_difference
+    significance: significant
+    alpha: 0.05
+    analysis_method: mixed_model
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent: *id013
+  source_spans:
+  - text: 'Table 1 | The frequency (in percent) of tree ring anomalies in trees representing six Canadian ecozones. Temperate Mixedwood: blue ring 3.1 (0.8), bc; Continental Boreal 0.3 (0.2), a.'
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.85
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: Table-derived only; the text names Maritime for blue rings.
+- id: e32_lat_light
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:decreased_latitude_of_the_seed_source_origin_695c
+  predicate: correlated_with
+  object: causal_mosaic:increased_light_ring_intensity_in_picea_glauca_83e4
+  negated: false
+  causal_language: associational
+  original_sentence: The latitude of the seed sources was negatively correlated with the intensity of light, blue, and double rings (Table 2).
+  ecosystem_context: plantations
+  comparator: &id014
+  - status: implicitly_assumed
+    comparator_type: alternative_dose_level
+    comparator_description: Other provenances along the continuous origin-climate gradient (24 provenances, six ecozones)
+  philosophical_accounts:
+  - probabilistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction:
+    status: asserted
+    evidence_for_direction: theoretical
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: Pearson r = -0.77 (Latitude x light ring; n = 24 provenances; Holm-adjusted)
+    quantitative_numeric: -0.77
+    effect_metric: correlation_coefficient
+    qualitative_descriptor: strong
+    significance: not_reported
+    alpha: 0.05
+    analysis_method: regression
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: distal
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent: *id013
+  source_spans:
+  - text: The latitude of the seed sources was negatively correlated with the intensity of light, blue, and double rings (Table 2).
+    section: results
+  - text: 'Table 2 | Pearson correlation between the intensity of different tree ring disturbances and the climate of origin of the seed sources. Latitude x light ring: r = -0.77.'
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.8
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: Table 2 marks Holm-significant correlations in bold, but the bold formatting is lost in the supplied text, so significance is recorded as not_reported. With n = 24, |r| >= ~0.62 would survive a Holm correction over the 40 tests; check against the published PDF. analysis_method 'regression' is the closest AnalysisMethodEnum value for Pearson correlation plus linear regression (Methods).
+- id: e33_lat_blue
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:decreased_latitude_of_the_seed_source_origin_695c
+  predicate: correlated_with
+  object: causal_mosaic:increased_blue_ring_intensity_in_picea_glauca_bc53
+  negated: false
+  causal_language: associational
+  original_sentence: The latitude of the seed sources was negatively correlated with the intensity of light, blue, and double rings (Table 2).
+  ecosystem_context: plantations
+  comparator: *id014
+  philosophical_accounts:
+  - probabilistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction:
+    status: asserted
+    evidence_for_direction: theoretical
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: Pearson r = -0.78 (Latitude x blue ring; n = 24 provenances; Holm-adjusted)
+    quantitative_numeric: -0.78
+    effect_metric: correlation_coefficient
+    qualitative_descriptor: strong
+    significance: not_reported
+    alpha: 0.05
+    analysis_method: regression
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: distal
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent: *id013
+  source_spans:
+  - text: The latitude of the seed sources was negatively correlated with the intensity of light, blue, and double rings (Table 2).
+    section: results
+  - text: 'Table 2 | Pearson correlation between the intensity of different tree ring disturbances and the climate of origin of the seed sources. Latitude x blue ring: r = -0.78.'
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.8
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: Table 2 marks Holm-significant correlations in bold, but the bold formatting is lost in the supplied text, so significance is recorded as not_reported. With n = 24, |r| >= ~0.62 would survive a Holm correction over the 40 tests; check against the published PDF. analysis_method 'regression' is the closest AnalysisMethodEnum value for Pearson correlation plus linear regression (Methods).
+- id: e34_lat_double
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:decreased_latitude_of_the_seed_source_origin_695c
+  predicate: correlated_with
+  object: causal_mosaic:increased_double_ring_intensity_in_picea_glauca_ff47
+  negated: false
+  causal_language: associational
+  original_sentence: The latitude of the seed sources was negatively correlated with the intensity of light, blue, and double rings (Table 2).
+  ecosystem_context: plantations
+  comparator: *id014
+  philosophical_accounts:
+  - probabilistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction:
+    status: asserted
+    evidence_for_direction: theoretical
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: Pearson r = -0.68 (Latitude x double ring; n = 24 provenances; Holm-adjusted)
+    quantitative_numeric: -0.68
+    effect_metric: correlation_coefficient
+    qualitative_descriptor: strong
+    significance: not_reported
+    alpha: 0.05
+    analysis_method: regression
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: distal
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent: *id013
+  source_spans:
+  - text: The latitude of the seed sources was negatively correlated with the intensity of light, blue, and double rings (Table 2).
+    section: results
+  - text: 'Table 2 | Pearson correlation between the intensity of different tree ring disturbances and the climate of origin of the seed sources. Latitude x double ring: r = -0.68.'
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.8
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: Table 2 marks Holm-significant correlations in bold, but the bold formatting is lost in the supplied text, so significance is recorded as not_reported. With n = 24, |r| >= ~0.62 would survive a Holm correction over the 40 tests; check against the published PDF. analysis_method 'regression' is the closest AnalysisMethodEnum value for Pearson correlation plus linear regression (Methods).
+- id: e35_mat_light
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:increased_mean_annual_temperature_at_the_seed_source_origin_aec1
+  predicate: correlated_with
+  object: causal_mosaic:increased_light_ring_intensity_in_picea_glauca_83e4
+  negated: false
+  causal_language: associational
+  original_sentence: Mean annual temperature and the end of the frost free period were positively correlated with these latewood anomalies, meaning that these anomalies were more prevalent in provenances from regions with warm and long growing seasons.
+  ecosystem_context: plantations
+  comparator: *id014
+  philosophical_accounts:
+  - probabilistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction:
+    status: asserted
+    evidence_for_direction: theoretical
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: Pearson r = 0.61 (Mean annual temperature x light ring; n = 24 provenances; Holm-adjusted)
+    quantitative_numeric: 0.61
+    effect_metric: correlation_coefficient
+    qualitative_descriptor: strong
+    significance: not_reported
+    alpha: 0.05
+    analysis_method: regression
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: distal
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent: *id013
+  source_spans:
+  - text: Mean annual temperature and the end of the frost free period were positively correlated with these latewood anomalies, meaning that these anomalies were more prevalent in provenances from regions with warm and long growing seasons.
+    section: results
+  - text: 'Table 2 | Pearson correlation between the intensity of different tree ring disturbances and the climate of origin of the seed sources. Mean annual temperature x light ring: r = 0.61.'
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.8
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: Table 2 marks Holm-significant correlations in bold, but the bold formatting is lost in the supplied text, so significance is recorded as not_reported. With n = 24, |r| >= ~0.62 would survive a Holm correction over the 40 tests; check against the published PDF. analysis_method 'regression' is the closest AnalysisMethodEnum value for Pearson correlation plus linear regression (Methods).
+- id: e36_mat_blue
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:increased_mean_annual_temperature_at_the_seed_source_origin_aec1
+  predicate: correlated_with
+  object: causal_mosaic:increased_blue_ring_intensity_in_picea_glauca_bc53
+  negated: false
+  causal_language: associational
+  original_sentence: Mean annual temperature and the end of the frost free period were positively correlated with these latewood anomalies, meaning that these anomalies were more prevalent in provenances from regions with warm and long growing seasons.
+  ecosystem_context: plantations
+  comparator: *id014
+  philosophical_accounts:
+  - probabilistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction:
+    status: asserted
+    evidence_for_direction: theoretical
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: Pearson r = 0.75 (Mean annual temperature x blue ring; n = 24 provenances; Holm-adjusted)
+    quantitative_numeric: 0.75
+    effect_metric: correlation_coefficient
+    qualitative_descriptor: strong
+    significance: not_reported
+    alpha: 0.05
+    analysis_method: regression
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: distal
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent: *id013
+  source_spans:
+  - text: Mean annual temperature and the end of the frost free period were positively correlated with these latewood anomalies, meaning that these anomalies were more prevalent in provenances from regions with warm and long growing seasons.
+    section: results
+  - text: 'Table 2 | Pearson correlation between the intensity of different tree ring disturbances and the climate of origin of the seed sources. Mean annual temperature x blue ring: r = 0.75.'
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.8
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: Table 2 marks Holm-significant correlations in bold, but the bold formatting is lost in the supplied text, so significance is recorded as not_reported. With n = 24, |r| >= ~0.62 would survive a Holm correction over the 40 tests; check against the published PDF. analysis_method 'regression' is the closest AnalysisMethodEnum value for Pearson correlation plus linear regression (Methods).
+- id: e37_mat_double
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:increased_mean_annual_temperature_at_the_seed_source_origin_aec1
+  predicate: correlated_with
+  object: causal_mosaic:increased_double_ring_intensity_in_picea_glauca_ff47
+  negated: false
+  causal_language: associational
+  original_sentence: Mean annual temperature and the end of the frost free period were positively correlated with these latewood anomalies, meaning that these anomalies were more prevalent in provenances from regions with warm and long growing seasons.
+  ecosystem_context: plantations
+  comparator: *id014
+  philosophical_accounts:
+  - probabilistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction:
+    status: asserted
+    evidence_for_direction: theoretical
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: Pearson r = 0.57 (Mean annual temperature x double ring; n = 24 provenances; Holm-adjusted)
+    quantitative_numeric: 0.57
+    effect_metric: correlation_coefficient
+    qualitative_descriptor: moderate
+    significance: not_reported
+    alpha: 0.05
+    analysis_method: regression
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: distal
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent: *id013
+  source_spans:
+  - text: Mean annual temperature and the end of the frost free period were positively correlated with these latewood anomalies, meaning that these anomalies were more prevalent in provenances from regions with warm and long growing seasons.
+    section: results
+  - text: 'Table 2 | Pearson correlation between the intensity of different tree ring disturbances and the climate of origin of the seed sources. Mean annual temperature x double ring: r = 0.57.'
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.8
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: Table 2 marks Holm-significant correlations in bold, but the bold formatting is lost in the supplied text, so significance is recorded as not_reported. With n = 24, |r| >= ~0.62 would survive a Holm correction over the 40 tests; check against the published PDF. analysis_method 'regression' is the closest AnalysisMethodEnum value for Pearson correlation plus linear regression (Methods).
+- id: e38_effp_light
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:later_end_of_the_frost_free_period_at_the_seed_source_origin_fea6
+  predicate: correlated_with
+  object: causal_mosaic:increased_light_ring_intensity_in_picea_glauca_83e4
+  negated: false
+  causal_language: associational
+  original_sentence: Mean annual temperature and the end of the frost free period were positively correlated with these latewood anomalies, meaning that these anomalies were more prevalent in provenances from regions with warm and long growing seasons.
+  ecosystem_context: plantations
+  comparator: *id014
+  philosophical_accounts:
+  - probabilistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction:
+    status: asserted
+    evidence_for_direction: theoretical
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: Pearson r = 0.62 (End of frost free period x light ring; n = 24 provenances; Holm-adjusted)
+    quantitative_numeric: 0.62
+    effect_metric: correlation_coefficient
+    qualitative_descriptor: strong
+    significance: not_reported
+    alpha: 0.05
+    analysis_method: regression
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: distal
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent: *id013
+  source_spans:
+  - text: Mean annual temperature and the end of the frost free period were positively correlated with these latewood anomalies, meaning that these anomalies were more prevalent in provenances from regions with warm and long growing seasons.
+    section: results
+  - text: 'Table 2 | Pearson correlation between the intensity of different tree ring disturbances and the climate of origin of the seed sources. End of frost free period x light ring: r = 0.62.'
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.8
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: Table 2 marks Holm-significant correlations in bold, but the bold formatting is lost in the supplied text, so significance is recorded as not_reported. With n = 24, |r| >= ~0.62 would survive a Holm correction over the 40 tests; check against the published PDF. analysis_method 'regression' is the closest AnalysisMethodEnum value for Pearson correlation plus linear regression (Methods).
+- id: e39_effp_blue
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:later_end_of_the_frost_free_period_at_the_seed_source_origin_fea6
+  predicate: correlated_with
+  object: causal_mosaic:increased_blue_ring_intensity_in_picea_glauca_bc53
+  negated: false
+  causal_language: associational
+  original_sentence: Mean annual temperature and the end of the frost free period were positively correlated with these latewood anomalies, meaning that these anomalies were more prevalent in provenances from regions with warm and long growing seasons.
+  ecosystem_context: plantations
+  comparator: *id014
+  philosophical_accounts:
+  - probabilistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction:
+    status: asserted
+    evidence_for_direction: theoretical
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: Pearson r = 0.69 (End of frost free period x blue ring; n = 24 provenances; Holm-adjusted)
+    quantitative_numeric: 0.69
+    effect_metric: correlation_coefficient
+    qualitative_descriptor: strong
+    significance: not_reported
+    alpha: 0.05
+    analysis_method: regression
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: distal
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent: *id013
+  source_spans:
+  - text: Mean annual temperature and the end of the frost free period were positively correlated with these latewood anomalies, meaning that these anomalies were more prevalent in provenances from regions with warm and long growing seasons.
+    section: results
+  - text: 'Table 2 | Pearson correlation between the intensity of different tree ring disturbances and the climate of origin of the seed sources. End of frost free period x blue ring: r = 0.69.'
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.8
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: Table 2 marks Holm-significant correlations in bold, but the bold formatting is lost in the supplied text, so significance is recorded as not_reported. With n = 24, |r| >= ~0.62 would survive a Holm correction over the 40 tests; check against the published PDF. analysis_method 'regression' is the closest AnalysisMethodEnum value for Pearson correlation plus linear regression (Methods).
+- id: e40_effp_double
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:later_end_of_the_frost_free_period_at_the_seed_source_origin_fea6
+  predicate: correlated_with
+  object: causal_mosaic:increased_double_ring_intensity_in_picea_glauca_ff47
+  negated: false
+  causal_language: associational
+  original_sentence: Mean annual temperature and the end of the frost free period were positively correlated with these latewood anomalies, meaning that these anomalies were more prevalent in provenances from regions with warm and long growing seasons.
+  ecosystem_context: plantations
+  comparator: *id014
+  philosophical_accounts:
+  - probabilistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction:
+    status: asserted
+    evidence_for_direction: theoretical
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: Pearson r = 0.59 (End of frost free period x double ring; n = 24 provenances; Holm-adjusted)
+    quantitative_numeric: 0.59
+    effect_metric: correlation_coefficient
+    qualitative_descriptor: moderate
+    significance: not_reported
+    alpha: 0.05
+    analysis_method: regression
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: distal
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent: *id013
+  source_spans:
+  - text: Mean annual temperature and the end of the frost free period were positively correlated with these latewood anomalies, meaning that these anomalies were more prevalent in provenances from regions with warm and long growing seasons.
+    section: results
+  - text: 'Table 2 | Pearson correlation between the intensity of different tree ring disturbances and the climate of origin of the seed sources. End of frost free period x double ring: r = 0.59.'
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.8
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: Table 2 marks Holm-significant correlations in bold, but the bold formatting is lost in the supplied text, so significance is recorded as not_reported. With n = 24, |r| >= ~0.62 would survive a Holm correction over the 40 tests; check against the published PDF. analysis_method 'regression' is the closest AnalysisMethodEnum value for Pearson correlation plus linear regression (Methods).
+- id: e41_mcmt_blue
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:increased_mean_coldest_month_temperature_at_the_seed_source__e039
+  predicate: correlated_with
+  object: causal_mosaic:increased_blue_ring_intensity_in_picea_glauca_bc53
+  negated: false
+  causal_language: associational
+  original_sentence: Provenances that showed a higher percentage of blue rings usually came from areas with a late end of the growing season, relatively mild winters and high precipitation levels (Table 2).
+  ecosystem_context: plantations
+  comparator: *id014
+  philosophical_accounts:
+  - probabilistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction:
+    status: asserted
+    evidence_for_direction: theoretical
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: Pearson r = 0.72 (Mean coldest month temperature x blue ring; n = 24 provenances; Holm-adjusted)
+    quantitative_numeric: 0.72
+    effect_metric: correlation_coefficient
+    qualitative_descriptor: strong
+    significance: not_reported
+    alpha: 0.05
+    analysis_method: regression
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: distal
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent: *id013
+  source_spans:
+  - text: Provenances that showed a higher percentage of blue rings usually came from areas with a late end of the growing season, relatively mild winters and high precipitation levels (Table 2).
+    section: results
+  - text: 'Table 2 | Pearson correlation between the intensity of different tree ring disturbances and the climate of origin of the seed sources. Mean coldest month temperature x blue ring: r = 0.72.'
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.8
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: Table 2 marks Holm-significant correlations in bold, but the bold formatting is lost in the supplied text, so significance is recorded as not_reported. With n = 24, |r| >= ~0.62 would survive a Holm correction over the 40 tests; check against the published PDF. analysis_method 'regression' is the closest AnalysisMethodEnum value for Pearson correlation plus linear regression (Methods).
+- id: e42_map_blue
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:increased_mean_annual_precipitation_at_the_seed_source_origi_b15a
+  predicate: correlated_with
+  object: causal_mosaic:increased_blue_ring_intensity_in_picea_glauca_bc53
+  negated: false
+  causal_language: associational
+  original_sentence: Provenances that showed a higher percentage of blue rings usually came from areas with a late end of the growing season, relatively mild winters and high precipitation levels (Table 2).
+  ecosystem_context: plantations
+  comparator: *id014
+  philosophical_accounts:
+  - probabilistic
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction:
+    status: asserted
+    evidence_for_direction: theoretical
+  temporal_ordering: not_addressed
+  strength:
+    status: explicitly_asserted
+    quantitative_value: Pearson r = 0.72 (Mean annual precipitation x blue ring; n = 24 provenances; Holm-adjusted)
+    quantitative_numeric: 0.72
+    effect_metric: correlation_coefficient
+    qualitative_descriptor: strong
+    significance: not_reported
+    alpha: 0.05
+    analysis_method: regression
+  specificity: not_addressed
+  stability: not_addressed
+  scope: assertional
+  determinism: not_addressed
+  proximate_distal: distal
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  temporal_extent: *id013
+  source_spans:
+  - text: Provenances that showed a higher percentage of blue rings usually came from areas with a late end of the growing season, relatively mild winters and high precipitation levels (Table 2).
+    section: results
+  - text: 'Table 2 | Pearson correlation between the intensity of different tree ring disturbances and the climate of origin of the seed sources. Mean annual precipitation x blue ring: r = 0.72.'
+    section: results
+  - text: However, blue rings were also more intense in provenances coming from wetter regions, suggesting that a lack of adaptation to drought might favor the formation of blue rings.
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.8
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: Table 2 marks Holm-significant correlations in bold, but the bold formatting is lost in the supplied text, so significance is recorded as not_reported. With n = 24, |r| >= ~0.62 would survive a Holm correction over the 40 tests; check against the published PDF. analysis_method 'regression' is the closest AnalysisMethodEnum value for Pearson correlation plus linear regression (Methods). Discussion interprets this as a possible lack of drought adaptation favouring blue rings (hedged; not annotated as a separate edge).
+- id: e43_south_hardiness
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:northward_transfer_of_picea_glauca_seed_sources_from_warmer__6a62
+  predicate: causes
+  object: causal_mosaic:later_onset_of_autumn_cold_hardiness_in_picea_glauca_c820
+  negated: false
+  causal_language: uncertain_causal
+  original_sentence: The fact that these xylem anomalies were more frequent in provenances originating from lower latitudes (Table 2 and Supplementary Figure S1) is consistent with a more extensive use of the growing season and a later onset of cold hardiness in these trees at our study site (Sebastian-Azcona et al., 2019).
+  ecosystem_context: plantations
+  comparator: *id010
+  philosophical_accounts:
+  - mechanistic
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  specificity: not_addressed
+  stability: not_addressed
+  scope: contingent
+  determinism: not_addressed
+  proximate_distal: proximate
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis:
+    evidence_types:
+    - randomized_experiment
+    evidence_objects:
+    - mechanism
+  certainty_grade: not_assessed
+  fcm_weight: 0.42
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct 1.0, uncertain 0.6)'
+  source_spans:
+  - text: The fact that these xylem anomalies were more frequent in provenances originating from lower latitudes (Table 2 and Supplementary Figure S1) is consistent with a more extensive use of the growing season and a later onset of cold hardiness in these trees at our study site (Sebastian-Azcona et al., 2019).
+    section: discussion
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.7
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: Supported by the authors' earlier cold-hardiness study on the same trial (Sebastian-Azcona et al. 2019), not measured in this paper; 'consistent with' read as hedged.
+- id: e44_south_latewood
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:northward_transfer_of_picea_glauca_seed_sources_from_warmer__6a62
+  predicate: causes
+  object: causal_mosaic:increased_latewood_xylem_anomaly_frequency_in_picea_glauca_209f
+  negated: false
+  causal_language: uncertain_causal
+  original_sentence: By contrast, provenances from southern regions with longer and warmer growing conditions showed an increased presence of latewood anomalies. These southern populations showed thin and unlignified cell walls in years when cold temperatures arrived before they could finish the last stages of xylem formation, indicating a potential maladaptation to the shorter growing seasons in the study site.
+  ecosystem_context: plantations
+  comparator: *id010
+  philosophical_accounts:
+  - mechanistic
+  - interventionist
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: explicitly_asserted
+  mediation:
+    status: explicitly_asserted
+    mediator_node_ids:
+    - causal_mosaic:later_onset_of_autumn_cold_hardiness_in_picea_glauca_c820
+    - causal_mosaic:interrupted_lignification_of_latewood_tracheid_cell_walls_in_92f0
+    pathway_description: Southern sources extend cambial activity into autumn (later cold-hardiness onset); early cold at the site arrives before latewood wall thickening and lignification finish, giving light and blue rings
+  moderation:
+    status: explicitly_asserted
+    moderator_node_ids:
+    - causal_mosaic:decreased_september_mean_temperature_at_the_test_site_5d94
+    interaction_type: synergistic
+  specificity: explicitly_asserted
+  stability: not_addressed
+  scope: contingent
+  determinism: not_addressed
+  proximate_distal: distal
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+  evidential_basis:
+    evidence_types:
+    - randomized_experiment
+    - observational_longitudinal
+    evidence_objects:
+    - both
+  certainty_grade: not_assessed
+  fcm_weight: 0.42
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct 1.0, uncertain 0.6)'
+  temporal_extent: *id013
+  source_spans:
+  - text: By contrast, provenances from southern regions with longer and warmer growing conditions showed an increased presence of latewood anomalies. These southern populations showed thin and unlignified cell walls in years when cold temperatures arrived before they could finish the last stages of xylem formation, indicating a potential maladaptation to the shorter growing seasons in the study site.
+    section: conclusion
+  - text: In particular, populations originating from warmer regions showed an increased presence of latewood anomalies, consistent with a more extensive use of the growing season in the fall.
+    section: abstract
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.8
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+- id: e45_farTransfer_latewood
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:seed_transfer_of_picea_glauca_too_far_poleward_or_upward_in__4b67
+  predicate: causes
+  object: causal_mosaic:increased_latewood_xylem_anomaly_frequency_in_picea_glauca_209f
+  negated: false
+  causal_language: uncertain_causal
+  original_sentence: When such anomalies are observed in assisted migration schemes to address climate change, it would indicate that seed sources have been moved too far poleward or upward in elevation.
+  ecosystem_context: boreal_and_temperate_high_montane_forests_and_woodlands
+  comparator: *id004
+  philosophical_accounts:
+  - agency
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction:
+    status: asserted
+    evidence_for_direction: experimental
+  temporal_ordering: not_addressed
+  specificity: explicitly_asserted
+  stability: not_addressed
+  scope: prototypical
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+    ecosystem_scope: boreal_and_temperate_high_montane_forests_and_woodlands
+  evidential_basis:
+    evidence_types:
+    - randomized_experiment
+    - theoretical
+    evidence_objects:
+    - both
+  certainty_grade: not_assessed
+  fcm_weight: 0.42
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct 1.0, uncertain 0.6)'
+  source_spans:
+  - text: When such anomalies are observed in assisted migration schemes to address climate change, it would indicate that seed sources have been moved too far poleward or upward in elevation.
+    section: conclusion
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.75
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: 'Management-facing generalisation (agency account): latewood anomalies as a diagnostic of over-poleward/upslope transfer. Extrapolated from one trial.'
+- id: e46_local_allAnom
+  source_document: 10.3389/fpls.2020.00208
+  subject: causal_mosaic:planting_local_climatically_matched_picea_glauca_seed_source_a2ac
+  predicate: prevents
+  object: causal_mosaic:increased_overall_xylem_anomaly_frequency_in_picea_glauca_eeb1
+  negated: false
+  causal_language: uncertain_causal
+  original_sentence: Local provenances collected near the planting site showed the least overall amount of xylem anomalies. This indicates that they are correctly adapted to the environment in which they occur, and that xylem anomalies should be at a minimum when planting stock is correctly matched to their optimal growing conditions.
+  ecosystem_context: plantations
+  comparator:
+  - status: explicitly_asserted
+    comparator_type: alternative_treatment
+    comparator_description: Non-local provenances transferred from other ecozones
+    comparator_node_id: causal_mosaic:northward_transfer_of_picea_glauca_seed_sources_from_warmer__6a62
+  philosophical_accounts:
+  - agency
+  - counterfactual
+  necessity: not_addressed
+  sufficiency: not_addressed
+  direction: *id011
+  temporal_ordering: not_addressed
+  strength:
+    status: implicitly_assumed
+    significance: not_reported
+    analysis_method: mixed_model
+    quantitative_value: overall total not tabulated; see Table 1 by anomaly type
+  specificity: not_addressed
+  stability: not_addressed
+  scope: prototypical
+  determinism: not_addressed
+  proximate_distal: not_addressed
+  contributing_sole: not_addressed
+  reversibility: not_addressed
+  proportionality: not_addressed
+  context_dependence:
+    status: implicitly_assumed
+    scope_conditions:
+    - Provenance trial, central boreal plains, Alberta (55°17'N, 113°10'W); boreal mixedwood on clay-loam Gray Luvisol; MAT 0.5 °C, MAP 491 mm
+    geographic_scope: Central Alberta, Canada (single common-garden site)
+    ecosystem_scope: boreal_and_temperate_high_montane_forests_and_woodlands
+  evidential_basis: *id012
+  certainty_grade: not_assessed
+  fcm_weight: -0.36
+  fcm_weight_source: 'derived_from_schema: predicate fcm_default_weight x causal_language factor (direct 1.0, uncertain 0.6)'
+  temporal_extent: *id013
+  source_spans:
+  - text: Local provenances collected near the planting site showed the least overall amount of xylem anomalies. This indicates that they are correctly adapted to the environment in which they occur, and that xylem anomalies should be at a minimum when planting stock is correctly matched to their optimal growing conditions.
+    section: conclusion
+  - text: Provenances native to the ecozone in which the study site was located (Continental Boreal) showed a high resistance to all types of anomalies.
+    section: results
+  annotator: camo_agent:claude-opus-5-5
+  annotation_confidence: 0.7
+  annotation_timestamp: '2026-11-13T12:00:00Z'
+  annotation_notes: 'Claim is only partly borne out by Table 1: Continental Boreal sources are lowest for initial frost and blue rings, but Cold Boreal sources have fewer light (1.8 vs 5.7%) and double (1.1 vs 3.3%) rings and Temperate Mixedwood fewer spring frost rings (7.4 vs 7.9%), none significantly different from local. No overall total or test is reported.'

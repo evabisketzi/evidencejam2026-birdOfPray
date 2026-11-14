@@ -368,11 +368,12 @@ class Extraction:
 
 
 def extract_paper(client: Client, system: str, user_text: str, valid_numbers: Sequence[int], max_input_tokens: int = 12000,
-                  label: str = "") -> Extraction:
+                  label: str = "", chunks: Optional[List[str]] = None) -> Extraction:
+    """`chunks`: ready-made per-call inputs (e.g. one per paragraph chunk); otherwise the text is split only when too long."""
     ex = Extraction([])
     claims: List[Claim] = []
     bad: List[str] = []
-    for chunk in split_user_text(user_text, max_input_tokens):
+    for chunk in (chunks or split_user_text(user_text, max_input_tokens)):
         r = client.complete(system, chunk, label)
         ex.chunks += 1
         ex.prompt_tokens += r.prompt_tokens

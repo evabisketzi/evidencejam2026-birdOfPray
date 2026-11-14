@@ -53,6 +53,7 @@ class LLMConfig:
     total_timeout: float = 1200.0      # one attempt may take at most this long, however steadily it streams
     retries: int = 3
     use_cache: bool = True
+    refresh_cache: bool = False        # ignore cached answers but store the new ones (repeat runs that still leave a cache)
     cache_dir: Path = CACHE_DIR
 
 
@@ -251,7 +252,7 @@ class Client:
         self._tl.label = label
         thinking = self.cfg.thinking
         cp = self._cache_path(system, user, thinking)
-        if self.cfg.use_cache and cp.exists():
+        if self.cfg.use_cache and not self.cfg.refresh_cache and cp.exists():
             try:
                 d = json.loads(cp.read_text(encoding="utf-8"))
                 return Result(d["text"], d["prompt_tokens"], d["completion_tokens"], d.get("seconds", 0.0), True, d.get("mode", "off"),

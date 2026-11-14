@@ -79,10 +79,11 @@ def process_one(row: Dict[str, str], corpus: Path, client: Client, system: str, 
 
 def run(corpus: Path, out_dir: Path, docs: Optional[List[str]] = None, limit: Optional[int] = None, concurrency: int = 4,
         thinking: bool = False, prompt: str = DEFAULT_PROMPT, use_cache: bool = True, max_input_tokens: int = 12000,
-        max_tokens: int = 3000, preprocess: str = "sentence") -> int:
+        max_tokens: int = 3000, preprocess: str = "sentence", refresh_cache: bool = False) -> int:
     t0 = time.time()
     pre_fn = get_preprocessor(preprocess)
-    cfg = config_from_env(thinking, use_cache, max_tokens)                 # raises ConfigError if a variable is missing
+    cfg = config_from_env(thinking, use_cache, max_tokens)
+    cfg.refresh_cache = refresh_cache                 # raises ConfigError if a variable is missing
     pname, system = load_prompt(prompt)
     index = read_index(corpus)
     todo = [r for r in index if not docs or r["slug"] in docs]
@@ -200,6 +201,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--thinking", choices=("on", "off"), default="off")
     ap.add_argument("--prompt", default=DEFAULT_PROMPT, help="file in pipeline/prompt/ (default system.txt)")
     ap.add_argument("--preprocess", choices=("sentence", "paragraph", "paragraph-chunks"), default="sentence", help="stage 1: sentence-level filtering (ours, default), paragraph-level scoring and selection (teammate's, team_paper.py; whole paper in one call), or the same with one call per paragraph chunk")
+    ap.add_argument("--refresh-cache", action="store_true", help="call the model even when an answer is cached, and store the new answer")
     ap.add_argument("--no-cache", action="store_true")
     ap.add_argument("--max-input-tokens", type=int, default=12000)
     ap.add_argument("--max-tokens", type=int, default=3000)
@@ -212,7 +214,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         if not a.corpus or not a.output:
             ap.error("corpus and output directories are required (or use --smoke SLUG)")
         return run(Path(a.corpus), Path(a.output), [d.strip() for d in a.docs.split(",") if d.strip()] if a.docs else None, a.limit,
-                   a.concurrency, a.thinking == "on", a.prompt, not a.no_cache, a.max_input_tokens, a.max_tokens, a.preprocess)
+                   a.concurrency, a.thinking == "on", a.prompt, not a.no_cache, a.max_input_tokens, a.max_tokens, a.preprocess, a.refresh_cache)
     except (ConfigError, RuntimeError) as e:
         print(f"error: {e}", file=sys.stderr)
         return 2 if isinstance(e, ConfigError) else 1

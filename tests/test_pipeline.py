@@ -193,7 +193,7 @@ def test_comparator_guild_and_associational_line_52_and_process_line_60():
 def test_entity_type_defaults_when_no_type_code_is_given():
     out = expand(["F|1|mowing/occ|c|invasion(T2)/spread/-|U|exp", "F|2|plant community/richness/+|c|soil moisture/level/-|U|obs"])
     kinds = {n["name"]: n["entity_type"] for n in out.nodes.values()}
-    assert kinds["Occurrence of mowing"] == "management_intervention"
+    assert kinds["Mowing"] == "management_intervention"          # an action is named by itself; "occurred" is in the qualifier
     assert [t for n, t in kinds.items() if "invasion" in n] == ["environmental_process"]
     assert [t for n, t in kinds.items() if "plant community" in n] == ["composite_variable"]
     assert [t for n, t in kinds.items() if "soil moisture" in n] == ["environmental_variable"]
@@ -958,3 +958,12 @@ def test_a_run_creates_output_retries_csv(monkeypatch, tmp_path):
     out = tmp_path / "out"
     assert m.run(ROOT / "corpus", out, docs=["4CB9X9XE"], use_cache=False) == 0
     assert (out / "retries.csv").read_text().splitlines()[0] == "timestamp,doc,attempt,error,sleep_s,gave_up"
+
+
+def test_calibrate_language_hedges_only():
+    from pipeline.expand import calibrate_language
+    assert calibrate_language("direct_causal", "exp", "It appears that higher densities deprived A. petiolata of resources.") == "uncertain_causal"
+    assert calibrate_language("direct_causal", "exp", "The results suggest that planting is a good strategy.") == "uncertain_causal"
+    assert calibrate_language("direct_causal", "exp", "Densities of 9 ramets/m2 significantly suppressed A. petiolata.") == "direct_causal"
+    assert calibrate_language("direct_causal", "exp", "Higher densities likely killed seedlings.") == "direct_causal"   # gold keeps this direct
+    assert calibrate_language("associational", "obs", "Cover may be higher.") == "associational"

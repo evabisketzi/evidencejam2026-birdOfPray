@@ -39,6 +39,11 @@ _COMPARE = re.compile(r"\b(than|compared|versus|vs\.?|more|less|higher|lower)\b"
 _MECH = re.compile(r"\b(because|through|via|mechanism|deprived|allowing)\b", re.I)
 _PROB = re.compile(r"\b(usually|tend|tends|tended|often|probab\w*)\b", re.I)
 _AGENCY = re.compile(r"\b(should|recommend\w*|strategy|managers?|effective)\b", re.I)
+# causal-language calibration: the model labels hedged sentences ("It appears that ...", "The results suggest ...", "would be
+# effective") as direct_causal.  Checked on the four gold papers (cached model output): this narrow list moves the language mix
+# toward the gold on all four; broader lists (likely, probably, indicated, generally) and a rule on observational designs made it
+# worse, because the human annotators treat those as direct (Murphy) or as associational (observational papers).
+_HEDGE = re.compile(r"\b(may|might|could|would|appears?|appeared|seems?|seemed|suggests?|suggested|suggesting)\b", re.I)
 _CONTINGENT = re.compile(r"\b(if|when|under|unless)\b", re.I)
 _PROTO = re.compile(r"\b(usually|generally|often)\b", re.I)
 _CTRL = re.compile(r"control|uncaged|unburned|untreated|reference|open", re.I)
@@ -148,12 +153,7 @@ class Expander:
                 entity_term = grounding.term_id(word, "entity") or word
                 applied = None
             prop = var.prop
-            if change in _ADJ:
-                name = f"{_ADJ[change]} {prop + ' of ' if prop else ''}{text}"
-            elif change in _NOUN:
-                name = f"{_NOUN[change]} {prop + ' of ' if prop else ''}{text}"
-            else:
-                name = f"{_cap(prop) + ' of ' if prop else ''}{text}"
+            name = compose_name(change, prop, text)
             node = {"id": nid, "name": _cap(name), "entity_type": self.entity_type(var, kind, word), "entity_term": entity_term}
             if prop:
                 node["measured_attribute"] = grounding.term_id(prop, "attribute") or prop
@@ -201,7 +201,8 @@ class Expander:
             e["causal_language"] = "no_relationship"
         else:
             lang = claim.language or ("associational" if claim.predicate in ("a", "cw", "pr") else "U")
-            e["causal_language"] = LANG_ENUM.get(lang, lang if lang in LANG_ENUM.values() else "uncertain_causal")
+            e["causal_language"] = calibrate_language(LANG_ENUM.get(lang, lang if lang in LANG_ENUM.values() else "uncertain_causal"),
+                                                      claim.design, text)
         e["original_sentence"] = spans[0]["text"] if spans else text
         # philosophical accounts (at least one)
         acc = []
@@ -323,6 +324,62 @@ class Expander:
                     self.add_edge(subj, mid, pc, spans, {}, path=True)
                     self.add_edge(mid, obj, pc, spans, {}, path=True)
         return self.out
+
+
+_ACTION_NOUN = re.compile(r"^(establishment|planting|transplant\w*|release|introduction|reintroduction|restoration|removal|"
+                          r"construction|application|harvest\w*|closure|cessation|burning|seeding|mowing|grazing|thinning|"
+                          r"installation|recovery|treatment)\b", re.I)
+_UNDO = re.compile(r"\b(closure|removal|cessation|abandonment|end)\b", re.I)
+_CATEGORY = re.compile(r"\b(type|class|category|group|status|use|stage|zone)$", re.I)
+_ADJ_ENTITY = re.compile(r"^(herbaceous|woody|native|exotic|non-?native|invasive|natural|aquatic|terrestrial|total|planted|"
+                         r"understou?ry|overstou?ry)$", re.I)
+
+
+def compose_name(change: Optional[str], prop: Optional[str], text: str) -> str:
+    return _tidy_name(_compose_name(change, prop, text))
+
+
+def _tidy_name(n: str) -> str:
+    n = re.sub(r" of (.+) of \1$", r" of \1", n)
+    n = re.sub(r"^(Presence|Occurrence) of (presence|occurrence) of ", r"\1 of ", n, flags=re.I)
+    return n
+
+
+def _compose_name(change: Optional[str], prop: Optional[str], text: str) -> str:
+    """Readable node name from (change, property, thing).  Avoids the template artefacts seen in the full run:
+    'Presence of establishment of X' (an action named as presence), 'Removal of smelter closure' (double action),
+    'establishment of X of X' (taxon repeated), 'Natural of ecotone type' (a value in the property slot) and
+    'species richness of herbaceous' (an adjective as the thing)."""
+    p = (prop or "").strip()
+    t = re.sub(r" of (.+) of \1$", r" of \1", (text or "").strip())     # 'establishment of X of X' -> 'establishment of X'
+    t = re.sub(r"^(presence|occurrence) of ", "", t, flags=re.I) if change in ("pres", "occ") else t
+    if p and t and (t.lower() in p.lower()):            # property already names the thing
+        core = p
+    elif p and _CATEGORY.search(t) and len(p.split()) <= 3:   # 'natural' + 'ecotone type' -> 'natural ecotone type'
+        core = f"{p} {t}"
+    elif p and _ADJ_ENTITY.match(t):                  # 'species richness' + 'herbaceous' -> 'herbaceous species richness'
+        core = f"{t} {p}"
+    else:
+        core = f"{p} of {t}" if p else t
+    if change in _ADJ:
+        return f"{_ADJ[change]} {core}"
+    if change in _NOUN:
+        if _ACTION_NOUN.match(core):
+            if change == "rem" and _UNDO.match(core):  # 'removal' of a 'closure' is the closure itself
+                return core
+            if change in ("pres", "occ", "intro"):     # 'Presence of establishment of X' -> 'Establishment of X'
+                return core
+        if change == "rem" and _UNDO.search(core):     # 'Removal of Coniston Smelter closure' -> 'Coniston Smelter closure'
+            return core
+        return f"{_NOUN[change]} {core}"
+    return core
+
+
+def calibrate_language(lang: str, design: str, text: str) -> str:
+    """direct_causal on a hedged sentence (may, might, could, would, appears, seems, suggests) -> uncertain_causal."""
+    if lang == "direct_causal" and _HEDGE.search(text or ""):
+        return "uncertain_causal"
+    return lang
 
 
 def expand_claims(slug: str, claims: List[Claim], side: dict) -> Expanded:

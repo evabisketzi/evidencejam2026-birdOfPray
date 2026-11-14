@@ -262,6 +262,7 @@ class Config:
     min_score: float = 3.0                       # keep 'extract' paragraphs scoring >= this
     always_keep_sections: tuple[str, ...] = ("abstract",)
     keep_null_results: bool = True               # any null-result cue keeps a paragraph
+    keep_fragments: bool = True                  # lowercase-start paragraphs are never dropped by selection
     max_extract_tokens: int | None = None        # per-article budget for 'extract' tokens
 
 
@@ -536,6 +537,30 @@ def normalize_unicode(doc: Doc) -> int:
     return changes
 
 
+# Units / statistics whose superscript is part of the value ("m<sup>2</sup>", "ha<sup>-1</sup>",
+# "R<sup>2</sup>", "χ<sup>2</sup>"). Anything else that is a bare number list is a citation.
+_SUP_KEEP_BEFORE = re.compile(
+    r"(?:\b(?:[mck]?m|mm|ha|km|yr|y|d|h|s|g|kg|mg|µg|ug|l|L|mL|ml|mol|mmol|ind|plants?|seeds?|"
+    r"stems?|ramets?|trees?|N|P|C|K|CO|NO|NH|PO|SO)|\b[A-Za-zχΧ]|\)|°)\s*$")
+_SUP = re.compile(r"<sup>\s*([^<>\n]{1,40}?)\s*</sup>", re.I)
+_SUP_CITATION = re.compile(r"^[\d,\s–\-−]+[a-z]?$|^[†‡§¶]+$")   # '*' kept: may mark significance
+
+
+@step(ROBUSTNESS, "text")
+def strip_citation_superscripts(doc: Doc) -> int:
+    """Delete superscript citation markers ('richness<sup>12,13</sup>') but keep unit/statistic superscripts (m<sup>2</sup>, R<sup>2</sup>)."""
+    def repl(m: re.Match) -> str:
+        content = m.group(1)
+        if not _SUP_CITATION.match(content):
+            return m.group(0)                      # e.g. <sup>-1</sup>, <sup>th</sup>: strip_html keeps text
+        before = m.string[max(0, m.start() - 12):m.start()]
+        if _SUP_KEEP_BEFORE.search(before) and re.fullmatch(r"[−\-]?\d", content.strip()):
+            return m.group(0)
+        return ""
+
+    return doc.tt.sub(_SUP, repl)
+
+
 @step(ROBUSTNESS, "text")
 def strip_html(doc: Doc) -> int:
     """Remove inline HTML/XML tags and comments (keeping their inner text) and decode entities."""
@@ -693,6 +718,8 @@ def normalize_whitespace(doc: Doc) -> int:
 # =============================================================================
 # 7. STRUCTURE: split into blocks and assign sections (always runs)
 # =============================================================================
+_CAPTION_START = re.compile(
+    r"^\W{0,3}(?:table|fig\.?|figure|plate|appendix\s+table)\s*[A-Z]?\d+[a-z]?\s*[.:|—–]", re.I)
 _INLINE_LABEL = re.compile(
     r"^\W{0,4}(abstract|summary|introduction|results|discussion|conclusions?)\W{0,4}[:.—–-]\s*\S",
     re.I)
@@ -749,6 +776,8 @@ def split_blocks_and_sections(doc: Doc) -> int:
                 current = name
         blk.section = current or "front"
         blk.heading = current_heading
+        if _CAPTION_START.match(blk.text) and blk.words() <= 120:
+            blk.kind = "caption"       # 'Figure 2.' / 'Table 1:' - not prose 'Fig. 2 shows ...'
 
     # post-pass: title, abstract and unlabelled prose in the preamble
     texts = [b for b in raw if b.kind != "heading"]
@@ -820,6 +849,8 @@ def drop_fragments(doc: Doc) -> int:
     """Drop leftover fragments: blocks with < 4 words or mostly non-letters (stray labels, axis ticks)."""
     n = 0
     for b in _live(doc):
+        if b.section == "title":
+            continue                   # short titles are real content (study card)
         s = b.tt.text.strip()
         nonspace = len(s.replace(" ", "").replace("\n", ""))
         letters = sum(c.isalpha() for c in s)
@@ -828,6 +859,55 @@ def drop_fragments(doc: Doc) -> int:
                 continue
             _drop(b, "fragment")
             n += 1
+    return n
+
+
+_TERMINAL = re.compile(r"[.!?:]['\"’”)\]]*\s*$")
+_SKIPPABLE = {"table", "fragment"}          # drop reasons of blocks a sentence may run across
+
+
+def _concat(a: TrackedText, sep: str, b: TrackedText) -> TrackedText:
+    anchor = (a.pos[-1] + 1) if a.pos else (b.pos[0] if b.pos else 0)
+    return TrackedText(a.text + sep + b.text, a.pos + [anchor] * len(sep) + b.pos)
+
+
+@step(ROBUSTNESS, "block")
+def merge_continuations(doc: Doc) -> int:
+    """Rejoin sentences split by page breaks even when a figure caption, table or image sits between the halves."""
+    n = 0
+    prev: Block | None = None          # last prose block that may continue
+    for b in doc.blocks or []:
+        if b.kind == "heading":
+            prev = None                # never merge across a heading
+            continue
+        if b.route == "drop":
+            if b.drop_reason in _SKIPPABLE:
+                continue               # look past dropped tables / image fragments
+            prev = None
+            continue
+        if b.kind == "caption":
+            continue                   # look past figure / table captions
+        t = b.text.lstrip()
+        if prev is not None and prev.section == b.section and t:
+            p = prev.text.rstrip()
+            first = t[0]
+            open_end = not _TERMINAL.search(p)
+            continues = first.islower() or (open_end and (first in ",;)" or first.isdigit()))
+            if continues and p:
+                lead = len(b.text) - len(t)
+                tail = b.tt.slice(lead, len(b.tt))
+                head = prev.tt.slice(0, len(p))
+                if p.endswith("-") and len(p) > 1 and p[-2].isalpha() and first.islower():
+                    if re.match(rf"(?:{_COMPOUND_TAILS})\b", t):
+                        prev.tt = _concat(head, "", tail)                    # 'size-' + 'dependent'
+                    else:
+                        prev.tt = _concat(head.slice(0, len(p) - 1), "", tail)   # 'manage-' + 'ment'
+                else:
+                    prev.tt = _concat(head, " ", tail)
+                _drop(b, "merged")
+                n += 1
+                continue
+        prev = b
     return n
 
 
@@ -1091,6 +1171,8 @@ def keep_paragraph(block: Block, cfg: Config) -> bool:
     null result (CAMO requires null results), or its cue score reaches the threshold."""
     if block.section in cfg.always_keep_sections:
         return True
+    if cfg.keep_fragments and block.text.lstrip()[:1].islower():
+        return True                    # second half of a split sentence: never judge it alone
     if cfg.keep_null_results and block.cues.get("null_result"):
         return True
     return (block.score or 0.0) >= cfg.min_score
@@ -1198,9 +1280,13 @@ def preprocess(text: str, disabled: Iterable[str] = (), tokenizer: str | Callabl
 
     paragraphs: list[Paragraph] = []
     dropped: list[dict] = []
+    n_merged = 0
     for b in doc.blocks or []:
         t = b.text.strip()
         if not t or b.kind == "heading":
+            continue
+        if b.route == "drop" and b.drop_reason == "merged":
+            n_merged += 1              # text lives on in the previous paragraph
             continue
         if b.route == "drop":
             dropped.append({
@@ -1222,6 +1308,7 @@ def preprocess(text: str, disabled: Iterable[str] = (), tokenizer: str | Callabl
                            config=config.__dict__ | {"always_keep_sections": list(config.always_keep_sections)})
     res.heading_tokens = sum(count(b.text) for b in _live(doc, include_headings=True) if b.kind == "heading")
     res.health = health_metrics(res)
+    res.health["merged_continuations"] = n_merged
     return res
 
 
@@ -1592,40 +1679,57 @@ def _print_scores(res: PreprocessResult) -> None:
         print(f"{st:<10}{route:<8}{sec:<13}{sc:>6.1f}  {c:<34}|  {text[:70]}")
 
 
-def _ablation(text: str, source: str, tokenizer: str, cfg: Config, pcfg: PackConfig) -> None:
-    count = make_token_counter(tokenizer)
+def ablation_configs() -> list[tuple[str, set[str]]]:
     rob = [s.name for s in STEPS if s.category == ROBUSTNESS]
     tok = [s.name for s in STEPS if s.category == TOKEN_REDUCTION]
-    configs: list[tuple[str, set[str]]] = [
+    return [
         ("structure only (raw)", set(OPTIONAL_STEPS)),
         ("robustness only", set(tok)),
         ("token_reduction only", set(rob)),
         ("all steps", set()),
     ] + [(f"all minus {n}", {n}) for n in OPTIONAL_STEPS]
-    full = None
+
+
+def ablation_rows(text: str, count: Callable[[str], int], cfg: Config, pcfg: PackConfig,
+                  source: str = "") -> list[dict]:
+    """One row per configuration: tokens, chunks and health. Used per article and summed per corpus."""
     rows = []
-    for label, dis in configs:
+    for label, dis in ablation_configs():
         res = preprocess(text, disabled=dis, tokenizer=count, source=source, config=cfg)
         pk = pack(res, pcfg, count)
-        ext = res.tokens_by_route().get("extract", 0)
-        if label == "all steps":
-            full = (ext, pk.est_llm_input_tokens)
-        rows.append((label, res, ext, pk))
-    print(f"\n{source}  original tokens: {rows[0][1].tokens_original}")
-    print(f"{'configuration':<38}{'paras':>6}{'extract':>9}{'Δextract':>10}{'chunks':>7}{'LLM in':>8}"
-          f"{'ΔLLM in':>9}{'lower%':>8}{'noPunct%':>9}{'split':>6}{'html':>6}")
-    for label, res, ext, pk in rows:
-        same = full is None or label == "all steps"
-        d1 = "" if same else f"{ext - full[0]:+d}"
-        d2 = "" if same else f"{pk.est_llm_input_tokens - full[1]:+d}"
         h = res.health
-        print(f"{label:<38}{h['n_paragraphs']:>6}{ext:>9}{d1:>10}{len(pk.chunks):>7}"
-              f"{pk.est_llm_input_tokens:>8}{d2:>9}"
-              f"{100 * h['starts_lowercase_share']:>8.1f}{100 * h['no_terminal_punct_share']:>9.1f}"
-              f"{h['split_words_left']:>6}{h['html_tags_left']:>6}")
-    print("\nΔ columns on 'all minus X' rows = extra tokens when step X is off (= what step X saves).\n"
-          "'LLM in' = estimated input tokens for the whole article incl. per-chunk prompt overhead.\n"
-          "lower% / noPunct% / split / html are robustness indicators: they rise when a robustness step is off.")
+        n = max(1, h["n_paragraphs"])
+        rows.append({
+            "config": label, "tokens_original": res.tokens_original,
+            "paragraphs": h["n_paragraphs"], "extract": res.tokens_by_route().get("extract", 0),
+            "chunks": len(pk.chunks), "llm_in": pk.est_llm_input_tokens,
+            "lowercase": round(h["starts_lowercase_share"] * n), "no_punct": round(h["no_terminal_punct_share"] * n),
+            "split": h["split_words_left"], "html": h["html_tags_left"],
+            "dropped_with_statistic": h["dropped_with_statistic"],
+        })
+    return rows
+
+
+def print_ablation(rows: list[dict], title: str) -> None:
+    full = next(r for r in rows if r["config"] == "all steps")
+    print(f"\n{title}  original tokens: {rows[0]['tokens_original']}")
+    print(f"{'configuration':<38}{'paras':>7}{'extract':>9}{'Δextract':>10}{'chunks':>7}{'LLM in':>9}"
+          f"{'ΔLLM in':>9}{'lower':>7}{'noPunct':>8}{'split':>6}{'html':>6}{'dropStat':>9}")
+    for r in rows:
+        same = r["config"] == "all steps"
+        d1 = "" if same else f"{r['extract'] - full['extract']:+d}"
+        d2 = "" if same else f"{r['llm_in'] - full['llm_in']:+d}"
+        print(f"{r['config']:<38}{r['paragraphs']:>7}{r['extract']:>9}{d1:>10}{r['chunks']:>7}{r['llm_in']:>9}"
+              f"{d2:>9}{r['lowercase']:>7}{r['no_punct']:>8}{r['split']:>6}{r['html']:>6}"
+              f"{r['dropped_with_statistic']:>9}")
+    print("\nΔ columns on 'all minus X' rows = extra tokens when step X is off (= what step X saves on its own).\n"
+          "'LLM in' = estimated input tokens incl. per-chunk prompt overhead.\n"
+          "lower / noPunct = paragraphs starting lowercase / ending without punctuation (split sentences);\n"
+          "split / html = leftover split words / HTML tags; dropStat = dropped blocks containing statistics.")
+
+
+def _ablation(text: str, source: str, tokenizer: str, cfg: Config, pcfg: PackConfig) -> None:
+    print_ablation(ablation_rows(text, make_token_counter(tokenizer), cfg, pcfg, source), source)
 
 
 def _sweep(text: str, source: str, tokenizer: str, cfg: Config, pcfg: PackConfig,
@@ -1648,7 +1752,18 @@ def _sweep(text: str, source: str, tokenizer: str, cfg: Config, pcfg: PackConfig
           "(check 'drop w/ stat' and --scores).")
 
 
+def _safe_console() -> None:
+    """Windows consoles often use cp1252 and crash on '±', '≤', 'χ²', 'Δ' in paper text.
+    Switch stdout/stderr to UTF-8 and replace anything the console cannot show."""
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
+
+
 def main(argv: list[str] | None = None) -> int:
+    _safe_console()
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0],
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("paper", nargs="?", help="markdown file of one article")
@@ -1661,6 +1776,8 @@ def main(argv: list[str] | None = None) -> int:
     g.add_argument("--min-score", type=float, default=Config.min_score, help="selection threshold")
     g.add_argument("--budget", type=int, default=None, help="max extract tokens per article")
     g.add_argument("--no-keep-null", action="store_true", help="do not auto-keep null-result paragraphs")
+    g.add_argument("--no-keep-fragments", action="store_true",
+                   help="let selection drop paragraphs that start lowercase")
     g.add_argument("--always-keep", nargs="*", default=list(Config.always_keep_sections),
                    help="sections never dropped by selection")
     g = ap.add_argument_group("packing")
@@ -1688,7 +1805,8 @@ def main(argv: list[str] | None = None) -> int:
         ap.error("paper is required")
     text = Path(a.paper).read_text(encoding="utf-8")
     cfg = Config(min_score=a.min_score, always_keep_sections=tuple(a.always_keep),
-                 keep_null_results=not a.no_keep_null, max_extract_tokens=a.budget)
+                 keep_null_results=not a.no_keep_null, keep_fragments=not a.no_keep_fragments,
+                 max_extract_tokens=a.budget)
     pcfg = PackConfig(max_chunk_tokens=a.max_chunk_tokens, max_paragraph_tokens=a.max_paragraph_tokens,
                       label=a.label, prompt_overhead_tokens=a.prompt_overhead,
                       study_card_tokens=a.card_tokens, include_study_card_in_chunks=a.card_in_chunks)

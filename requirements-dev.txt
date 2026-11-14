@@ -1,0 +1,6 @@
+-r requirements.txt
+pytest==7.4.4
+scipy==1.17.1
+numpy==2.4.4
+linkml==1.12.1
+tokenizers==0.21.1

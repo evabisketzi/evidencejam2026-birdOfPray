@@ -1,0 +1,26 @@
+synonym	curie	label	kind	verified
+height	PATO:0000119	height	attribute	no
+plant height	PATO:0000119	height	attribute	no
+length	PATO:0000122	length	attribute	no
+temperature	PATO:0000146	temperature	attribute	no
+age	PATO:0000011	age	attribute	no
+diameter	PATO:0001334	diameter	attribute	no
+thickness	PATO:0000915	thickness	attribute	no
+frequency	PATO:0000044	frequency	attribute	no
+intensity	PATO:0000049	intensity	attribute	no
+persistence	PATO:0000082	persistence	attribute	no
+depth	PATO:0001595	depth	attribute	no
+width	PATO:0000921	width	attribute	no
+volume	PATO:0000918	volume	attribute	no
+mass	PATO:0000125	mass	attribute	no
+area	PATO:0001323	area	attribute	no
+size	PATO:0000117	size	attribute	no
+rate	PATO:0000161	rate	attribute	no
+density	PATO:0001019	mass density (density is a synonym; check this is the density you mean)	attribute	no
+abundance	PATO:0000070	amount (abundance is not a listed synonym; check)	attribute	no
+number of individuals	PATO:0000070	amount (check)	attribute	no
+season	ENVO:03000096	season	entity	no
+canopy	ENVO:01001242	canopy	entity	no
+soil	ENVO:00001998	soil	entity	no
+fire	ENVO:01000786	fire	entity	no
+precipitation	ENVO:01000703	hydrological precipitation process (precipitation vs. its volume ENVO:01001363: check)	entity	no

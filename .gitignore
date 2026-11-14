@@ -1,0 +1,7 @@
+out/
+.cache/
+__pycache__/
+*.pyc
+.pytest_cache/
+dev/score_out/
+.venv/

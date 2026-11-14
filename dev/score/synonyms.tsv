@@ -1,0 +1,11 @@
+# Attribute / term synonym groups.  One group per line:  group_name <TAB> term | term | term
+# Terms are lemmatised before lookup, so plurals are covered.  Longer phrases win over shorter ones.
+# Edit freely: every phrase of a group is replaced by one shared token before comparison.
+count	count | number | number of individuals | abundance | numbers
+density	density | initial density | initial planting density | planting density | ramet density
+size	size | area | leaf area | gross area
+height	height | plant height
+richness	richness | species richness | diversity
+recruitment	recruitment | establishment | seedling recruitment
+consumption	consumption | granivory | seed removal | seed predation
+competition	competition | competitive ability | competitive success

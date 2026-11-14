@@ -1,0 +1,3155 @@
+format: interstitial-camo-graphs/1
+article: Murphy2005.pdf
+citation: Uploaded article
+exported_at: '2026-11-03T20:08:44.475905+00:00'
+camo:
+  repository: https://github.com/timalamenciak/causalmosaic
+  revision: 6dcf9d7639b3c50f6e932cd3982728b9169a084b
+  version: 0.10.0
+  sha256:
+    causalmosaic.yaml: b0dbf471ee36e0ce115d587c5c466286a102b4849a9753c9974b5f79e35fbdc4
+    vocab/ecoskos_terms.tsv: becc597dd976258964dc7f606db16e8fc4f61a23adb0a8fc6a3bb8358fdd9da2
+    docs/ecoskos/ecoskos.ttl: c9ffbfa5d051e73488cd78247e83dc26d4f84a00162d640abcb92f222f30d54e
+  vocabulary_terms: 6
+graphs:
+- finding_id: f1
+  sentence: In a field additive-series experiment in a degraded woodlot near Waterloo,
+    Ontario, as of 2000 (transplanted 1997, with initial Alliaria petiolata densities
+    of 128 seedlings/m2 and 31 rosettes/m2), initial Sanguinaria canadensis densities
+    of as little as 5 ramets/m2 suppressed Alliaria petiolata, as shown by multivariate
+    repeated-measures ANOVA and simple ANOVAs.
+  fit: lossy
+  graph:
+    graph_id: 567f2b10444a436096aa9c37e6e471e4-f1
+    schema_version: 0.10.0
+    provenance:
+      causal_mosaic_version: 0.10.0
+    nodes:
+    - id: causal_mosaic:sanguinaria_canadensis_initial_planting_density_55f6
+      name: Sanguinaria canadensis initial planting density
+      entity_type: taxon
+      entity_term: NCBITaxon:3472
+      measured_attribute: NCIT:C53338
+      state_or_change_qualifier: introduced
+      life_stage: ramet_or_clonal_unit
+      life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+    - id: causal_mosaic:alliaria_petiolata_suppressed_2573
+      name: Alliaria petiolata (suppressed)
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      state_or_change_qualifier: decreased
+    edges:
+    - id: causal_mosaic:edge_2d2a9638
+      subject: causal_mosaic:sanguinaria_canadensis_initial_planting_density_55f6
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_suppressed_2573
+      causal_language: direct_causal
+      ecosystem_context: deciduous_temperate_forests
+      dose:
+        minimum_value: 5
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+        verbatim: as little as 5 ramets/m2
+      comparator:
+      - status: not_addressed
+        comparator_type: not_reported
+      philosophical_accounts:
+      - interventionist
+      - counterfactual
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      strength:
+        status: explicitly_asserted
+        significance: significant
+        analysis_method: manova
+      scope: assertional
+      context_dependence:
+        status: explicitly_asserted
+        geographic_scope: degraded woodlot near Waterloo, Ontario
+        ecosystem_scope: deciduous_temperate_forests
+        scope_conditions:
+        - initial Alliaria petiolata densities of 128 seedlings/m2 and 31 rosettes/m2
+      evidential_basis:
+        evidence_types:
+        - randomized_experiment
+        evidence_objects:
+        - correlation
+      temporal_extent:
+        time_since_intervention_months: 36
+        time_since_intervention_text: as of 2000 (transplanted 1997)
+- finding_id: f2
+  sentence: Initial Sanguinaria canadensis densities of 9 and 11 ramets/m2 resulted
+    in the lowest numbers of late-spring Alliaria petiolata seedlings, numbers and
+    sizes of year 1 and 2 rosettes, numbers and gross areas of stem leaves, numbers
+    of flowering individuals, number of flowers, number of fruits (siliques), and
+    height at flowering.
+  fit: lossy
+  graph:
+    graph_id: 567f2b10444a436096aa9c37e6e471e4-f2
+    schema_version: 0.10.0
+    provenance:
+      causal_mosaic_version: 0.10.0
+    nodes:
+    - id: causal_mosaic:sanguinaria_canadensis_initial_planting_density_6d15
+      name: Sanguinaria canadensis initial planting density
+      entity_type: management_intervention
+      entity_term: NCBITaxon:3472
+      measured_attribute: initial planting density
+      state_or_change_qualifier: present
+      life_stage: ramet_or_clonal_unit
+      life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:3472
+        life_stage: ramet_or_clonal_unit
+        life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+    - id: causal_mosaic:alliaria_petiolata_seedling_count_3fd5
+      name: Alliaria petiolata seedling count
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: count
+      state_or_change_qualifier: decreased
+      life_stage: germinant_or_seedling
+      life_stage_term: PO:0008037
+    - id: causal_mosaic:alliaria_petiolata_rosette_count_5d74
+      name: Alliaria petiolata rosette count
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: count
+      state_or_change_qualifier: decreased
+      life_stage: juvenile
+      life_stage_term: year 1 and 2 rosettes
+    - id: causal_mosaic:alliaria_petiolata_rosette_size_89b8
+      name: Alliaria petiolata rosette size
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: NCIT:C25681
+      state_or_change_qualifier: decreased
+      life_stage: juvenile
+      life_stage_term: year 1 and 2 rosettes
+    - id: causal_mosaic:alliaria_petiolata_stem_leaf_count_7dac
+      name: Alliaria petiolata stem leaf count
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: count
+      state_or_change_qualifier: decreased
+      applied_to:
+      - entity_type: taxon
+        entity_term: PO:0000013
+    - id: causal_mosaic:alliaria_petiolata_stem_leaf_gross_area_91d1
+      name: Alliaria petiolata stem leaf gross area
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: gross area
+      state_or_change_qualifier: decreased
+      applied_to:
+      - entity_type: taxon
+        entity_term: PO:0000013
+    - id: causal_mosaic:alliaria_petiolata_flowering_individual_count_4a04
+      name: Alliaria petiolata flowering individual count
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: count
+      state_or_change_qualifier: decreased
+      life_stage: reproductive_adult
+      life_stage_term: flowering individuals
+    - id: causal_mosaic:alliaria_petiolata_flower_count_54e3
+      name: Alliaria petiolata flower count
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: count
+      state_or_change_qualifier: decreased
+      life_stage: reproductive_adult
+      applied_to:
+      - entity_type: taxon
+        entity_term: flower
+    - id: causal_mosaic:alliaria_petiolata_silique_count_0e55
+      name: Alliaria petiolata silique count
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: count
+      state_or_change_qualifier: decreased
+      life_stage: reproductive_adult
+      applied_to:
+      - entity_type: taxon
+        entity_term: http://purl.obolibrary.org/obo/BTO_0001249
+    - id: causal_mosaic:alliaria_petiolata_height_at_flowering_54ab
+      name: Alliaria petiolata height at flowering
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: height at flowering
+      state_or_change_qualifier: decreased
+      life_stage: reproductive_adult
+      life_stage_term: flowering individuals
+    edges:
+    - id: causal_mosaic:edge_af1524d0
+      subject: causal_mosaic:sanguinaria_canadensis_initial_planting_density_6d15
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_seedling_count_3fd5
+      causal_language: direct_causal
+      philosophical_accounts:
+      - interventionist
+      dose:
+        minimum_value: 9
+        maximum_value: 11
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+        verbatim: 9 and 11 ramets/m2
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: alternative_dose_level
+        comparator_description: other initial S. canadensis densities in the experiment
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      strength:
+        status: explicitly_asserted
+        significance: not_reported
+        analysis_method: not_reported
+      temporal_extent:
+        observation_seasons:
+        - late_spring
+    - id: causal_mosaic:edge_9777b4d1
+      subject: causal_mosaic:sanguinaria_canadensis_initial_planting_density_6d15
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_rosette_count_5d74
+      causal_language: direct_causal
+      philosophical_accounts:
+      - interventionist
+      dose:
+        minimum_value: 9
+        maximum_value: 11
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+        verbatim: 9 and 11 ramets/m2
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: alternative_dose_level
+        comparator_description: other initial S. canadensis densities in the experiment
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      strength:
+        status: explicitly_asserted
+        significance: not_reported
+        analysis_method: not_reported
+    - id: causal_mosaic:edge_f896cf4d
+      subject: causal_mosaic:sanguinaria_canadensis_initial_planting_density_6d15
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_rosette_size_89b8
+      causal_language: direct_causal
+      philosophical_accounts:
+      - interventionist
+      dose:
+        minimum_value: 9
+        maximum_value: 11
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+        verbatim: 9 and 11 ramets/m2
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: alternative_dose_level
+        comparator_description: other initial S. canadensis densities in the experiment
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      strength:
+        status: explicitly_asserted
+        significance: not_reported
+        analysis_method: not_reported
+    - id: causal_mosaic:edge_e6261d41
+      subject: causal_mosaic:sanguinaria_canadensis_initial_planting_density_6d15
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_stem_leaf_count_7dac
+      causal_language: direct_causal
+      philosophical_accounts:
+      - interventionist
+      dose:
+        minimum_value: 9
+        maximum_value: 11
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+        verbatim: 9 and 11 ramets/m2
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: alternative_dose_level
+        comparator_description: other initial S. canadensis densities in the experiment
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      strength:
+        status: explicitly_asserted
+        significance: not_reported
+        analysis_method: not_reported
+    - id: causal_mosaic:edge_0447a777
+      subject: causal_mosaic:sanguinaria_canadensis_initial_planting_density_6d15
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_stem_leaf_gross_area_91d1
+      causal_language: direct_causal
+      philosophical_accounts:
+      - interventionist
+      dose:
+        minimum_value: 9
+        maximum_value: 11
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+        verbatim: 9 and 11 ramets/m2
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: alternative_dose_level
+        comparator_description: other initial S. canadensis densities in the experiment
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      strength:
+        status: explicitly_asserted
+        significance: not_reported
+        analysis_method: not_reported
+    - id: causal_mosaic:edge_d0c0712f
+      subject: causal_mosaic:sanguinaria_canadensis_initial_planting_density_6d15
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_flowering_individual_count_4a04
+      causal_language: direct_causal
+      philosophical_accounts:
+      - interventionist
+      dose:
+        minimum_value: 9
+        maximum_value: 11
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+        verbatim: 9 and 11 ramets/m2
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: alternative_dose_level
+        comparator_description: other initial S. canadensis densities in the experiment
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      strength:
+        status: explicitly_asserted
+        significance: not_reported
+        analysis_method: not_reported
+    - id: causal_mosaic:edge_8025abcc
+      subject: causal_mosaic:sanguinaria_canadensis_initial_planting_density_6d15
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_flower_count_54e3
+      causal_language: direct_causal
+      philosophical_accounts:
+      - interventionist
+      dose:
+        minimum_value: 9
+        maximum_value: 11
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+        verbatim: 9 and 11 ramets/m2
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: alternative_dose_level
+        comparator_description: other initial S. canadensis densities in the experiment
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      strength:
+        status: explicitly_asserted
+        significance: not_reported
+        analysis_method: not_reported
+    - id: causal_mosaic:edge_e336686b
+      subject: causal_mosaic:sanguinaria_canadensis_initial_planting_density_6d15
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_silique_count_0e55
+      causal_language: direct_causal
+      philosophical_accounts:
+      - interventionist
+      dose:
+        minimum_value: 9
+        maximum_value: 11
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+        verbatim: 9 and 11 ramets/m2
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: alternative_dose_level
+        comparator_description: other initial S. canadensis densities in the experiment
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      strength:
+        status: explicitly_asserted
+        significance: not_reported
+        analysis_method: not_reported
+    - id: causal_mosaic:edge_b7b92117
+      subject: causal_mosaic:sanguinaria_canadensis_initial_planting_density_6d15
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_height_at_flowering_54ab
+      causal_language: direct_causal
+      philosophical_accounts:
+      - interventionist
+      dose:
+        minimum_value: 9
+        maximum_value: 11
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+        verbatim: 9 and 11 ramets/m2
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: alternative_dose_level
+        comparator_description: other initial S. canadensis densities in the experiment
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      strength:
+        status: explicitly_asserted
+        significance: not_reported
+        analysis_method: not_reported
+- finding_id: f3
+  sentence: The experiments indicated that transplanting Sanguinaria canadensis was
+    effective at mitigating the spread of Alliaria petiolata, although it remains
+    to be tested whether this will continue and whether reestablishment of S. canadensis
+    will help reassemble forest ecosystems.
+  fit: lossy
+  graph:
+    graph_id: 567f2b10444a436096aa9c37e6e471e4-f3
+    schema_version: 0.10.0
+    provenance:
+      causal_mosaic_version: 0.10.0
+    nodes:
+    - id: causal_mosaic:transplanting_of_sanguinaria_canadensis_f665
+      name: transplanting of Sanguinaria canadensis
+      entity_type: management_intervention
+      entity_term: ecoskos:0000001
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:3472
+      state_or_change_qualifier: occurred
+    - id: causal_mosaic:spread_of_alliaria_petiolata_d5c7
+      name: spread of Alliaria petiolata
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: spread
+      state_or_change_qualifier: decreased
+    - id: causal_mosaic:reestablishment_of_sanguinaria_canadensis_8fab
+      name: reestablishment of Sanguinaria canadensis
+      entity_type: taxon
+      entity_term: NCBITaxon:3472
+      measured_attribute: population reestablishment
+      state_or_change_qualifier: present
+    - id: causal_mosaic:reassembly_of_forest_ecosystems_7fbc
+      name: reassembly of forest ecosystems
+      entity_type: environmental_process
+      entity_term: ENVO:01001243
+      measured_attribute: ecosystem reassembly
+      state_or_change_qualifier: occurred
+    edges:
+    - id: causal_mosaic:edge_2fee1089
+      subject: causal_mosaic:transplanting_of_sanguinaria_canadensis_f665
+      predicate: causes
+      object: causal_mosaic:spread_of_alliaria_petiolata_d5c7
+      negated: false
+      causal_language: direct_causal
+      philosophical_accounts:
+      - interventionist
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      comparator:
+      - status: not_addressed
+        comparator_type: not_reported
+      strength:
+        status: explicitly_asserted
+        significance: not_reported
+        analysis_method: not_reported
+      temporal_extent:
+        duration_text: it remains to be tested whether this will continue
+      stability: not_addressed
+      contributing_sole: not_addressed
+      scope: assertional
+      evidential_basis:
+        evidence_objects:
+        - correlation
+    - id: causal_mosaic:edge_93df079e
+      subject: causal_mosaic:reestablishment_of_sanguinaria_canadensis_8fab
+      predicate: contributes_to
+      object: causal_mosaic:reassembly_of_forest_ecosystems_7fbc
+      negated: false
+      causal_language: uncertain_causal
+      philosophical_accounts:
+      - interventionist
+      direction:
+        status: uncertain
+      strength:
+        status: not_addressed
+        significance: not_tested
+      contributing_sole: contributing_cause
+      scope: unclear
+- finding_id: f4
+  sentence: Leafing phenologies of year 2 Alliaria petiolata and ramets of Sanguinaria
+    canadensis overlapped, although Alliaria petiolata seedling emergence was relatively
+    early.
+  fit: lossy
+  graph:
+    graph_id: 567f2b10444a436096aa9c37e6e471e4-f4
+    schema_version: 0.10.0
+    provenance:
+      causal_mosaic_version: 0.10.0
+    nodes:
+    - id: causal_mosaic:leafing_phenology_of_year_2_alliaria_petiolata_64a4
+      name: leafing phenology of year 2 Alliaria petiolata
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: leafing phenology
+      state_or_change_qualifier: occurred
+      life_stage: not_specified
+      life_stage_term: year 2
+    - id: causal_mosaic:leafing_phenology_of_sanguinaria_canadensis_ramets_086b
+      name: leafing phenology of Sanguinaria canadensis ramets
+      entity_type: taxon
+      entity_term: NCBITaxon:3472
+      measured_attribute: leafing phenology
+      state_or_change_qualifier: occurred
+      life_stage: ramet_or_clonal_unit
+      life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+    - id: causal_mosaic:seedling_emergence_timing_of_alliaria_petiolata_269a
+      name: seedling emergence timing of Alliaria petiolata
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: seedling emergence timing
+      state_or_change_qualifier: occurred
+      life_stage: germinant_or_seedling
+      life_stage_term: PO:0008037
+    edges:
+    - id: causal_mosaic:edge_8555e898
+      subject: causal_mosaic:leafing_phenology_of_year_2_alliaria_petiolata_64a4
+      predicate: associated_with
+      object: causal_mosaic:leafing_phenology_of_sanguinaria_canadensis_ramets_086b
+      causal_language: associational
+      philosophical_accounts:
+      - regularity
+      comparator:
+      - status: not_addressed
+        comparator_type: not_applicable
+      direction:
+        status: not_addressed
+      strength:
+        status: not_addressed
+        significance: not_tested
+        analysis_method: descriptive_only
+      evidential_basis:
+        evidence_objects:
+        - correlation
+      scope: assertional
+- finding_id: f5
+  sentence: Over time, the numbers of leaves emerging from Sanguinaria canadensis
+    rose most rapidly from ramets planted at initial densities of 7, 9, and 11 ramets/m2.
+  fit: lossy
+  graph:
+    graph_id: 567f2b10444a436096aa9c37e6e471e4-f5
+    schema_version: 0.10.0
+    provenance:
+      causal_mosaic_version: 0.10.0
+    nodes:
+    - id: causal_mosaic:initial_planting_density_of_sanguinaria_canadensis_ramets_7278
+      name: initial planting density of Sanguinaria canadensis ramets
+      entity_type: management_intervention
+      entity_term: initial planting density
+      state_or_change_qualifier: present
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:3472
+        life_stage: ramet_or_clonal_unit
+        life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+    - id: causal_mosaic:number_of_leaves_emerging_from_sanguinaria_canadensis_ramets_9c16
+      name: number of leaves emerging from Sanguinaria canadensis ramets
+      entity_type: taxon
+      entity_term: NCBITaxon:3472
+      measured_attribute: http://purl.obolibrary.org/obo/TO_0000241
+      state_or_change_qualifier: increased
+      life_stage: ramet_or_clonal_unit
+      life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+    edges:
+    - id: causal_mosaic:edge_e86cb9c6
+      subject: causal_mosaic:initial_planting_density_of_sanguinaria_canadensis_ramets_7278
+      predicate: associated_with
+      object: causal_mosaic:number_of_leaves_emerging_from_sanguinaria_canadensis_ramets_9c16
+      causal_language: associational
+      philosophical_accounts:
+      - probabilistic
+      dose:
+        minimum_value: 7
+        maximum_value: 11
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+        verbatim: initial densities of 7, 9, and 11 ramets/m2
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: alternative_dose_level
+        comparator_dose_level: not_specified
+      strength:
+        status: explicitly_asserted
+        significance: not_reported
+      scope: assertional
+      evidential_basis:
+        evidence_objects:
+        - correlation
+- finding_id: f6
+  sentence: Initial Sanguinaria canadensis densities had different effects on Alliaria
+    petiolata in subsequent years, with significant time x density interactions indicating
+    that the effects of initial density changed over time as Alliaria petiolata populations
+    were affected by competition with Sanguinaria canadensis after the first season.
+  fit: lossy
+  graph:
+    graph_id: 567f2b10444a436096aa9c37e6e471e4-f6
+    schema_version: 0.10.0
+    provenance:
+      causal_mosaic_version: 0.10.0
+    nodes:
+    - id: causal_mosaic:initial_sanguinaria_canadensis_density_994d
+      name: Initial Sanguinaria canadensis density
+      entity_type: taxon
+      entity_term: NCBITaxon:3472
+      measured_attribute: https://kos.lifewatch.eu/thesauri/traits/c_ddc0028f
+      state_or_change_qualifier: present
+    - id: causal_mosaic:alliaria_petiolata_populations_c8b8
+      name: Alliaria petiolata populations
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+    - id: causal_mosaic:competition_between_sanguinaria_canadensis_and_alliaria_peti_d150
+      name: Competition between Sanguinaria canadensis and Alliaria petiolata
+      entity_type: environmental_process
+      entity_term: interspecific competition with Sanguinaria canadensis
+      state_or_change_qualifier: occurred
+    edges:
+    - id: causal_mosaic:edge_545d829d
+      subject: causal_mosaic:initial_sanguinaria_canadensis_density_994d
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_populations_c8b8
+      causal_language: direct_causal
+      philosophical_accounts:
+      - interventionist
+      - mechanistic
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: alternative_dose_level
+        comparator_dose_level: not_specified
+      mediation:
+        status: explicitly_asserted
+        mediator_node_ids:
+        - causal_mosaic:competition_between_sanguinaria_canadensis_and_alliaria_peti_d150
+        pathway_description: Alliaria petiolata populations were affected by competition
+          with Sanguinaria canadensis after the first season
+      moderation:
+        status: explicitly_asserted
+        interaction_type: not_specified
+      strength:
+        status: explicitly_asserted
+        significance: significant
+        analysis_method: not_reported
+      temporal_ordering: explicitly_asserted
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      scope: assertional
+      contributing_sole: not_addressed
+      temporal_extent:
+        time_since_intervention_text: in subsequent years; after the first season
+      evidential_basis:
+        evidence_types:
+        - randomized_experiment
+        evidence_objects:
+        - both
+- finding_id: f7
+  sentence: Alliaria petiolata number of seedlings in early spring, number of seedlings
+    in autumn, change in numbers of seedlings from autumn to spring, and change in
+    number of year 2 rosettes from early to late spring were not affected by initial
+    Sanguinaria canadensis density.
+  fit: lossy
+  graph:
+    graph_id: 567f2b10444a436096aa9c37e6e471e4-f7
+    schema_version: 0.10.0
+    provenance:
+      causal_mosaic_version: 0.10.0
+    nodes:
+    - id: causal_mosaic:initial_sanguinaria_canadensis_density_01c9
+      name: initial Sanguinaria canadensis density
+      entity_type: taxon
+      entity_term: NCBITaxon:3472
+      measured_attribute: https://kos.lifewatch.eu/thesauri/traits/c_ddc0028f
+      state_or_change_qualifier: increased
+    - id: causal_mosaic:alliaria_petiolata_number_of_seedlings_ebab
+      name: Alliaria petiolata number of seedlings
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: https://cropontology.org/rdf/CO_357:1000408
+      state_or_change_qualifier: unchanged
+      life_stage: germinant_or_seedling
+      life_stage_term: PO:0008037
+    - id: causal_mosaic:alliaria_petiolata_change_in_number_of_seedlings_3549
+      name: Alliaria petiolata change in number of seedlings
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: change in number of individuals
+      state_or_change_qualifier: unchanged
+      life_stage: germinant_or_seedling
+      life_stage_term: PO:0008037
+    - id: causal_mosaic:alliaria_petiolata_change_in_number_of_year_2_rosettes_d458
+      name: Alliaria petiolata change in number of year 2 rosettes
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: change in number of individuals
+      state_or_change_qualifier: unchanged
+      life_stage: juvenile
+      life_stage_term: year 2 rosettes
+    edges:
+    - id: causal_mosaic:edge_2fd274a8
+      subject: causal_mosaic:initial_sanguinaria_canadensis_density_01c9
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_number_of_seedlings_ebab
+      negated: true
+      causal_language: no_relationship
+      philosophical_accounts:
+      - interventionist
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: alternative_dose_level
+      strength:
+        status: explicitly_asserted
+        significance: not_significant
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      scope: assertional
+      temporal_extent:
+        observation_seasons:
+        - early_spring
+      evidential_basis:
+        evidence_objects:
+        - correlation
+    - id: causal_mosaic:edge_36230de1
+      subject: causal_mosaic:initial_sanguinaria_canadensis_density_01c9
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_number_of_seedlings_ebab
+      negated: true
+      causal_language: no_relationship
+      philosophical_accounts:
+      - interventionist
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: alternative_dose_level
+      strength:
+        status: explicitly_asserted
+        significance: not_significant
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      scope: assertional
+      temporal_extent:
+        observation_seasons:
+        - autumn
+      evidential_basis:
+        evidence_objects:
+        - correlation
+    - id: causal_mosaic:edge_f62cf582
+      subject: causal_mosaic:initial_sanguinaria_canadensis_density_01c9
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_change_in_number_of_seedlings_3549
+      negated: true
+      causal_language: no_relationship
+      philosophical_accounts:
+      - interventionist
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: alternative_dose_level
+      strength:
+        status: explicitly_asserted
+        significance: not_significant
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      scope: assertional
+      temporal_extent:
+        time_since_intervention_text: from autumn to spring
+      evidential_basis:
+        evidence_objects:
+        - correlation
+    - id: causal_mosaic:edge_e74b84b5
+      subject: causal_mosaic:initial_sanguinaria_canadensis_density_01c9
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_change_in_number_of_year_2_rosettes_d458
+      negated: true
+      causal_language: no_relationship
+      philosophical_accounts:
+      - interventionist
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: alternative_dose_level
+      strength:
+        status: explicitly_asserted
+        significance: not_significant
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      scope: assertional
+      temporal_extent:
+        time_since_intervention_text: from early to late spring
+      evidential_basis:
+        evidence_objects:
+        - correlation
+- finding_id: f8
+  sentence: Initial Sanguinaria canadensis densities of 7, 9, and 11 ramets/m2 generally
+    suppressed Alliaria petiolata most.
+  fit: lossy
+  graph:
+    graph_id: 567f2b10444a436096aa9c37e6e471e4-f8
+    schema_version: 0.10.0
+    provenance:
+      causal_mosaic_version: 0.10.0
+    nodes:
+    - id: causal_mosaic:planting_of_sanguinaria_canadensis_ramets_at_set_initial_den_8b41
+      name: Planting of Sanguinaria canadensis ramets at set initial densities
+      entity_type: management_intervention
+      entity_term: planting of Sanguinaria canadensis at set initial densities
+      measured_attribute: initial density
+      state_or_change_qualifier: introduced
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:3472
+        life_stage: ramet_or_clonal_unit
+        life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+      life_stage: ramet_or_clonal_unit
+      life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+    - id: causal_mosaic:alliaria_petiolata_suppressed_2573
+      name: Alliaria petiolata (suppressed)
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      state_or_change_qualifier: decreased
+    edges:
+    - id: causal_mosaic:edge_d3031767
+      subject: causal_mosaic:planting_of_sanguinaria_canadensis_ramets_at_set_initial_den_8b41
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_suppressed_2573
+      causal_language: direct_causal
+      philosophical_accounts:
+      - interventionist
+      - counterfactual
+      dose:
+        minimum_value: 7
+        maximum_value: 11
+        unit: http://vocab.nerc.ac.uk/collection/P06/current/UPMS/
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+        verbatim: 7, 9, and 11 ramets/m2
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: alternative_dose_level
+        comparator_description: other initial S. canadensis densities tested (implied
+          by 'most')
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      strength:
+        status: explicitly_asserted
+        significance: not_reported
+        analysis_method: not_reported
+      scope: prototypical
+      contributing_sole: not_addressed
+      evidential_basis:
+        evidence_objects:
+        - correlation
+- finding_id: f9
+  sentence: In within-year ANOVAs of the 2000 data, there were no significant differences
+    on most variables measured for Alliaria petiolata among initial Sanguinaria canadensis
+    densities of 9, 11, 15, and 20 ramets/m2, though 9 and 11 ramets/m2 tended to
+    be the most effective (e.g., numbers of late-spring seedlings and leaf area).
+  fit: lossy
+  graph:
+    graph_id: 567f2b10444a436096aa9c37e6e471e4-f9
+    schema_version: 0.10.0
+    provenance:
+      causal_mosaic_version: 0.10.0
+    nodes:
+    - id: causal_mosaic:sanguinaria_canadensis_initial_planting_density_911a
+      name: Sanguinaria canadensis initial planting density
+      entity_type: taxon
+      entity_term: NCBITaxon:3472
+      measured_attribute: initial density
+      state_or_change_qualifier: introduced
+      life_stage: ramet_or_clonal_unit
+      life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+    - id: causal_mosaic:alliaria_petiolata_measured_variables_most_6e82
+      name: Alliaria petiolata measured variables (most)
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: performance variables measured
+      state_or_change_qualifier: unchanged
+    - id: causal_mosaic:alliaria_petiolata_late_spring_seedling_numbers_e513
+      name: Alliaria petiolata late-spring seedling numbers
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: https://cropontology.org/rdf/CO_357:1000408
+      state_or_change_qualifier: decreased
+      life_stage: germinant_or_seedling
+      life_stage_term: PO:0008037
+    - id: causal_mosaic:alliaria_petiolata_leaf_area_c8e8
+      name: Alliaria petiolata leaf area
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: http://top-thesaurus.org/trait#TOP25
+      state_or_change_qualifier: decreased
+    edges:
+    - id: causal_mosaic:edge_53840ffd
+      subject: causal_mosaic:sanguinaria_canadensis_initial_planting_density_911a
+      predicate: contributes_to
+      object: causal_mosaic:alliaria_petiolata_measured_variables_most_6e82
+      negated: true
+      causal_language: no_relationship
+      philosophical_accounts:
+      - interventionist
+      dose:
+        minimum_value: 9
+        maximum_value: 20
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+        verbatim: 9, 11, 15, and 20 ramets/m2
+      comparator:
+      - status: explicitly_asserted
+        comparator_type: alternative_dose_level
+        comparator_description: among initial S. canadensis densities of 9, 11, 15,
+          and 20 ramets/m2
+      strength:
+        status: explicitly_asserted
+        significance: not_significant
+        analysis_method: anova
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      scope: assertional
+      evidential_basis:
+        evidence_objects:
+        - correlation
+    - id: causal_mosaic:edge_3daef79a
+      subject: causal_mosaic:sanguinaria_canadensis_initial_planting_density_911a
+      predicate: contributes_to
+      object: causal_mosaic:alliaria_petiolata_late_spring_seedling_numbers_e513
+      negated: false
+      causal_language: uncertain_causal
+      philosophical_accounts:
+      - interventionist
+      dose:
+        minimum_value: 9
+        maximum_value: 11
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+        verbatim: 9 and 11 ramets/m2
+      dose_level: lower_than_comparator
+      comparator:
+      - status: explicitly_asserted
+        comparator_type: alternative_dose_level
+        comparator_description: initial densities of 15 and 20 ramets/m2
+        comparator_dose:
+          minimum_value: 15
+          maximum_value: 20
+          unit_text: ramets/m2
+          verbatim: 15, and 20 ramets/m2
+      strength:
+        status: explicitly_asserted
+        significance: marginal
+        analysis_method: anova
+      temporal_extent:
+        observation_seasons:
+        - late_spring
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      scope: assertional
+      evidential_basis:
+        evidence_objects:
+        - correlation
+    - id: causal_mosaic:edge_e041f95b
+      subject: causal_mosaic:sanguinaria_canadensis_initial_planting_density_911a
+      predicate: contributes_to
+      object: causal_mosaic:alliaria_petiolata_leaf_area_c8e8
+      negated: false
+      causal_language: uncertain_causal
+      philosophical_accounts:
+      - interventionist
+      dose:
+        minimum_value: 9
+        maximum_value: 11
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+        verbatim: 9 and 11 ramets/m2
+      dose_level: lower_than_comparator
+      comparator:
+      - status: explicitly_asserted
+        comparator_type: alternative_dose_level
+        comparator_description: initial densities of 15 and 20 ramets/m2
+        comparator_dose:
+          minimum_value: 15
+          maximum_value: 20
+          unit_text: ramets/m2
+          verbatim: 15, and 20 ramets/m2
+      strength:
+        status: explicitly_asserted
+        significance: marginal
+        analysis_method: anova
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      scope: assertional
+      evidential_basis:
+        evidence_objects:
+        - correlation
+- finding_id: f10
+  sentence: At lower initial densities (3 ramets/m2 or less), Sanguinaria canadensis
+    usually could not compete with Alliaria petiolata.
+  fit: lossy
+  graph:
+    graph_id: 567f2b10444a436096aa9c37e6e471e4-f10
+    schema_version: 0.10.0
+    provenance:
+      causal_mosaic_version: 0.10.0
+    nodes:
+    - id: causal_mosaic:sanguinaria_canadensis_initial_planting_density_ramets_0784
+      name: Sanguinaria canadensis initial planting density (ramets)
+      entity_type: environmental_variable
+      entity_term: NCBITaxon:3472
+      measured_attribute: initial density
+      state_or_change_qualifier: decreased
+      life_stage: ramet_or_clonal_unit
+      life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+    - id: causal_mosaic:sanguinaria_canadensis_competitive_ability_against_alliaria__b5f3
+      name: Sanguinaria canadensis competitive ability against Alliaria petiolata
+      entity_type: taxon
+      entity_term: NCBITaxon:3472
+      measured_attribute: competitive ability
+      state_or_change_qualifier: decreased
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:126270
+    edges:
+    - id: causal_mosaic:edge_6b9565f3
+      subject: causal_mosaic:sanguinaria_canadensis_initial_planting_density_ramets_0784
+      predicate: associated_with
+      object: causal_mosaic:sanguinaria_canadensis_competitive_ability_against_alliaria__b5f3
+      causal_language: associational
+      philosophical_accounts:
+      - probabilistic
+      determinism: indeterministic_process
+      dose:
+        maximum_value: 3
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+      dose_level: lower_than_comparator
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: alternative_dose_level
+      strength:
+        status: not_addressed
+        significance: not_reported
+      scope: contingent
+- finding_id: f12
+  sentence: By 2000, higher Sanguinaria canadensis densities (15 and 20 ramets/m2)
+    provided no additional benefit in suppressing Alliaria petiolata and fared slightly,
+    but not significantly, worse than densities of 5, 7, 9, and 11 ramets/m2.
+  fit: lossy
+  graph:
+    graph_id: 567f2b10444a436096aa9c37e6e471e4-f12
+    schema_version: 0.10.0
+    provenance:
+      causal_mosaic_version: 0.10.0
+    nodes:
+    - id: causal_mosaic:sanguinaria_canadensis_planting_density_increased_5557
+      name: Sanguinaria canadensis planting density (increased)
+      entity_type: management_intervention
+      entity_term: planting of Sanguinaria canadensis
+      measured_attribute: density
+      state_or_change_qualifier: increased
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:3472
+        life_stage: ramet_or_clonal_unit
+        life_stage_term: ramets
+    - id: causal_mosaic:alliaria_petiolata_suppression_unchanged_f023
+      name: Alliaria petiolata suppression (unchanged)
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: suppression
+      state_or_change_qualifier: unchanged
+    - id: causal_mosaic:alliaria_petiolata_suppression_decreased_25ac
+      name: Alliaria petiolata suppression (decreased)
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: suppression
+      state_or_change_qualifier: decreased
+    edges:
+    - id: causal_mosaic:edge_e2d823f8
+      subject: causal_mosaic:sanguinaria_canadensis_planting_density_increased_5557
+      predicate: prevents
+      object: causal_mosaic:alliaria_petiolata_suppression_unchanged_f023
+      negated: true
+      causal_language: uncertain_causal
+      philosophical_accounts:
+      - interventionist
+      - counterfactual
+      dose:
+        minimum_value: 15
+        maximum_value: 20
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: ramets
+        verbatim: 15 and 20 ramets/m2
+      dose_level: higher_than_comparator
+      comparator:
+      - status: explicitly_asserted
+        comparator_type: alternative_dose_level
+        comparator_dose:
+          minimum_value: 5
+          maximum_value: 11
+          unit_text: ramets/m2
+          counted_entity:
+            entity_type: taxon
+            entity_term: NCBITaxon:3472
+            life_stage: ramet_or_clonal_unit
+            life_stage_term: ramets
+          verbatim: 5, 7, 9, and 11 ramets/m2
+        comparator_dose_level: lower_than_comparator
+      strength:
+        status: explicitly_asserted
+        significance: not_significant
+        analysis_method: not_reported
+      context_dependence:
+        status: explicitly_asserted
+        temporal_scope: by 2000
+      evidential_basis:
+        evidence_objects:
+        - correlation
+    - id: causal_mosaic:edge_4ee15f5b
+      subject: causal_mosaic:sanguinaria_canadensis_planting_density_increased_5557
+      predicate: associated_with
+      object: causal_mosaic:alliaria_petiolata_suppression_decreased_25ac
+      negated: true
+      causal_language: associational
+      philosophical_accounts:
+      - probabilistic
+      dose:
+        minimum_value: 15
+        maximum_value: 20
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: ramets
+        verbatim: 15 and 20 ramets/m2
+      dose_level: higher_than_comparator
+      comparator:
+      - status: explicitly_asserted
+        comparator_type: alternative_dose_level
+        comparator_dose:
+          minimum_value: 5
+          maximum_value: 11
+          unit_text: ramets/m2
+          counted_entity:
+            entity_type: taxon
+            entity_term: NCBITaxon:3472
+            life_stage: ramet_or_clonal_unit
+            life_stage_term: ramets
+          verbatim: 5, 7, 9, and 11 ramets/m2
+        comparator_dose_level: lower_than_comparator
+      strength:
+        status: explicitly_asserted
+        qualitative_descriptor: weak
+        significance: not_significant
+        analysis_method: not_reported
+      context_dependence:
+        status: explicitly_asserted
+        temporal_scope: by 2000
+      evidential_basis:
+        evidence_objects:
+        - correlation
+- finding_id: f13
+  sentence: The increase in the number of leaves of Sanguinaria canadensis at initial
+    intermediate densities of 9 and 11 ramets/m2 to levels equal to or near that at
+    the highest initial density of 20 ramets/m2 indicates that these intermediate
+    densities were most useful in competing with Alliaria petiolata, though this one
+    measure is not a substitute for a complete response surface test of intra- and
+    interspecific competition.
+  fit: lossy
+  graph:
+    graph_id: 567f2b10444a436096aa9c37e6e471e4-f13
+    schema_version: 0.10.0
+    provenance:
+      causal_mosaic_version: 0.10.0
+    nodes:
+    - id: causal_mosaic:initial_planting_density_of_sanguinaria_canadensis_ramets_a17a
+      name: initial planting density of Sanguinaria canadensis ramets
+      entity_type: management_intervention
+      entity_term: initial planting density
+      state_or_change_qualifier: present
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:3472
+        life_stage: ramet_or_clonal_unit
+        life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+      life_stage: ramet_or_clonal_unit
+      life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+    - id: causal_mosaic:number_of_leaves_of_sanguinaria_canadensis_increased_cf57
+      name: number of leaves of Sanguinaria canadensis (increased)
+      entity_type: taxon
+      entity_term: NCBITaxon:3472
+      measured_attribute: http://purl.obolibrary.org/obo/TO_0000241
+      state_or_change_qualifier: increased
+    - id: causal_mosaic:number_of_leaves_of_sanguinaria_canadensis_unchanged_relativ_557a
+      name: number of leaves of Sanguinaria canadensis (unchanged relative to highest
+        density)
+      entity_type: taxon
+      entity_term: NCBITaxon:3472
+      measured_attribute: http://purl.obolibrary.org/obo/TO_0000241
+      state_or_change_qualifier: unchanged
+    - id: causal_mosaic:interspecific_competition_of_sanguinaria_canadensis_against__6f23
+      name: interspecific competition of Sanguinaria canadensis against Alliaria petiolata
+      entity_type: environmental_process
+      entity_term: interspecific competition
+      measured_attribute: competitive effectiveness against Alliaria petiolata
+      state_or_change_qualifier: increased
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:3472
+      - entity_type: taxon
+        entity_term: NCBITaxon:126270
+    edges:
+    - id: causal_mosaic:edge_104d7dcc
+      subject: causal_mosaic:initial_planting_density_of_sanguinaria_canadensis_ramets_a17a
+      predicate: associated_with
+      object: causal_mosaic:number_of_leaves_of_sanguinaria_canadensis_increased_cf57
+      causal_language: associational
+      philosophical_accounts:
+      - interventionist
+      dose:
+        minimum_value: 9
+        maximum_value: 11
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+        verbatim: 9 and 11 ramets/m2
+      dose_level: intermediate
+      comparator:
+      - status: not_addressed
+        comparator_type: not_reported
+      strength:
+        status: explicitly_asserted
+        significance: not_reported
+        analysis_method: not_reported
+      scope: assertional
+    - id: causal_mosaic:edge_ddb33f94
+      subject: causal_mosaic:initial_planting_density_of_sanguinaria_canadensis_ramets_a17a
+      predicate: associated_with
+      object: causal_mosaic:number_of_leaves_of_sanguinaria_canadensis_unchanged_relativ_557a
+      causal_language: associational
+      philosophical_accounts:
+      - interventionist
+      dose:
+        minimum_value: 9
+        maximum_value: 11
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+        verbatim: 9 and 11 ramets/m2
+      dose_level: intermediate
+      comparator:
+      - status: explicitly_asserted
+        comparator_type: alternative_dose_level
+        comparator_dose:
+          numeric_value: 20
+          unit_text: ramets/m2
+          counted_entity:
+            entity_type: taxon
+            entity_term: NCBITaxon:3472
+            life_stage: ramet_or_clonal_unit
+            life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+          verbatim: highest initial density of 20 ramets/m2
+        comparator_dose_level: high
+      strength:
+        status: explicitly_asserted
+        significance: not_reported
+        analysis_method: not_reported
+      scope: assertional
+    - id: causal_mosaic:edge_bb548ceb
+      subject: causal_mosaic:initial_planting_density_of_sanguinaria_canadensis_ramets_a17a
+      predicate: contributes_to
+      object: causal_mosaic:interspecific_competition_of_sanguinaria_canadensis_against__6f23
+      causal_language: uncertain_causal
+      philosophical_accounts:
+      - counterfactual
+      dose:
+        minimum_value: 9
+        maximum_value: 11
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+        verbatim: 9 and 11 ramets/m2
+      dose_level: intermediate
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: alternative_dose_level
+      strength:
+        status: implicitly_assumed
+        significance: not_tested
+      evidential_basis:
+        evidence_objects:
+        - correlation
+      scope: assertional
+      contributing_sole: not_addressed
+- finding_id: f16
+  sentence: Leafing at initial Sanguinaria canadensis densities above 7 ramets/m2
+    was early enough to kill significantly more Alliaria petiolata seedlings before
+    they matured; by 2000 both the numbers of late-spring seedlings and the change
+    in numbers of seedlings between early and late spring declined significantly at
+    these densities.
+  fit: lossy
+  graph:
+    graph_id: 567f2b10444a436096aa9c37e6e471e4-f16
+    schema_version: 0.10.0
+    provenance:
+      causal_mosaic_version: 0.10.0
+    nodes:
+    - id: causal_mosaic:sanguinaria_canadensis_initial_ramet_density_77c9
+      name: Sanguinaria canadensis initial ramet density
+      entity_type: environmental_variable
+      entity_term: plant population density
+      measured_attribute: initial density
+      state_or_change_qualifier: increased
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:3472
+        life_stage: ramet_or_clonal_unit
+        life_stage_term: ramet
+      life_stage: ramet_or_clonal_unit
+      life_stage_term: ramet
+    - id: causal_mosaic:sanguinaria_canadensis_leafing_d862
+      name: Sanguinaria canadensis leafing
+      entity_type: environmental_process
+      entity_term: leafing
+      measured_attribute: timing
+      state_or_change_qualifier: occurred
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:3472
+    - id: causal_mosaic:alliaria_petiolata_seedling_mortality_before_maturity_5589
+      name: Alliaria petiolata seedling mortality before maturity
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: mortality
+      state_or_change_qualifier: increased
+      life_stage: germinant_or_seedling
+      life_stage_term: http://purl.obolibrary.org/obo/AGRO_00000548
+    - id: causal_mosaic:alliaria_petiolata_late_spring_seedling_number_df9a
+      name: Alliaria petiolata late-spring seedling number
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: https://cropontology.org/rdf/CO_357:1000408
+      state_or_change_qualifier: decreased
+      life_stage: germinant_or_seedling
+      life_stage_term: http://purl.obolibrary.org/obo/AGRO_00000548
+    - id: causal_mosaic:alliaria_petiolata_change_in_seedling_number_between_early_a_f74c
+      name: Alliaria petiolata change in seedling number between early and late spring
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: change in number of individuals
+      state_or_change_qualifier: decreased
+      life_stage: germinant_or_seedling
+      life_stage_term: http://purl.obolibrary.org/obo/AGRO_00000548
+    edges:
+    - id: causal_mosaic:edge_d180845c
+      subject: causal_mosaic:sanguinaria_canadensis_initial_ramet_density_77c9
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_seedling_mortality_before_maturity_5589
+      causal_language: direct_causal
+      philosophical_accounts:
+      - counterfactual
+      - mechanistic
+      dose:
+        minimum_value: 7
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: ramet
+        verbatim: above 7 ramets/m2
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: alternative_dose_level
+        comparator_dose:
+          maximum_value: 7
+          unit_text: ramets/m2
+          counted_entity:
+            entity_type: taxon
+            entity_term: NCBITaxon:3472
+            life_stage: ramet_or_clonal_unit
+            life_stage_term: ramet
+        comparator_dose_level: lower_than_comparator
+      mediation:
+        status: explicitly_asserted
+        mediator_node_ids:
+        - causal_mosaic:sanguinaria_canadensis_leafing_d862
+        pathway_description: leafing was early enough to kill seedlings before they
+          matured
+      strength:
+        status: explicitly_asserted
+        significance: significant
+        analysis_method: not_reported
+        dose_response: true
+        dose_response_shape: threshold
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+    - id: causal_mosaic:edge_16dcf3dd
+      subject: causal_mosaic:sanguinaria_canadensis_initial_ramet_density_77c9
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_late_spring_seedling_number_df9a
+      causal_language: direct_causal
+      philosophical_accounts:
+      - counterfactual
+      dose:
+        minimum_value: 7
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: ramet
+        verbatim: above 7 ramets/m2
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: alternative_dose_level
+        comparator_dose:
+          maximum_value: 7
+          unit_text: ramets/m2
+        comparator_dose_level: lower_than_comparator
+      mediation:
+        status: implicitly_assumed
+        mediator_node_ids:
+        - causal_mosaic:sanguinaria_canadensis_leafing_d862
+      strength:
+        status: explicitly_asserted
+        significance: significant
+        analysis_method: not_reported
+        dose_response: true
+        dose_response_shape: threshold
+      temporal_extent:
+        observation_seasons:
+        - late_spring
+      context_dependence:
+        status: explicitly_asserted
+        temporal_scope: by 2000
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+    - id: causal_mosaic:edge_6ec56a12
+      subject: causal_mosaic:sanguinaria_canadensis_initial_ramet_density_77c9
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_change_in_seedling_number_between_early_a_f74c
+      causal_language: direct_causal
+      philosophical_accounts:
+      - counterfactual
+      dose:
+        minimum_value: 7
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: ramet
+        verbatim: above 7 ramets/m2
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: alternative_dose_level
+        comparator_dose:
+          maximum_value: 7
+          unit_text: ramets/m2
+        comparator_dose_level: lower_than_comparator
+      mediation:
+        status: implicitly_assumed
+        mediator_node_ids:
+        - causal_mosaic:sanguinaria_canadensis_leafing_d862
+      strength:
+        status: explicitly_asserted
+        significance: significant
+        analysis_method: not_reported
+        dose_response: true
+        dose_response_shape: threshold
+      temporal_extent:
+        observation_seasons:
+        - early_spring
+        - late_spring
+      context_dependence:
+        status: explicitly_asserted
+        temporal_scope: by 2000
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+- finding_id: f17
+  sentence: There were no differences between Sanguinaria canadensis density treatments
+    in the numbers of autumn Alliaria petiolata seedlings that emerged during summer
+    or in the change in numbers of seedlings between late spring and autumn, because
+    S. canadensis leaves senesced by summer and the Alliaria petiolata seed bank is
+    large.
+  fit: lossy
+  graph:
+    graph_id: 567f2b10444a436096aa9c37e6e471e4-f17
+    schema_version: 0.10.0
+    provenance:
+      causal_mosaic_version: 0.10.0
+    nodes:
+    - id: causal_mosaic:sanguinaria_canadensis_planting_density_density_treatments_a6b3
+      name: Sanguinaria canadensis planting density (density treatments)
+      entity_type: management_intervention
+      entity_term: NCBITaxon:3472
+      measured_attribute: plant density
+      state_or_change_qualifier: increased
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:3472
+    - id: causal_mosaic:number_of_autumn_alliaria_petiolata_seedlings_that_emerged_d_7a0c
+      name: number of autumn Alliaria petiolata seedlings that emerged during summer
+      entity_type: environmental_variable
+      entity_term: NCBITaxon:126270
+      measured_attribute: https://cropontology.org/rdf/CO_357:1000408
+      state_or_change_qualifier: unchanged
+      life_stage: germinant_or_seedling
+      life_stage_term: PO:0008037
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:126270
+        life_stage: germinant_or_seedling
+        life_stage_term: PO:0008037
+    - id: causal_mosaic:change_in_number_of_alliaria_petiolata_seedlings_between_lat_9fd4
+      name: change in number of Alliaria petiolata seedlings between late spring and
+        autumn
+      entity_type: environmental_variable
+      entity_term: NCBITaxon:126270
+      measured_attribute: https://cropontology.org/rdf/CO_357:1000408
+      state_or_change_qualifier: unchanged
+      life_stage: germinant_or_seedling
+      life_stage_term: PO:0008037
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:126270
+        life_stage: germinant_or_seedling
+        life_stage_term: PO:0008037
+    - id: causal_mosaic:leaf_senescence_of_sanguinaria_canadensis_by_summer_97cd
+      name: leaf senescence of Sanguinaria canadensis by summer
+      entity_type: environmental_process
+      entity_term: GO:0010150
+      state_or_change_qualifier: occurred
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:3472
+    - id: causal_mosaic:large_alliaria_petiolata_seed_bank_be8d
+      name: large Alliaria petiolata seed bank
+      entity_type: environmental_variable
+      entity_term: NCBITaxon:126270
+      measured_attribute: size
+      state_or_change_qualifier: present
+      life_stage: seed_or_seed_bank
+      life_stage_term: seed bank
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:126270
+        life_stage: seed_or_seed_bank
+        life_stage_term: seed bank
+    edges:
+    - id: causal_mosaic:edge_eb50f7ed
+      subject: causal_mosaic:sanguinaria_canadensis_planting_density_density_treatments_a6b3
+      predicate: causes
+      object: causal_mosaic:number_of_autumn_alliaria_petiolata_seedlings_that_emerged_d_7a0c
+      negated: true
+      causal_language: no_relationship
+      philosophical_accounts:
+      - interventionist
+      - counterfactual
+      comparator:
+      - status: explicitly_asserted
+        comparator_type: alternative_dose_level
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      mediation:
+        status: explicitly_asserted
+        pathway_description: No density effect because S. canadensis leaves senesced
+          by summer and the A. petiolata seed bank is large
+      moderation:
+        status: implicitly_assumed
+        moderator_node_ids:
+        - causal_mosaic:leaf_senescence_of_sanguinaria_canadensis_by_summer_97cd
+        - causal_mosaic:large_alliaria_petiolata_seed_bank_be8d
+        interaction_type: not_specified
+      strength:
+        status: explicitly_asserted
+        significance: not_significant
+        analysis_method: not_reported
+      evidential_basis:
+        evidence_types:
+        - randomized_experiment
+        evidence_objects:
+        - correlation
+      temporal_extent:
+        observation_seasons:
+        - autumn
+      scope: assertional
+    - id: causal_mosaic:edge_60d410bd
+      subject: causal_mosaic:sanguinaria_canadensis_planting_density_density_treatments_a6b3
+      predicate: causes
+      object: causal_mosaic:change_in_number_of_alliaria_petiolata_seedlings_between_lat_9fd4
+      negated: true
+      causal_language: no_relationship
+      philosophical_accounts:
+      - interventionist
+      - counterfactual
+      comparator:
+      - status: explicitly_asserted
+        comparator_type: alternative_dose_level
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      mediation:
+        status: explicitly_asserted
+        pathway_description: No density effect because S. canadensis leaves senesced
+          by summer and the A. petiolata seed bank is large
+      moderation:
+        status: implicitly_assumed
+        moderator_node_ids:
+        - causal_mosaic:leaf_senescence_of_sanguinaria_canadensis_by_summer_97cd
+        - causal_mosaic:large_alliaria_petiolata_seed_bank_be8d
+        interaction_type: not_specified
+      strength:
+        status: explicitly_asserted
+        significance: not_significant
+        analysis_method: not_reported
+      evidential_basis:
+        evidence_types:
+        - randomized_experiment
+        evidence_objects:
+        - correlation
+      temporal_extent:
+        time_since_intervention_text: between late spring and autumn
+      scope: assertional
+- finding_id: f18
+  sentence: By 2000, initial Sanguinaria canadensis densities of even 5 ramets/m2
+    significantly harmed early-spring, late-spring, and autumn rosettes (numbers and
+    sizes) of Alliaria petiolata, and below this density rosette numbers and sizes
+    increased over time.
+  fit: lossy
+  graph:
+    graph_id: 567f2b10444a436096aa9c37e6e471e4-f18
+    schema_version: 0.10.0
+    provenance:
+      causal_mosaic_version: 0.10.0
+    nodes:
+    - id: causal_mosaic:sanguinaria_canadensis_initial_ramet_density_7f01
+      name: Sanguinaria canadensis initial ramet density
+      entity_type: taxon
+      entity_term: NCBITaxon:3472
+      measured_attribute: NCIT:C53338
+      state_or_change_qualifier: present
+      life_stage: ramet_or_clonal_unit
+      life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+    - id: causal_mosaic:alliaria_petiolata_rosette_number_decreased_0ce9
+      name: Alliaria petiolata rosette number (decreased)
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: number
+      state_or_change_qualifier: decreased
+      life_stage: juvenile
+      life_stage_term: rosette
+    - id: causal_mosaic:alliaria_petiolata_rosette_size_decreased_9d70
+      name: Alliaria petiolata rosette size (decreased)
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: NCIT:C25681
+      state_or_change_qualifier: decreased
+      life_stage: juvenile
+      life_stage_term: rosette
+    - id: causal_mosaic:alliaria_petiolata_rosette_number_increased_0347
+      name: Alliaria petiolata rosette number (increased)
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: number
+      state_or_change_qualifier: increased
+      life_stage: juvenile
+      life_stage_term: rosette
+    - id: causal_mosaic:alliaria_petiolata_rosette_size_increased_1294
+      name: Alliaria petiolata rosette size (increased)
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: NCIT:C25681
+      state_or_change_qualifier: increased
+      life_stage: juvenile
+      life_stage_term: rosette
+    edges:
+    - id: causal_mosaic:edge_2068ce64
+      subject: causal_mosaic:sanguinaria_canadensis_initial_ramet_density_7f01
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_rosette_number_decreased_0ce9
+      causal_language: direct_causal
+      philosophical_accounts:
+      - interventionist
+      scope: contingent
+      dose:
+        minimum_value: 5
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+        verbatim: even 5 ramets/m2
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: not_reported
+      strength:
+        status: explicitly_asserted
+        significance: significant
+        analysis_method: not_reported
+        dose_response: true
+        dose_response_shape: threshold
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      temporal_extent:
+        time_since_intervention_text: by 2000
+        observation_seasons:
+        - early_spring
+        - late_spring
+        - autumn
+      evidential_basis:
+        evidence_types:
+        - randomized_experiment
+        evidence_objects:
+        - correlation
+    - id: causal_mosaic:edge_8c190d75
+      subject: causal_mosaic:sanguinaria_canadensis_initial_ramet_density_7f01
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_rosette_size_decreased_9d70
+      causal_language: direct_causal
+      philosophical_accounts:
+      - interventionist
+      scope: contingent
+      dose:
+        minimum_value: 5
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+        verbatim: even 5 ramets/m2
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: not_reported
+      strength:
+        status: explicitly_asserted
+        significance: significant
+        analysis_method: not_reported
+        dose_response: true
+        dose_response_shape: threshold
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      temporal_extent:
+        time_since_intervention_text: by 2000
+        observation_seasons:
+        - early_spring
+        - late_spring
+        - autumn
+      evidential_basis:
+        evidence_types:
+        - randomized_experiment
+        evidence_objects:
+        - correlation
+    - id: causal_mosaic:edge_a83b68ef
+      subject: causal_mosaic:sanguinaria_canadensis_initial_ramet_density_7f01
+      predicate: associated_with
+      object: causal_mosaic:alliaria_petiolata_rosette_number_increased_0347
+      causal_language: associational
+      philosophical_accounts:
+      - regularity
+      scope: contingent
+      dose_level: lower_than_comparator
+      comparator:
+      - status: explicitly_asserted
+        comparator_type: alternative_dose_level
+        comparator_dose:
+          numeric_value: 5
+          unit_text: ramets/m2
+          counted_entity:
+            entity_type: taxon
+            entity_term: NCBITaxon:3472
+            life_stage: ramet_or_clonal_unit
+            life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+          verbatim: this density
+      strength:
+        status: explicitly_asserted
+        significance: not_reported
+        analysis_method: not_reported
+        dose_response: true
+        dose_response_shape: threshold
+      evidential_basis:
+        evidence_types:
+        - randomized_experiment
+        evidence_objects:
+        - correlation
+    - id: causal_mosaic:edge_15ec7ead
+      subject: causal_mosaic:sanguinaria_canadensis_initial_ramet_density_7f01
+      predicate: associated_with
+      object: causal_mosaic:alliaria_petiolata_rosette_size_increased_1294
+      causal_language: associational
+      philosophical_accounts:
+      - regularity
+      scope: contingent
+      dose_level: lower_than_comparator
+      comparator:
+      - status: explicitly_asserted
+        comparator_type: alternative_dose_level
+        comparator_dose:
+          numeric_value: 5
+          unit_text: ramets/m2
+          counted_entity:
+            entity_type: taxon
+            entity_term: NCBITaxon:3472
+            life_stage: ramet_or_clonal_unit
+            life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+          verbatim: this density
+      strength:
+        status: explicitly_asserted
+        significance: not_reported
+        analysis_method: not_reported
+        dose_response: true
+        dose_response_shape: threshold
+      evidential_basis:
+        evidence_types:
+        - randomized_experiment
+        evidence_objects:
+        - correlation
+- finding_id: f19
+  sentence: Because there were no significant changes in numbers of Alliaria petiolata
+    rosettes between year 1 autumn and year 2 early spring or between year 2 early
+    spring and year 2 late spring, the impact of Sanguinaria canadensis on rosettes
+    was probably related to its effect on seedlings rather than direct suppression
+    of rosettes; higher S. canadensis densities likely killed or harmed enough seedlings
+    that fewer survived to produce year 1 rosettes, and survivors produced smaller
+    rosettes.
+  fit: lossy
+  graph:
+    graph_id: 567f2b10444a436096aa9c37e6e471e4-f19
+    schema_version: 0.10.0
+    provenance:
+      causal_mosaic_version: 0.10.0
+    nodes:
+    - id: causal_mosaic:sanguinaria_canadensis_density_increased_a522
+      name: Sanguinaria canadensis density, increased
+      entity_type: taxon
+      entity_term: NCBITaxon:3472
+      measured_attribute: https://kos.lifewatch.eu/thesauri/traits/c_ddc0028f
+      state_or_change_qualifier: increased
+    - id: causal_mosaic:alliaria_petiolata_seedling_survival_decreased_dffc
+      name: Alliaria petiolata seedling survival, decreased
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: survival
+      state_or_change_qualifier: decreased
+      life_stage: germinant_or_seedling
+      life_stage_term: PO:0008037
+    - id: causal_mosaic:alliaria_petiolata_year_1_rosette_abundance_decreased_b74a
+      name: Alliaria petiolata year 1 rosette abundance, decreased
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: abundance
+      state_or_change_qualifier: decreased
+      life_stage: juvenile
+      life_stage_term: year 1 rosettes
+    - id: causal_mosaic:alliaria_petiolata_rosette_size_decreased_14b5
+      name: Alliaria petiolata rosette size, decreased
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: https://kos.lifewatch.eu/thesauri/traits/c_bb852c2c
+      state_or_change_qualifier: decreased
+      life_stage: juvenile
+      life_stage_term: year 1 rosettes
+    - id: causal_mosaic:alliaria_petiolata_rosette_abundance_after_year_1_autumn_dec_d231
+      name: Alliaria petiolata rosette abundance after year 1 autumn, decreased
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: abundance
+      state_or_change_qualifier: decreased
+      life_stage: juvenile
+      life_stage_term: rosettes
+    edges:
+    - id: causal_mosaic:edge_712bdec2
+      subject: causal_mosaic:sanguinaria_canadensis_density_increased_a522
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_seedling_survival_decreased_dffc
+      negated: false
+      causal_language: uncertain_causal
+      philosophical_accounts:
+      - mechanistic
+      dose_level: higher_than_comparator
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: alternative_dose_level
+        comparator_dose_level: lower_than_comparator
+      proximate_distal: proximate
+      direction:
+        status: asserted
+      strength:
+        status: not_addressed
+        significance: not_tested
+      evidential_basis:
+        evidence_objects:
+        - mechanism
+    - id: causal_mosaic:edge_aac01f17
+      subject: causal_mosaic:alliaria_petiolata_seedling_survival_decreased_dffc
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_year_1_rosette_abundance_decreased_b74a
+      negated: false
+      causal_language: uncertain_causal
+      philosophical_accounts:
+      - mechanistic
+      proximate_distal: proximate
+      direction:
+        status: asserted
+      strength:
+        status: not_addressed
+        significance: not_tested
+      evidential_basis:
+        evidence_objects:
+        - mechanism
+    - id: causal_mosaic:edge_90304c7b
+      subject: causal_mosaic:sanguinaria_canadensis_density_increased_a522
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_rosette_size_decreased_14b5
+      negated: false
+      causal_language: uncertain_causal
+      philosophical_accounts:
+      - mechanistic
+      dose_level: higher_than_comparator
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: alternative_dose_level
+        comparator_dose_level: lower_than_comparator
+      direction:
+        status: asserted
+      strength:
+        status: not_addressed
+        significance: not_tested
+      evidential_basis:
+        evidence_objects:
+        - mechanism
+    - id: causal_mosaic:edge_fc6ea7ad
+      subject: causal_mosaic:sanguinaria_canadensis_density_increased_a522
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_year_1_rosette_abundance_decreased_b74a
+      negated: false
+      causal_language: uncertain_causal
+      philosophical_accounts:
+      - mechanistic
+      dose_level: higher_than_comparator
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: alternative_dose_level
+        comparator_dose_level: lower_than_comparator
+      proximate_distal: distal
+      mediation:
+        status: explicitly_asserted
+        mediator_node_ids:
+        - causal_mosaic:alliaria_petiolata_seedling_survival_decreased_dffc
+        pathway_description: higher S. canadensis densities likely killed or harmed
+          enough seedlings that fewer survived to produce year 1 rosettes
+      direction:
+        status: asserted
+      strength:
+        status: not_addressed
+        significance: not_tested
+      evidential_basis:
+        evidence_objects:
+        - mechanism
+    - id: causal_mosaic:edge_53113f80
+      subject: causal_mosaic:sanguinaria_canadensis_density_increased_a522
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_rosette_abundance_after_year_1_autumn_dec_d231
+      negated: true
+      causal_language: uncertain_causal
+      philosophical_accounts:
+      - mechanistic
+      proximate_distal: proximate
+      direction:
+        status: asserted
+      strength:
+        status: explicitly_asserted
+        significance: not_significant
+        analysis_method: not_reported
+      temporal_extent:
+        time_since_intervention_text: between year 1 autumn and year 2 early spring
+          or between year 2 early spring and year 2 late spring
+      evidential_basis:
+        evidence_objects:
+        - correlation
+- finding_id: f20
+  sentence: The numbers of stem leaves, gross leaf area, number of flowers, number
+    of siliques, and height at final flowering of Alliaria petiolata were all significantly
+    suppressed by Sanguinaria canadensis at intermediate and higher initial densities
+    of 7, 9, 11, 15, and 20 ramets/m2, indicating density-dependent competition from
+    S. canadensis had a significant effect on Alliaria petiolata.
+  fit: lossy
+  graph:
+    graph_id: 567f2b10444a436096aa9c37e6e471e4-f20
+    schema_version: 0.10.0
+    provenance:
+      causal_mosaic_version: 0.10.0
+    nodes:
+    - id: causal_mosaic:sanguinaria_canadensis_initial_planting_density_increased_4894
+      name: Sanguinaria canadensis initial planting density (increased)
+      entity_type: taxon
+      entity_term: NCBITaxon:3472
+      measured_attribute: initial planting density
+      state_or_change_qualifier: increased
+      life_stage: ramet_or_clonal_unit
+      life_stage_term: ramet
+    - id: causal_mosaic:alliaria_petiolata_number_of_stem_leaves_decreased_5bd6
+      name: Alliaria petiolata number of stem leaves (decreased)
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: number of stem leaves
+      state_or_change_qualifier: decreased
+    - id: causal_mosaic:alliaria_petiolata_gross_leaf_area_decreased_8deb
+      name: Alliaria petiolata gross leaf area (decreased)
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: gross leaf area
+      state_or_change_qualifier: decreased
+    - id: causal_mosaic:alliaria_petiolata_number_of_flowers_decreased_b7d9
+      name: Alliaria petiolata number of flowers (decreased)
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: http://purl.obolibrary.org/obo/SOY_0001740
+      state_or_change_qualifier: decreased
+    - id: causal_mosaic:alliaria_petiolata_number_of_siliques_decreased_bd5d
+      name: Alliaria petiolata number of siliques (decreased)
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: number of siliques
+      state_or_change_qualifier: decreased
+    - id: causal_mosaic:alliaria_petiolata_height_at_final_flowering_decreased_587e
+      name: Alliaria petiolata height at final flowering (decreased)
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: plant height
+      state_or_change_qualifier: decreased
+    edges:
+    - id: causal_mosaic:edge_f32d8364
+      subject: causal_mosaic:sanguinaria_canadensis_initial_planting_density_increased_4894
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_number_of_stem_leaves_decreased_5bd6
+      causal_language: direct_causal
+      philosophical_accounts:
+      - interventionist
+      dose:
+        minimum_value: 7
+        maximum_value: 20
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: ramet
+        verbatim: 7, 9, 11, 15, and 20 ramets/m2
+      comparator:
+      - comparator_type: not_reported
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      mediation:
+        status: explicitly_asserted
+        pathway_description: density-dependent competition from S. canadensis
+      strength:
+        status: explicitly_asserted
+        significance: significant
+        analysis_method: not_reported
+        dose_response: true
+        dose_response_shape: not_reported
+    - id: causal_mosaic:edge_d059217b
+      subject: causal_mosaic:sanguinaria_canadensis_initial_planting_density_increased_4894
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_gross_leaf_area_decreased_8deb
+      causal_language: direct_causal
+      philosophical_accounts:
+      - interventionist
+      dose:
+        minimum_value: 7
+        maximum_value: 20
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: ramet
+        verbatim: 7, 9, 11, 15, and 20 ramets/m2
+      comparator:
+      - comparator_type: not_reported
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      mediation:
+        status: explicitly_asserted
+        pathway_description: density-dependent competition from S. canadensis
+      strength:
+        status: explicitly_asserted
+        significance: significant
+        analysis_method: not_reported
+        dose_response: true
+        dose_response_shape: not_reported
+    - id: causal_mosaic:edge_cffbaee5
+      subject: causal_mosaic:sanguinaria_canadensis_initial_planting_density_increased_4894
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_number_of_flowers_decreased_b7d9
+      causal_language: direct_causal
+      philosophical_accounts:
+      - interventionist
+      dose:
+        minimum_value: 7
+        maximum_value: 20
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: ramet
+        verbatim: 7, 9, 11, 15, and 20 ramets/m2
+      comparator:
+      - comparator_type: not_reported
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      mediation:
+        status: explicitly_asserted
+        pathway_description: density-dependent competition from S. canadensis
+      strength:
+        status: explicitly_asserted
+        significance: significant
+        analysis_method: not_reported
+        dose_response: true
+        dose_response_shape: not_reported
+    - id: causal_mosaic:edge_ace4ffa6
+      subject: causal_mosaic:sanguinaria_canadensis_initial_planting_density_increased_4894
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_number_of_siliques_decreased_bd5d
+      causal_language: direct_causal
+      philosophical_accounts:
+      - interventionist
+      dose:
+        minimum_value: 7
+        maximum_value: 20
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: ramet
+        verbatim: 7, 9, 11, 15, and 20 ramets/m2
+      comparator:
+      - comparator_type: not_reported
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      mediation:
+        status: explicitly_asserted
+        pathway_description: density-dependent competition from S. canadensis
+      strength:
+        status: explicitly_asserted
+        significance: significant
+        analysis_method: not_reported
+        dose_response: true
+        dose_response_shape: not_reported
+    - id: causal_mosaic:edge_f9395173
+      subject: causal_mosaic:sanguinaria_canadensis_initial_planting_density_increased_4894
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_height_at_final_flowering_decreased_587e
+      causal_language: direct_causal
+      philosophical_accounts:
+      - interventionist
+      dose:
+        minimum_value: 7
+        maximum_value: 20
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: ramet
+        verbatim: 7, 9, 11, 15, and 20 ramets/m2
+      comparator:
+      - comparator_type: not_reported
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      mediation:
+        status: explicitly_asserted
+        pathway_description: density-dependent competition from S. canadensis
+      strength:
+        status: explicitly_asserted
+        significance: significant
+        analysis_method: not_reported
+        dose_response: true
+        dose_response_shape: not_reported
+- finding_id: f21
+  sentence: It appears that intermediate and higher densities of Sanguinaria canadensis
+    deprived Alliaria petiolata of sufficient resources to produce large leaves, flowers,
+    and fruits, indicating that both vegetative and reproductive allocations were
+    affected.
+  fit: lossy
+  graph:
+    graph_id: 567f2b10444a436096aa9c37e6e471e4-f21
+    schema_version: 0.10.0
+    provenance:
+      causal_mosaic_version: 0.10.0
+    nodes:
+    - id: causal_mosaic:sanguinaria_canadensis_density_increased_001e
+      name: Sanguinaria canadensis density (increased)
+      entity_type: taxon
+      entity_term: NCBITaxon:3472
+      measured_attribute: https://kos.lifewatch.eu/thesauri/traits/c_ddc0028f
+      state_or_change_qualifier: increased
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:3472
+    - id: causal_mosaic:resources_available_to_alliaria_petiolata_decreased_c315
+      name: resources available to Alliaria petiolata (decreased)
+      entity_type: environmental_variable
+      entity_term: growth-limiting resources available to a plant
+      measured_attribute: sufficiency
+      state_or_change_qualifier: decreased
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:126270
+    - id: causal_mosaic:alliaria_petiolata_leaf_size_decreased_3686
+      name: Alliaria petiolata leaf size (decreased)
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: http://purl.obolibrary.org/obo/TO_0002637
+      state_or_change_qualifier: decreased
+    - id: causal_mosaic:alliaria_petiolata_flower_production_decreased_0a6e
+      name: Alliaria petiolata flower production (decreased)
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: flower production
+      state_or_change_qualifier: decreased
+    - id: causal_mosaic:alliaria_petiolata_fruit_production_decreased_e230
+      name: Alliaria petiolata fruit production (decreased)
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: fruit production
+      state_or_change_qualifier: decreased
+    - id: causal_mosaic:alliaria_petiolata_vegetative_allocation_affected_29ba
+      name: Alliaria petiolata vegetative allocation (affected)
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: vegetative allocation
+      state_or_change_qualifier: decreased
+    - id: causal_mosaic:alliaria_petiolata_reproductive_allocation_affected_33f4
+      name: Alliaria petiolata reproductive allocation (affected)
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: http://purl.obolibrary.org/obo/GSSO_011861
+      state_or_change_qualifier: decreased
+    edges:
+    - id: causal_mosaic:edge_70864389
+      subject: causal_mosaic:sanguinaria_canadensis_density_increased_001e
+      predicate: causes
+      object: causal_mosaic:resources_available_to_alliaria_petiolata_decreased_c315
+      causal_language: uncertain_causal
+      philosophical_accounts:
+      - mechanistic
+      dose_level: intermediate
+      comparator:
+      - comparator_type: not_reported
+      direction:
+        status: asserted
+      strength:
+        significance: not_reported
+    - id: causal_mosaic:edge_913522c3
+      subject: causal_mosaic:sanguinaria_canadensis_density_increased_001e
+      predicate: causes
+      object: causal_mosaic:resources_available_to_alliaria_petiolata_decreased_c315
+      causal_language: uncertain_causal
+      philosophical_accounts:
+      - mechanistic
+      dose_level: high
+      comparator:
+      - comparator_type: not_reported
+      direction:
+        status: asserted
+      strength:
+        significance: not_reported
+    - id: causal_mosaic:edge_ab615a43
+      subject: causal_mosaic:sanguinaria_canadensis_density_increased_001e
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_leaf_size_decreased_3686
+      causal_language: uncertain_causal
+      philosophical_accounts:
+      - mechanistic
+      dose_level: intermediate
+      comparator:
+      - comparator_type: not_reported
+      direction:
+        status: asserted
+      mediation:
+        status: explicitly_asserted
+        mediator_node_ids:
+        - causal_mosaic:resources_available_to_alliaria_petiolata_decreased_c315
+        pathway_description: deprived Alliaria petiolata of sufficient resources to
+          produce large leaves
+      strength:
+        significance: not_reported
+    - id: causal_mosaic:edge_4833137f
+      subject: causal_mosaic:sanguinaria_canadensis_density_increased_001e
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_leaf_size_decreased_3686
+      causal_language: uncertain_causal
+      philosophical_accounts:
+      - mechanistic
+      dose_level: high
+      comparator:
+      - comparator_type: not_reported
+      direction:
+        status: asserted
+      mediation:
+        status: explicitly_asserted
+        mediator_node_ids:
+        - causal_mosaic:resources_available_to_alliaria_petiolata_decreased_c315
+        pathway_description: deprived Alliaria petiolata of sufficient resources to
+          produce large leaves
+      strength:
+        significance: not_reported
+    - id: causal_mosaic:edge_e9e9dc25
+      subject: causal_mosaic:sanguinaria_canadensis_density_increased_001e
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_flower_production_decreased_0a6e
+      causal_language: uncertain_causal
+      philosophical_accounts:
+      - mechanistic
+      dose_level: intermediate
+      comparator:
+      - comparator_type: not_reported
+      direction:
+        status: asserted
+      mediation:
+        status: explicitly_asserted
+        mediator_node_ids:
+        - causal_mosaic:resources_available_to_alliaria_petiolata_decreased_c315
+        pathway_description: deprived Alliaria petiolata of sufficient resources to
+          produce flowers
+      strength:
+        significance: not_reported
+    - id: causal_mosaic:edge_ac7c6200
+      subject: causal_mosaic:sanguinaria_canadensis_density_increased_001e
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_flower_production_decreased_0a6e
+      causal_language: uncertain_causal
+      philosophical_accounts:
+      - mechanistic
+      dose_level: high
+      comparator:
+      - comparator_type: not_reported
+      direction:
+        status: asserted
+      mediation:
+        status: explicitly_asserted
+        mediator_node_ids:
+        - causal_mosaic:resources_available_to_alliaria_petiolata_decreased_c315
+        pathway_description: deprived Alliaria petiolata of sufficient resources to
+          produce flowers
+      strength:
+        significance: not_reported
+    - id: causal_mosaic:edge_50a64b25
+      subject: causal_mosaic:sanguinaria_canadensis_density_increased_001e
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_fruit_production_decreased_e230
+      causal_language: uncertain_causal
+      philosophical_accounts:
+      - mechanistic
+      dose_level: intermediate
+      comparator:
+      - comparator_type: not_reported
+      direction:
+        status: asserted
+      mediation:
+        status: explicitly_asserted
+        mediator_node_ids:
+        - causal_mosaic:resources_available_to_alliaria_petiolata_decreased_c315
+        pathway_description: deprived Alliaria petiolata of sufficient resources to
+          produce fruits
+      strength:
+        significance: not_reported
+    - id: causal_mosaic:edge_aba2eb39
+      subject: causal_mosaic:sanguinaria_canadensis_density_increased_001e
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_fruit_production_decreased_e230
+      causal_language: uncertain_causal
+      philosophical_accounts:
+      - mechanistic
+      dose_level: high
+      comparator:
+      - comparator_type: not_reported
+      direction:
+        status: asserted
+      mediation:
+        status: explicitly_asserted
+        mediator_node_ids:
+        - causal_mosaic:resources_available_to_alliaria_petiolata_decreased_c315
+        pathway_description: deprived Alliaria petiolata of sufficient resources to
+          produce fruits
+      strength:
+        significance: not_reported
+    - id: causal_mosaic:edge_0a49430b
+      subject: causal_mosaic:sanguinaria_canadensis_density_increased_001e
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_vegetative_allocation_affected_29ba
+      causal_language: uncertain_causal
+      philosophical_accounts:
+      - mechanistic
+      dose_level: intermediate
+      comparator:
+      - comparator_type: not_reported
+      direction:
+        status: asserted
+      mediation:
+        status: explicitly_asserted
+        mediator_node_ids:
+        - causal_mosaic:resources_available_to_alliaria_petiolata_decreased_c315
+        pathway_description: resource deprivation; vegetative allocation inferred
+          to be affected from reduced leaf size
+      strength:
+        significance: not_reported
+    - id: causal_mosaic:edge_cc94bec3
+      subject: causal_mosaic:sanguinaria_canadensis_density_increased_001e
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_vegetative_allocation_affected_29ba
+      causal_language: uncertain_causal
+      philosophical_accounts:
+      - mechanistic
+      dose_level: high
+      comparator:
+      - comparator_type: not_reported
+      direction:
+        status: asserted
+      mediation:
+        status: explicitly_asserted
+        mediator_node_ids:
+        - causal_mosaic:resources_available_to_alliaria_petiolata_decreased_c315
+        pathway_description: resource deprivation; vegetative allocation inferred
+          to be affected from reduced leaf size
+      strength:
+        significance: not_reported
+    - id: causal_mosaic:edge_9eb4692e
+      subject: causal_mosaic:sanguinaria_canadensis_density_increased_001e
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_reproductive_allocation_affected_33f4
+      causal_language: uncertain_causal
+      philosophical_accounts:
+      - mechanistic
+      dose_level: intermediate
+      comparator:
+      - comparator_type: not_reported
+      direction:
+        status: asserted
+      mediation:
+        status: explicitly_asserted
+        mediator_node_ids:
+        - causal_mosaic:resources_available_to_alliaria_petiolata_decreased_c315
+        pathway_description: resource deprivation; reproductive allocation inferred
+          to be affected from reduced flower and fruit production
+      strength:
+        significance: not_reported
+    - id: causal_mosaic:edge_202ae2e7
+      subject: causal_mosaic:sanguinaria_canadensis_density_increased_001e
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_reproductive_allocation_affected_33f4
+      causal_language: uncertain_causal
+      philosophical_accounts:
+      - mechanistic
+      dose_level: high
+      comparator:
+      - comparator_type: not_reported
+      direction:
+        status: asserted
+      mediation:
+        status: explicitly_asserted
+        mediator_node_ids:
+        - causal_mosaic:resources_available_to_alliaria_petiolata_decreased_c315
+        pathway_description: resource deprivation; reproductive allocation inferred
+          to be affected from reduced flower and fruit production
+      strength:
+        significance: not_reported
+- finding_id: f22
+  sentence: The inability of Alliaria petiolata to grow taller under intermediate
+    and higher densities of Sanguinaria canadensis means that it either had insufficient
+    resources or could not reallocate resources quickly enough when in competition.
+  fit: lossy
+  graph:
+    graph_id: 567f2b10444a436096aa9c37e6e471e4-f22
+    schema_version: 0.10.0
+    provenance:
+      causal_mosaic_version: 0.10.0
+    nodes:
+    - id: causal_mosaic:sanguinaria_canadensis_population_density_9d94
+      name: Sanguinaria canadensis population density
+      entity_type: taxon
+      entity_term: NCBITaxon:3472
+      measured_attribute: NCIT:C53338
+      state_or_change_qualifier: increased
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:3472
+    - id: causal_mosaic:alliaria_petiolata_plant_height_edee
+      name: Alliaria petiolata plant height
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: plant height
+      state_or_change_qualifier: increased
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:126270
+    - id: causal_mosaic:resources_available_to_alliaria_petiolata_ff34
+      name: resources available to Alliaria petiolata
+      entity_type: environmental_variable
+      entity_term: resource availability
+      state_or_change_qualifier: decreased
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:126270
+    - id: causal_mosaic:resource_reallocation_by_alliaria_petiolata_8697
+      name: resource reallocation by Alliaria petiolata
+      entity_type: environmental_process
+      entity_term: resource reallocation
+      measured_attribute: rate
+      state_or_change_qualifier: decreased
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:126270
+    edges:
+    - id: causal_mosaic:edge_76eef356
+      subject: causal_mosaic:sanguinaria_canadensis_population_density_9d94
+      predicate: prevents
+      object: causal_mosaic:alliaria_petiolata_plant_height_edee
+      causal_language: uncertain_causal
+      dose_level: intermediate
+      philosophical_accounts:
+      - mechanistic
+      - counterfactual
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: not_reported
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      mediation:
+        status: explicitly_asserted
+        mediator_node_ids:
+        - causal_mosaic:resources_available_to_alliaria_petiolata_ff34
+        - causal_mosaic:resource_reallocation_by_alliaria_petiolata_8697
+        pathway_description: it either had insufficient resources or could not reallocate
+          resources quickly enough when in competition
+      strength:
+        status: not_addressed
+        significance: not_reported
+      contributing_sole: not_addressed
+      scope: contingent
+      evidential_basis:
+        evidence_types:
+        - randomized_experiment
+        evidence_objects:
+        - correlation
+    - id: causal_mosaic:edge_b3648da8
+      subject: causal_mosaic:sanguinaria_canadensis_population_density_9d94
+      predicate: prevents
+      object: causal_mosaic:alliaria_petiolata_plant_height_edee
+      causal_language: uncertain_causal
+      dose_level: high
+      philosophical_accounts:
+      - mechanistic
+      - counterfactual
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: not_reported
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      mediation:
+        status: explicitly_asserted
+        mediator_node_ids:
+        - causal_mosaic:resources_available_to_alliaria_petiolata_ff34
+        - causal_mosaic:resource_reallocation_by_alliaria_petiolata_8697
+        pathway_description: it either had insufficient resources or could not reallocate
+          resources quickly enough when in competition
+      strength:
+        status: not_addressed
+        significance: not_reported
+      contributing_sole: not_addressed
+      scope: contingent
+      evidential_basis:
+        evidence_types:
+        - randomized_experiment
+        evidence_objects:
+        - correlation
+- finding_id: f23
+  sentence: The results suggest that planting intermediate densities of Sanguinaria
+    canadensis is a good strategy for managing invasions by Alliaria petiolata in
+    ecological restoration.
+  fit: lossy
+  graph:
+    graph_id: 567f2b10444a436096aa9c37e6e471e4-f23
+    schema_version: 0.10.0
+    provenance:
+      causal_mosaic_version: 0.10.0
+    nodes:
+    - id: causal_mosaic:planting_of_sanguinaria_canadensis_15d1
+      name: planting of Sanguinaria canadensis
+      entity_type: management_intervention
+      entity_term: planting
+      state_or_change_qualifier: introduced
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:3472
+    - id: causal_mosaic:invasion_by_alliaria_petiolata_37e5
+      name: invasion by Alliaria petiolata
+      entity_type: environmental_process
+      entity_term: biological invasion
+      state_or_change_qualifier: decreased
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:126270
+    edges:
+    - id: causal_mosaic:edge_2f98ed7f
+      subject: causal_mosaic:planting_of_sanguinaria_canadensis_15d1
+      predicate: prevents
+      object: causal_mosaic:invasion_by_alliaria_petiolata_37e5
+      causal_language: uncertain_causal
+      philosophical_accounts:
+      - interventionist
+      dose_level: intermediate
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: not_reported
+      strength:
+        significance: not_reported
+      context_dependence:
+        status: explicitly_asserted
+        scope_conditions:
+        - ecological restoration
+      scope: contingent
+- finding_id: f24
+  sentence: Although early- and late-season numbers of Alliaria petiolata seedlings
+    were not reduced, spring populations of Alliaria petiolata remained high but did
+    not worsen when Sanguinaria canadensis was transplanted at densities of five or
+    more ramets per square meter.
+  fit: lossy
+  graph:
+    graph_id: 567f2b10444a436096aa9c37e6e471e4-f24
+    schema_version: 0.10.0
+    provenance:
+      causal_mosaic_version: 0.10.0
+    nodes:
+    - id: causal_mosaic:transplanting_of_sanguinaria_canadensis_3119
+      name: transplanting of Sanguinaria canadensis
+      entity_type: management_intervention
+      entity_term: ecoskos:0000001
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:3472
+        life_stage: ramet_or_clonal_unit
+        life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+      state_or_change_qualifier: occurred
+    - id: causal_mosaic:alliaria_petiolata_seedling_numbers_decreased_6b7c
+      name: Alliaria petiolata seedling numbers decreased
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: https://cropontology.org/rdf/CO_357:1000408
+      life_stage: germinant_or_seedling
+      life_stage_term: PO:0008037
+      state_or_change_qualifier: decreased
+    - id: causal_mosaic:alliaria_petiolata_spring_population_size_remained_high_incr_a561
+      name: Alliaria petiolata spring population size (remained high) increased
+      entity_type: taxon
+      entity_term: NCBITaxon:126270
+      measured_attribute: http://www.fao.org/aims/aos/cwr.owl#PopulationSize
+      state_or_change_qualifier: increased
+    edges:
+    - id: causal_mosaic:edge_4ac5b69f
+      subject: causal_mosaic:transplanting_of_sanguinaria_canadensis_3119
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_seedling_numbers_decreased_6b7c
+      negated: true
+      causal_language: no_relationship
+      philosophical_accounts:
+      - interventionist
+      - counterfactual
+      dose:
+        minimum_value: 5
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      strength:
+        significance: not_reported
+      context_dependence:
+        status: explicitly_asserted
+        temporal_scope: early- and late-season
+      scope: assertional
+    - id: causal_mosaic:edge_f0f3e377
+      subject: causal_mosaic:transplanting_of_sanguinaria_canadensis_3119
+      predicate: causes
+      object: causal_mosaic:alliaria_petiolata_spring_population_size_remained_high_incr_a561
+      negated: true
+      causal_language: no_relationship
+      philosophical_accounts:
+      - interventionist
+      - counterfactual
+      dose:
+        minimum_value: 5
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      strength:
+        significance: not_reported
+      temporal_extent:
+        observation_seasons:
+        - spring
+      scope: assertional
+- finding_id: f26
+  sentence: All else being equal, Sanguinaria canadensis densities of 9 and 11 ramets/m2
+    resulted in more successful competition with Alliaria petiolata.
+  fit: lossy
+  graph:
+    graph_id: 567f2b10444a436096aa9c37e6e471e4-f26
+    schema_version: 0.10.0
+    provenance:
+      causal_mosaic_version: 0.10.0
+    nodes:
+    - id: causal_mosaic:sanguinaria_canadensis_ramet_density_55be
+      name: Sanguinaria canadensis ramet density
+      entity_type: environmental_variable
+      entity_term: NCBITaxon:3472
+      measured_attribute: https://kos.lifewatch.eu/thesauri/traits/c_ddc0028f
+      state_or_change_qualifier: increased
+      life_stage: ramet_or_clonal_unit
+      life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+    - id: causal_mosaic:sanguinaria_canadensis_competitive_success_against_alliaria__75c8
+      name: Sanguinaria canadensis competitive success against Alliaria petiolata
+      entity_type: taxon
+      entity_term: NCBITaxon:3472
+      measured_attribute: competitive success
+      state_or_change_qualifier: increased
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:126270
+    edges:
+    - id: causal_mosaic:edge_0e35a93d
+      subject: causal_mosaic:sanguinaria_canadensis_ramet_density_55be
+      predicate: causes
+      object: causal_mosaic:sanguinaria_canadensis_competitive_success_against_alliaria__75c8
+      negated: false
+      causal_language: direct_causal
+      philosophical_accounts:
+      - counterfactual
+      - interventionist
+      dose:
+        minimum_value: 9
+        maximum_value: 11
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: http://aims.fao.org/aos/agrovoc/c_df6bc767
+        verbatim: 9 and 11 ramets/m2
+      comparator:
+      - status: implicitly_assumed
+        comparator_type: alternative_dose_level
+      direction:
+        status: asserted
+        evidence_for_direction: experimental
+      strength:
+        status: explicitly_asserted
+        significance: not_reported
+        analysis_method: not_reported
+      context_dependence:
+        status: explicitly_asserted
+        scope_conditions:
+        - all else being equal
+      contributing_sole: not_addressed
+      scope: contingent
+- finding_id: f30
+  sentence: By 2000, there was no evidence of regeneration of other native species
+    from existing propagules and no detected increase in other native species or other
+    exotics in any Sanguinaria canadensis density treatment, with too few individuals
+    and no trends to report.
+  fit: lossy
+  graph:
+    graph_id: 567f2b10444a436096aa9c37e6e471e4-f30
+    schema_version: 0.10.0
+    provenance:
+      causal_mosaic_version: 0.10.0
+    nodes:
+    - id: causal_mosaic:sanguinaria_canadensis_density_treatment_3fef
+      name: Sanguinaria canadensis density treatment
+      entity_type: management_intervention
+      entity_term: Sanguinaria canadensis density treatment
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:3472
+      state_or_change_qualifier: introduced
+    - id: causal_mosaic:regeneration_of_other_native_species_from_existing_propagule_0d46
+      name: regeneration of other native species from existing propagules
+      entity_type: environmental_process
+      entity_term: regeneration
+      applied_to:
+      - entity_type: composite_variable
+        entity_term: ecoskos:0000004
+      nativeness_basis: not_reported
+      state_or_change_qualifier: occurred
+    - id: causal_mosaic:number_of_individuals_of_other_native_species_1abe
+      name: number of individuals of other native species
+      entity_type: composite_variable
+      entity_term: ecoskos:0000004
+      measured_attribute: number of individuals
+      nativeness_basis: not_reported
+      state_or_change_qualifier: increased
+    - id: causal_mosaic:number_of_individuals_of_other_exotic_plant_species_465d
+      name: number of individuals of other exotic plant species
+      entity_type: composite_variable
+      entity_term: exotic plant species
+      measured_attribute: number of individuals
+      nativeness_basis: not_reported
+      state_or_change_qualifier: increased
+    edges:
+    - id: causal_mosaic:edge_bff0110a
+      subject: causal_mosaic:sanguinaria_canadensis_density_treatment_3fef
+      predicate: causes
+      object: causal_mosaic:regeneration_of_other_native_species_from_existing_propagule_0d46
+      negated: true
+      causal_language: no_relationship
+      philosophical_accounts:
+      - interventionist
+      comparator:
+      - status: not_addressed
+        comparator_type: not_reported
+      strength:
+        status: not_addressed
+        significance: not_tested
+      context_dependence:
+        status: explicitly_asserted
+        temporal_scope: by 2000
+        scope_conditions:
+        - in any Sanguinaria canadensis density treatment
+      evidential_basis:
+        evidence_objects:
+        - correlation
+    - id: causal_mosaic:edge_dcaaab1a
+      subject: causal_mosaic:sanguinaria_canadensis_density_treatment_3fef
+      predicate: causes
+      object: causal_mosaic:number_of_individuals_of_other_native_species_1abe
+      negated: true
+      causal_language: no_relationship
+      philosophical_accounts:
+      - interventionist
+      comparator:
+      - status: not_addressed
+        comparator_type: not_reported
+      strength:
+        status: not_addressed
+        significance: not_tested
+      context_dependence:
+        status: explicitly_asserted
+        temporal_scope: by 2000
+        scope_conditions:
+        - in any Sanguinaria canadensis density treatment
+      evidential_basis:
+        evidence_objects:
+        - correlation
+    - id: causal_mosaic:edge_b4d77483
+      subject: causal_mosaic:sanguinaria_canadensis_density_treatment_3fef
+      predicate: causes
+      object: causal_mosaic:number_of_individuals_of_other_exotic_plant_species_465d
+      negated: true
+      causal_language: no_relationship
+      philosophical_accounts:
+      - interventionist
+      comparator:
+      - status: not_addressed
+        comparator_type: not_reported
+      strength:
+        status: not_addressed
+        significance: not_tested
+      context_dependence:
+        status: explicitly_asserted
+        temporal_scope: by 2000
+        scope_conditions:
+        - in any Sanguinaria canadensis density treatment
+      evidential_basis:
+        evidence_objects:
+        - correlation
+- finding_id: f32
+  sentence: Transplanting Sanguinaria canadensis at 9 or 11 ramets/m2 would generally
+    be cost and labor effective on a local scale of a couple of hundred meters at
+    most.
+  fit: lossy
+  graph:
+    graph_id: 567f2b10444a436096aa9c37e6e471e4-f32
+    schema_version: 0.10.0
+    provenance:
+      causal_mosaic_version: 0.10.0
+    nodes:
+    - id: causal_mosaic:transplanting_of_sanguinaria_canadensis_ramets_26f6
+      name: transplanting of Sanguinaria canadensis ramets
+      entity_type: management_intervention
+      entity_term: ecoskos:0000001
+      state_or_change_qualifier: occurred
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:3472
+        life_stage: ramet_or_clonal_unit
+        life_stage_term: ramets
+    - id: causal_mosaic:cost_effectiveness_of_transplanting_sanguinaria_canadensis_d9b9
+      name: cost effectiveness of transplanting Sanguinaria canadensis
+      entity_type: environmental_variable
+      entity_term: ecoskos:0000001
+      measured_attribute: cost effectiveness
+      state_or_change_qualifier: present
+    - id: causal_mosaic:labor_effectiveness_of_transplanting_sanguinaria_canadensis_2014
+      name: labor effectiveness of transplanting Sanguinaria canadensis
+      entity_type: environmental_variable
+      entity_term: ecoskos:0000001
+      measured_attribute: labor effectiveness
+      state_or_change_qualifier: present
+    edges:
+    - id: causal_mosaic:edge_3e8d45b9
+      subject: causal_mosaic:transplanting_of_sanguinaria_canadensis_ramets_26f6
+      predicate: contributes_to
+      object: causal_mosaic:cost_effectiveness_of_transplanting_sanguinaria_canadensis_d9b9
+      causal_language: uncertain_causal
+      philosophical_accounts:
+      - interventionist
+      dose:
+        minimum_value: 9
+        maximum_value: 11
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: ramets
+        verbatim: 9 or 11 ramets/m2
+      comparator:
+      - status: not_addressed
+        comparator_type: not_reported
+      scope: prototypical
+      strength:
+        status: not_addressed
+        significance: not_tested
+      context_dependence:
+        status: explicitly_asserted
+        geographic_scope: on a local scale of a couple of hundred meters at most
+      evidential_basis:
+        evidence_types:
+        - expert_judgment
+        evidence_objects:
+        - correlation
+    - id: causal_mosaic:edge_de385f5d
+      subject: causal_mosaic:transplanting_of_sanguinaria_canadensis_ramets_26f6
+      predicate: contributes_to
+      object: causal_mosaic:labor_effectiveness_of_transplanting_sanguinaria_canadensis_2014
+      causal_language: uncertain_causal
+      philosophical_accounts:
+      - interventionist
+      dose:
+        minimum_value: 9
+        maximum_value: 11
+        unit_text: ramets/m2
+        counted_entity:
+          entity_type: taxon
+          entity_term: NCBITaxon:3472
+          life_stage: ramet_or_clonal_unit
+          life_stage_term: ramets
+        verbatim: 9 or 11 ramets/m2
+      comparator:
+      - status: not_addressed
+        comparator_type: not_reported
+      scope: prototypical
+      strength:
+        status: not_addressed
+        significance: not_tested
+      context_dependence:
+        status: explicitly_asserted
+        geographic_scope: on a local scale of a couple of hundred meters at most
+      evidential_basis:
+        evidence_types:
+        - expert_judgment
+        evidence_objects:
+        - correlation
+- finding_id: f33
+  sentence: In the longer term, if many locales adopt planting of species like Sanguinaria
+    canadensis, it may help establish local barriers that mitigate the spread of Alliaria
+    petiolata.
+  fit: lossy
+  graph:
+    graph_id: 567f2b10444a436096aa9c37e6e471e4-f33
+    schema_version: 0.10.0
+    provenance:
+      causal_mosaic_version: 0.10.0
+    nodes:
+    - id: causal_mosaic:planting_of_species_like_sanguinaria_canadensis_399e
+      name: planting of species like Sanguinaria canadensis
+      entity_type: management_intervention
+      entity_term: native species planting
+      state_or_change_qualifier: introduced
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:3472
+    - id: causal_mosaic:local_barriers_to_alliaria_petiolata_spread_7049
+      name: local barriers to Alliaria petiolata spread
+      entity_type: environmental_variable
+      entity_term: local barriers to invasive plant spread
+      state_or_change_qualifier: present
+    - id: causal_mosaic:spread_of_alliaria_petiolata_9732
+      name: spread of Alliaria petiolata
+      entity_type: environmental_process
+      entity_term: NCBITaxon:126270
+      measured_attribute: https://kos.lifewatch.eu/thesauri/alienspecies/c_6
+      state_or_change_qualifier: decreased
+      applied_to:
+      - entity_type: taxon
+        entity_term: NCBITaxon:126270
+    edges:
+    - id: causal_mosaic:edge_0a4e1190
+      subject: causal_mosaic:planting_of_species_like_sanguinaria_canadensis_399e
+      predicate: contributes_to
+      object: causal_mosaic:spread_of_alliaria_petiolata_9732
+      negated: false
+      causal_language: uncertain_causal
+      philosophical_accounts:
+      - interventionist
+      - mechanistic
+      contributing_sole: contributing_cause
+      scope: contingent
+      direction:
+        status: asserted
+        evidence_for_direction: theoretical
+      comparator:
+      - status: not_addressed
+        comparator_type: not_reported
+      mediation:
+        status: explicitly_asserted
+        mediator_node_ids:
+        - causal_mosaic:local_barriers_to_alliaria_petiolata_spread_7049
+        pathway_description: planting may help establish local barriers that mitigate
+          the spread
+      strength:
+        status: not_addressed
+        significance: not_tested
+      context_dependence:
+        status: explicitly_asserted
+        temporal_scope: in the longer term
+        scope_conditions:
+        - if many locales adopt planting
+      evidential_basis:
+        evidence_types:
+        - theoretical
+        evidence_objects:
+        - mechanism

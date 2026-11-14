@@ -45,8 +45,12 @@ dev/preflight.sh                                         # clean-checkout submis
 ## Endpoint access
 - `BRINE_URL`, `BRINE_MODEL`, `BRINE_API_KEY` come from the environment only. Claude's own shell usually does NOT have them.
 - The user starts `tmux new -d -s jobs 'dev/jobrunner.sh'` in a shell that has them; Claude then queues runs by writing
-  `dev/jobs/queue/NAME.job` (one line: `preprocess=... prompt=... cache=on|refresh|off set=gold4|murphy`). Output goes to
-  `dev/jobs/out/NAME/`, events to `dev/jobs/runner.log`.
+  `dev/jobs/queue/NAME.job` (one line of key=value; NAME must be new). Keys: `preprocess=sentence|paragraph|paragraph-chunks
+  prompt=<file> cache=on|refresh|off set=gold4|murphy|all thinking=on|off max_tokens=<1000-16000> refine=on|off
+  samples=1|2|3` (refine=on / samples>1 only once the pipeline has `--refine` / `--samples`; checked per job, no restart).
+  Up to 2 jobs run at once (oldest first); a bad key/value is REJECTED at once, a job the pipeline rejects FAILS, both with
+  the reason in `dev/jobs/runner.log`; the runner keeps going. Output goes to `dev/jobs/out/NAME/`.
+  Never edit `dev/jobrunner.sh` while it runs without telling the user to restart it (`tmux kill-session -t jobs`, not STOP).
 
 ## Hard rules
 - NEVER write, print or commit the API key. Hooks block key-like strings in edits, commits and pushes.

@@ -295,9 +295,11 @@ class Client:
         if self.cfg.use_cache:
             try:
                 cp.parent.mkdir(parents=True, exist_ok=True)
-                cp.write_text(json.dumps({"text": text, "prompt_tokens": pt, "completion_tokens": ct, "seconds": secs, "mode": mode,
-                                         "think": had_think, "raw": raw_reply}),
-                              encoding="utf-8")
+                tmp = cp.with_name(f"{cp.name}.{os.getpid()}.{threading.get_ident()}.tmp")
+                tmp.write_text(json.dumps({"text": text, "prompt_tokens": pt, "completion_tokens": ct, "seconds": secs, "mode": mode,
+                                          "think": had_think, "raw": raw_reply}),
+                               encoding="utf-8")
+                os.replace(tmp, cp)       # atomic: parallel jobs never read a half-written entry
             except OSError:
                 pass
         return Result(text, pt, ct, secs, False, mode, had_think, raw_reply)

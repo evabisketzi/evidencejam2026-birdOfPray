@@ -571,7 +571,7 @@ def _patch_client(monkeypatch, tmp_path, **kw):
     import pipeline.main as m
     for k, v in (("BRINE_URL", "http://h/v1"), ("BRINE_MODEL", "m"), ("BRINE_API_KEY", "k")):
         monkeypatch.setenv(k, v)
-    monkeypatch.setattr(m, "Client", lambda cfg: Client(cfg, sleep=lambda s: None, post=_fake_post_factory(**kw)))
+    monkeypatch.setattr(m, "Client", lambda cfg, **k: Client(cfg, sleep=lambda s: None, post=_fake_post_factory(**kw), **k))
     return m
 
 
@@ -796,3 +796,165 @@ def test_smoke_on_an_unknown_slug_is_a_clear_error(mock_env, tmp_path, capsys):
     import pipeline.main as m
     assert m.main(["--smoke", "NOPE1234", "--smoke-dir", str(tmp_path / "o")]) == 2
     assert "not in index.csv" in capsys.readouterr().err
+
+
+# =================================================================================== streaming client: SSE, idle + total timeouts, retries.csv
+import time as _time
+
+
+class _StreamMock:
+    """mode: sse | json | reject_usage | reject_stream | idle | endless"""
+    def __init__(self, mode="sse", text="F|1|T1/a/+|c|T2/b/-|D|exp", usage=True):
+        self.mode, self.text, self.usage, self.bodies = mode, text, usage, []
+        outer = self
+
+        class H(BaseHTTPRequestHandler):
+            def log_message(self, *a):
+                pass
+
+            def do_POST(self):
+                body = json.loads(self.rfile.read(int(self.headers.get("Content-Length", 0))))
+                outer.bodies.append(body)
+                m = outer.mode
+                if m == "reject_usage" and "stream_options" in body:
+                    return self._json(400, {"error": {"message": "stream_options is not supported"}})
+                if m == "reject_stream" and body.get("stream"):
+                    return self._json(400, {"error": {"message": "stream not supported"}})
+                if m == "json" or not body.get("stream"):
+                    return self._json(200, {"choices": [{"message": {"content": outer.text}}], "usage": {"prompt_tokens": 7, "completion_tokens": 3}})
+                self.send_response(200)
+                self.send_header("Content-Type", "text/event-stream")
+                self.end_headers()
+                try:
+                    if m == "idle":
+                        self._chunk("F|1|")
+                        _time.sleep(2.0)
+                        return
+                    if m == "endless":
+                        while True:
+                            self._chunk("x")
+                            _time.sleep(0.05)
+                    self.wfile.write(b": keep-alive\n\n")
+                    for piece in [outer.text[i:i + 7] for i in range(0, len(outer.text), 7)]:
+                        self._chunk(piece)
+                    if outer.usage and body.get("stream_options", {}).get("include_usage"):
+                        self.wfile.write(("data: " + json.dumps({"choices": [], "usage": {"prompt_tokens": 11, "completion_tokens": 22}}) + "\n\n").encode())
+                    self.wfile.write(b"data: [DONE]\n\n")
+                    self.wfile.flush()
+                except (BrokenPipeError, ConnectionResetError):
+                    pass
+
+            def _chunk(self, s):
+                self.wfile.write(("data: " + json.dumps({"choices": [{"delta": {"content": s}}]}) + "\n\n").encode())
+                self.wfile.flush()
+
+            def _json(self, code, obj):
+                d = json.dumps(obj).encode()
+                self.send_response(code)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Content-Length", str(len(d)))
+                self.end_headers()
+                self.wfile.write(d)
+
+        self.srv = HTTPServer(("127.0.0.1", 0), H)
+        self.url = f"http://127.0.0.1:{self.srv.server_address[1]}/v1"
+        threading.Thread(target=self.srv.serve_forever, daemon=True).start()
+
+    def close(self):
+        self.srv.shutdown()
+
+
+@pytest.fixture
+def stream_server():
+    made = []
+
+    def make(**kw):
+        m = _StreamMock(**kw)
+        made.append(m)
+        return m
+    yield make
+    for m in made:
+        m.close()
+
+
+def scfg(tmp_path, url, **kw):
+    return LLMConfig(url=url, model="m", key=KEY, cache_dir=tmp_path / "cache", use_cache=False, **kw)
+
+
+def test_defaults_are_120s_idle_and_1200s_total():
+    c = LLMConfig(url="u", model="m", key="k")
+    assert (c.idle_timeout, c.total_timeout) == (120.0, 1200.0)
+
+
+def test_streamed_reply_is_assembled_and_usage_taken_from_the_final_chunk(stream_server, tmp_path):
+    srv = stream_server(text="<think>x</think>F|12|T1/density/+|c|T2/cover/-|D|exp|stage=seedling")
+    r = Client(scfg(tmp_path, srv.url), sleep=lambda s: None).complete("sys", "user", "DOC1")
+    assert r.text == "F|12|T1/density/+|c|T2/cover/-|D|exp|stage=seedling" and r.think_returned
+    assert (r.prompt_tokens, r.completion_tokens) == (11, 22)
+    b = srv.bodies[0]
+    assert b["stream"] is True and b["stream_options"] == {"include_usage": True} and b["chat_template_kwargs"] == {"enable_thinking": False}
+
+
+def test_server_that_ignores_stream_returns_plain_json_and_still_works(stream_server, tmp_path):
+    srv = stream_server(mode="json", text="F|1|a")
+    r = Client(scfg(tmp_path, srv.url), sleep=lambda s: None).complete("s", "u")
+    assert r.text == "F|1|a" and (r.prompt_tokens, r.completion_tokens) == (7, 3)
+
+
+def test_stream_options_rejected_then_stream_rejected_degrades_step_by_step(stream_server, tmp_path):
+    srv = stream_server(mode="reject_usage")
+    c = Client(scfg(tmp_path, srv.url), sleep=lambda s: None)
+    r = c.complete("s", "u")
+    assert r.text.startswith("F|1|") and c._stream == "nousage" and "stream_options" not in srv.bodies[-1]
+    assert srv.bodies[-1]["stream"] is True and r.completion_tokens > 0                      # no usage chunk: estimated, not zero
+    srv2 = stream_server(mode="reject_stream")
+    c2 = Client(scfg(tmp_path, srv2.url), sleep=lambda s: None)
+    r2 = c2.complete("s", "u")
+    assert c2._stream == "off" and "stream" not in srv2.bodies[-1] and r2.text == "F|1|T1/a/+|c|T2/b/-|D|exp"
+
+
+def test_idle_timeout_retries_and_writes_retries_csv(stream_server, tmp_path):
+    srv = stream_server(mode="idle")
+    log_path = tmp_path / "out" / "retries.csv"
+    sleeps = []
+    c = Client(scfg(tmp_path, srv.url, idle_timeout=0.4, retries=2), sleep=sleeps.append, retry_log=log_path)
+    with pytest.raises(LLMError, match="3 attempts"):
+        c.complete("s", "u", "DOC9")
+    rows = list(csv.DictReader(open(log_path, encoding="utf-8")))
+    assert [r["attempt"] for r in rows] == ["1", "2", "3"] and {r["doc"] for r in rows} == {"DOC9"}
+    assert "timed out" in rows[0]["error"].lower() and [r["gave_up"] for r in rows] == ["0", "0", "1"] and sleeps == [2, 4]
+    assert srv.bodies and srv.bodies[0]["stream"] is True
+
+
+def test_total_timeout_cuts_a_stream_that_never_ends(stream_server, tmp_path):
+    srv = stream_server(mode="endless")
+    log_path = tmp_path / "retries.csv"
+    c = Client(scfg(tmp_path, srv.url, idle_timeout=5, total_timeout=0.6, retries=1), sleep=lambda s: None, retry_log=log_path)
+    t0 = _time.time()
+    with pytest.raises(LLMError):
+        c.complete("s", "u", "DOC2")
+    assert _time.time() - t0 < 6
+    rows = list(csv.DictReader(open(log_path, encoding="utf-8")))
+    assert len(rows) == 2 and "total timeout" in rows[0]["error"]
+
+
+def test_retry_log_exists_with_a_header_even_when_nothing_was_retried(tmp_path):
+    p = tmp_path / "o" / "retries.csv"
+    Client(cfg(tmp_path), retry_log=p).init_retry_log()
+    assert p.read_text().strip() == "timestamp,doc,attempt,error,sleep_s,gave_up"
+
+
+def test_5xx_retry_is_logged_with_the_doc_label(tmp_path):
+    p = tmp_path / "retries.csv"
+    script = [(503, {}), reply("ok")]
+    c = Client(cfg(tmp_path, use_cache=False), sleep=lambda s: None, post=lambda u, pl: script.pop(0), retry_log=p)
+    c.complete("s", "u", "SLUG1")
+    rows = list(csv.DictReader(open(p, encoding="utf-8")))
+    assert len(rows) == 1 and rows[0]["doc"] == "SLUG1" and rows[0]["error"] == "HTTP 503" and rows[0]["gave_up"] == "0"
+
+
+def test_a_run_creates_output_retries_csv(monkeypatch, tmp_path):
+    m = _patch_client(monkeypatch, tmp_path)
+    out = tmp_path / "out"
+    assert m.run(ROOT / "corpus", out, docs=["4CB9X9XE"], use_cache=False) == 0
+    assert (out / "retries.csv").read_text().splitlines()[0] == "timestamp,doc,attempt,error,sleep_s,gave_up"

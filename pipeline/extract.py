@@ -5,12 +5,14 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import hashlib
 import json
 import logging
 import os
 import re
 import sys
+import threading
 import time
 import urllib.error
 import urllib.request
@@ -47,7 +49,8 @@ class LLMConfig:
     key: str = field(repr=False)                     # never printed
     thinking: bool = False
     max_tokens: int = 3000
-    timeout: float = 300.0
+    idle_timeout: float = 120.0        # no bytes from the server for this long -> the attempt fails (and is retried)
+    total_timeout: float = 1200.0      # one attempt may take at most this long, however steadily it streams
     retries: int = 3
     use_cache: bool = True
     cache_dir: Path = CACHE_DIR
@@ -102,28 +105,110 @@ class Result:
 
 
 class Client:
+    RETRY_HEADER = ["timestamp", "doc", "attempt", "error", "sleep_s", "gave_up"]
+
     def __init__(self, cfg: LLMConfig, sleep: Callable[[float], None] = time.sleep,
-                 post: Optional[Callable[[str, dict], Tuple[int, dict]]] = None):
+                 post: Optional[Callable[[str, dict], Tuple[int, dict]]] = None, retry_log: Optional[Path] = None):
         self.cfg = cfg
         self._sleep = sleep
         self._post_fn = post or self._http_post
         self._chat_url: Optional[str] = None
         self._kwargs_rejected = False
+        self._stream = "full"                  # full (stream + usage) -> nousage -> off, if the server objects
         self.modes_seen: Dict[str, int] = {}
+        self._retry_log = Path(retry_log) if retry_log else None
+        self._lock = threading.Lock()
+        self._tl = threading.local()
+
+    # --- retry log ---
+    def init_retry_log(self) -> None:
+        """Create output/retries.csv (header only) so the file exists even when nothing needed a retry."""
+        if self._retry_log:
+            with self._lock:
+                self._retry_log.parent.mkdir(parents=True, exist_ok=True)
+                if not self._retry_log.exists():
+                    with open(self._retry_log, "w", encoding="utf-8", newline="") as f:
+                        csv.writer(f).writerow(self.RETRY_HEADER)
+
+    def _log_retry(self, attempt: int, error: str, sleep_s: float, gave_up: bool) -> None:
+        label = getattr(self._tl, "label", "")
+        log.warning("%s: attempt %d failed (%s)%s", label or "-", attempt, error, "; giving up" if gave_up else f"; retrying in {sleep_s:g}s")
+        if not self._retry_log:
+            return
+        with self._lock:
+            new = not self._retry_log.exists()
+            self._retry_log.parent.mkdir(parents=True, exist_ok=True)
+            with open(self._retry_log, "a", encoding="utf-8", newline="") as f:
+                w = csv.writer(f)
+                if new:
+                    w.writerow(self.RETRY_HEADER)
+                w.writerow([time.strftime("%Y-%m-%d %H:%M:%S"), label, attempt, error[:200], f"{sleep_s:g}", int(gave_up)])
 
     # --- transport (the only place that touches the key) ---
     def _http_post(self, url: str, payload: dict) -> Tuple[int, dict]:
+        """Streamed request.  Degrades to 'stream without usage', then to a plain request, if the server rejects the stream options."""
+        while True:
+            body = dict(payload)
+            if self._stream != "off":
+                body["stream"] = True
+                if self._stream == "full":
+                    body["stream_options"] = {"include_usage": True}
+            status, data = self._post_once(url, body)
+            if status in (400, 422) and self._stream != "off" and "stream" in json.dumps(data).lower():
+                self._stream = "nousage" if self._stream == "full" else "off"
+                log.warning("server rejected the stream options; falling back to stream mode %r", self._stream)
+                continue
+            return status, data
+
+    def _post_once(self, url: str, payload: dict) -> Tuple[int, dict]:
         req = urllib.request.Request(url, data=json.dumps(payload).encode("utf-8"), method="POST", headers={
-            "Content-Type": "application/json", "Authorization": f"Bearer {self.cfg.key}", "User-Agent": "evidencejam-pipeline/1.0"})
+            "Content-Type": "application/json", "Authorization": f"Bearer {self.cfg.key}", "User-Agent": "evidencejam-pipeline/1.0",
+            "Accept": "text/event-stream, application/json"})
         try:
-            with urllib.request.urlopen(req, timeout=self.cfg.timeout) as r:
-                return r.status, json.loads(r.read().decode("utf-8"))
+            r = urllib.request.urlopen(req, timeout=self.cfg.idle_timeout)    # the socket timeout is the idle timeout
         except urllib.error.HTTPError as e:
             try:
                 body = json.loads(e.read().decode("utf-8", "replace"))
             except Exception:  # noqa: BLE001
                 body = {"error": {"message": f"HTTP {e.code}"}}
             return e.code, body
+        with r:
+            if "text/event-stream" not in (r.headers.get("Content-Type") or ""):
+                return r.status, json.loads(r.read().decode("utf-8"))      # server ignored stream=true: a normal JSON reply
+            t0 = time.monotonic()
+            parts: List[str] = []
+            usage: dict = {}
+            first: Optional[float] = None
+            while True:
+                if time.monotonic() - t0 > self.cfg.total_timeout:
+                    raise TimeoutError(f"total timeout: more than {self.cfg.total_timeout:g}s for one response")
+                line = r.readline()                                          # raises on an idle timeout
+                if not line:
+                    break
+                s = line.decode("utf-8", "replace").strip()
+                if not s.startswith("data:"):
+                    continue                                                 # blank lines and ': keep-alive' comments
+                data = s[5:].strip()
+                if data == "[DONE]":
+                    break
+                try:
+                    obj = json.loads(data)
+                except ValueError:
+                    continue
+                if obj.get("error") and not obj.get("choices"):
+                    raise ConnectionError("stream error: " + str(obj["error"])[:150])
+                if obj.get("usage"):
+                    usage = obj["usage"]
+                for ch in obj.get("choices") or []:
+                    c = (ch.get("delta") or {}).get("content")
+                    if c:
+                        if first is None:
+                            first = time.monotonic() - t0
+                            log.info("%s: first token after %.1fs", getattr(self._tl, "label", "") or "-", first)
+                        parts.append(c)
+            if not parts and not usage:
+                raise ConnectionError("empty stream (no content, no usage)")
+            return 200, {"choices": [{"message": {"content": "".join(parts)}}], "usage": usage}
 
     def _detect_url(self) -> str:
         if self._chat_url:
@@ -150,8 +235,11 @@ class Client:
                 return status, body
             if status is not None:
                 last = f"HTTP {status}"
-            if attempt < self.cfg.retries:
-                self._sleep(2 ** (attempt + 1))
+            last_attempt = attempt >= self.cfg.retries
+            wait = 0 if last_attempt else 2 ** (attempt + 1)
+            self._log_retry(attempt + 1, last, wait, last_attempt)
+            if not last_attempt:
+                self._sleep(wait)
         raise LLMError(f"request failed after {self.cfg.retries + 1} attempts ({last})")
 
     # --- one completion ---
@@ -159,7 +247,8 @@ class Client:
         h = hashlib.sha256(json.dumps([self.cfg.model, system, user, thinking, self.cfg.max_tokens]).encode("utf-8")).hexdigest()
         return self.cfg.cache_dir / f"{h}.json"
 
-    def complete(self, system: str, user: str) -> Result:
+    def complete(self, system: str, user: str, label: str = "") -> Result:
+        self._tl.label = label
         thinking = self.cfg.thinking
         cp = self._cache_path(system, user, thinking)
         if self.cfg.use_cache and cp.exists():
@@ -200,6 +289,7 @@ class Client:
         raw_reply, had_think = text, bool(re.search(r"<think>", text, re.I))
         text = strip_thinking(text)
         secs = time.time() - t0
+        log.info("%s: done, %d prompt + %d completion tokens in %.0fs (%.1f tok/s)", label or "-", pt, ct, secs, ct / secs if secs else 0.0)
         self.modes_seen[mode] = self.modes_seen.get(mode, 0) + 1
         if self.cfg.use_cache:
             try:
@@ -277,12 +367,13 @@ class Extraction:
     modes: List[str] = field(default_factory=list)
 
 
-def extract_paper(client: Client, system: str, user_text: str, valid_numbers: Sequence[int], max_input_tokens: int = 12000) -> Extraction:
+def extract_paper(client: Client, system: str, user_text: str, valid_numbers: Sequence[int], max_input_tokens: int = 12000,
+                  label: str = "") -> Extraction:
     ex = Extraction([])
     claims: List[Claim] = []
     bad: List[str] = []
     for chunk in split_user_text(user_text, max_input_tokens):
-        r = client.complete(system, chunk)
+        r = client.complete(system, chunk, label)
         ex.chunks += 1
         ex.prompt_tokens += r.prompt_tokens
         ex.completion_tokens += r.completion_tokens
@@ -295,7 +386,7 @@ def extract_paper(client: Client, system: str, user_text: str, valid_numbers: Se
     ex.n_bad = len(bad)
     if bad:                                              # one repair call with only the broken lines
         try:
-            r = client.complete(system, REPAIR_INSTRUCTION + "\n".join(bad))
+            r = client.complete(system, REPAIR_INSTRUCTION + "\n".join(bad), label)
             ex.prompt_tokens += r.prompt_tokens
             ex.completion_tokens += r.completion_tokens
             ex.seconds += r.seconds
@@ -318,7 +409,6 @@ def main(argv: Optional[List[str]] = None) -> int:
     from .preprocess.assemble import Options, process_paper
     from .preprocess.legend import load_taxon_table
     from .preprocess.tokens import get_counter
-    import csv
 
     ap = argparse.ArgumentParser(prog="pipeline.extract", description="Run the LLM extraction on one paper and print the raw lines.")
     ap.add_argument("--doc", required=True, help="slug, e.g. 4CB9X9XE")
@@ -346,7 +436,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     pre = process_paper(a.doc, raw, meta, count, Options(), load_taxon_table())
     client = Client(cfg)
     valid = [s["n"] for s in pre.sidecar["sentences"]]
-    ex = extract_paper(client, system, pre.txt, valid, a.max_input_tokens)
+    ex = extract_paper(client, system, pre.txt, valid, a.max_input_tokens, a.doc)
     print(f"# prompt={pname} thinking={a.thinking} mode(s)={sorted(set(ex.modes))}")
     print("\n".join(ex.raw))
     tps = ex.completion_tokens / ex.seconds if ex.seconds else float("nan")

@@ -44,7 +44,7 @@ def process_one(row: Dict[str, str], corpus: Path, client: Client, system: str, 
         valid = [s["n"] for s in pre.sidecar["sentences"]]
         if not valid:
             raise RuntimeError("preprocessing kept no sentences")
-        ex = extract_paper(client, system, pre.txt, valid, max_input_tokens)                  # stage 3
+        ex = extract_paper(client, system, pre.txt, valid, max_input_tokens, slug)            # stage 3
         out.update(prompt_tokens=ex.prompt_tokens, completion_tokens=ex.completion_tokens, seconds=ex.seconds, chunks=ex.chunks)
         exp = expand_claims(slug, ex.claims, pre.sidecar)                                     # stage 4
         nodes, edges, stats = guard_paper(slug, exp.nodes, exp.edges)                         # stage 5 (per paper)
@@ -77,7 +77,8 @@ def run(corpus: Path, out_dir: Path, docs: Optional[List[str]] = None, limit: Op
         todo = todo[:limit]
     count, tok_name = get_counter(allow_download=False)
     table = load_taxon_table()
-    client = Client(cfg)
+    client = Client(cfg, retry_log=out_dir / "retries.csv")
+    client.init_retry_log()
     log.info("prompt=%s thinking=%s tokenizer=%s papers=%d concurrency=%d", pname, "on" if thinking else "off", tok_name, len(todo), concurrency)
     outcomes: List[dict] = []
     done = 0
@@ -133,7 +134,7 @@ def run_smoke(slug: str, corpus: Path, out_dir: Path, prompt: str = DEFAULT_PROM
     print(f"input: {len(pre.txt):,} characters, {len(valid)} numbered sentences (estimated {int(len(pre.txt) / 3.5):,} tokens)")
     client = Client(cfg)
     try:
-        r = client.complete(system, pre.txt)
+        r = client.complete(system, pre.txt, slug)
     except LLMError as e:
         print(f"CALL FAILED: {e}", file=sys.stderr)
         return 1

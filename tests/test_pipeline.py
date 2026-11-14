@@ -338,6 +338,17 @@ def test_guard_integrity_negation_unchanged_object_unused_nodes_and_duplicates()
     assert guard_paper("DOC", nodes, [e])[1] == []
 
 
+def test_guard_drops_a_claim_repeated_in_the_same_sentence_but_keeps_other_sentences():
+    nodes, e = edge_with()
+    same = copy.deepcopy(e); same["id"] = e["id"] + "b"                          # same claim, same sentence
+    other = copy.deepcopy(e); other["id"] = e["id"] + "c"                        # same claim, another sentence
+    other["source_spans"] = [dict(other["source_spans"][0], start_char=9000, end_char=9050, text="Another sentence.")]
+    null = copy.deepcopy(e); null["id"] = e["id"] + "d"; null["negated"] = True  # same sentence, but a null result
+    _, edges, stats = guard_paper("DOC", nodes, [e, same, other, null])
+    assert [x["id"] for x in edges] == [e["id"], other["id"], null["id"]]
+    assert stats["dropped edge: same claim, same sentence"] == 1
+
+
 def test_guard_undeclared_prefix_becomes_free_text():
     nodes, e = edge_with()
     nodes[e["subject"]]["entity_term"] = "FOO:123"

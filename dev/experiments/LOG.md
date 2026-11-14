@@ -97,3 +97,22 @@ direct (Murphy 33/39/11/17, 4CB9X9XE 2/48/31/19, 3KPITIV3 20/17/59/4, 6HKWT4QG 2
 - **Type:** post-processing → exact check.
 - **Result:** Murphy std F1 0.593 → 0.593 (sentence), 0.535 → 0.535 (paragraph-chunks); other gold papers identical.
 - **Tests:** `tests/test_abbrev.py::test_cap_keeps_mixed_case_terms`.
+
+## 2026-11-14 — drop a claim repeated within the same sentence  — KEPT
+- **Change:** `pipeline/guard.py` `integrity()` + `same_sentence_key()`: an edge with the same subject node, predicate, object
+  node, null flag, mediators and cited sentence(s) as an earlier edge of the paper is dropped (first one kept). The same
+  claim from different sentences is kept (the gold repeats claims that way).
+- **Why:** d12 (`dev/diag/d12_failure_budget.py`): duplicate rate 15 % (sentence) / 9 % (paragraph-chunks) vs 8 % in the gold;
+  same-sentence repeats are pure model repetition.
+- **Type:** post-processing → exact check on cached output ("before" = same code with the key made unique per edge).
+- **Result (sentence model):** Murphy std F1 0.593 → 0.602, strict 0.504 → 0.511, P 0.635 → 0.656, loose 0.770 → 0.752
+  (2 edges dropped; both exact copies of a kept edge; each had been loose-matched to a DIFFERENT gold edge from another
+  sentence, i.e. never a real match); 4CB9X9XE / 3KPITIV3 / 6HKWT4QG identical. d12 duplicates on the 4 gold papers
+  34/232 (15 %) → 32/230 (14 %).
+- **Paragraph-chunks model:** Murphy std F1 0.535 → 0.543, strict 0.465 → 0.471, loose 0.746 → 0.729 (same reason);
+  other gold papers identical; d12 duplicates 21/236 (9 %) → 19/234 (8 %).
+- **Corpus (full_baseline graph, 308 papers):** 130 edges dropped in 41 papers (R9DVQAQB 26, IBH9XBA8 21, 4RFTRJCP 11);
+  d12 duplicates 3208/22938 (14.0 %) → 3078/22808 (13.5 %). Most d12 "duplicates" are cross-sentence repeats, kept on purpose.
+- **Rejected variant:** keying on the scorer's normalised token sets (205 instead of 130 drops): it merges different claims
+  ("→ Diversity" and "→ Species richness" share a token after normalisation), i.e. tuning to a scorer quirk.
+- **Tests:** `tests/test_pipeline.py::test_guard_drops_a_claim_repeated_in_the_same_sentence_but_keeps_other_sentences`.

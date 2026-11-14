@@ -195,9 +195,19 @@ def _fix_curies(node: dict, stats: Counter) -> None:
             stats["repair: undeclared prefix in applied_to"] += 1
 
 
+def same_sentence_key(e: dict) -> tuple:
+    """One claim = subject, predicate, object, null flag, mediators, cited sentence(s).  The same claim twice from the same
+    sentence is a model repeat (the first is kept); the same claim from different sentences is kept (the gold does that)."""
+    spans = tuple(sorted((s.get("start_char"), s.get("end_char"), s.get("text")) for s in e.get("source_spans") or []))
+    mids = tuple((e.get("mediation") or {}).get("mediator_node_ids") or [])
+    return (e.get("subject"), e.get("predicate"), e.get("object"), bool(e.get("negated")), mids,
+            spans or e.get("original_sentence"))
+
+
 def integrity(slug: str, nodes: Dict[str, dict], edges: List[dict], doc_ids: set, stats: Counter) -> Tuple[Dict[str, dict], List[dict]]:
     out: List[dict] = []
     seen: set = set()
+    seen_claims: set = set()
     for e in edges:
         mids = (e.get("mediation") or {}).get("mediator_node_ids") or []
         if e.get("subject") not in nodes or e.get("object") not in nodes or any(m not in nodes for m in mids):
@@ -210,6 +220,11 @@ def integrity(slug: str, nodes: Dict[str, dict], edges: List[dict], doc_ids: set
             stats["dropped edge: duplicate id"] += 1
             continue
         seen.add(e["id"])
+        claim = same_sentence_key(e)
+        if claim in seen_claims:
+            stats["dropped edge: same claim, same sentence"] += 1
+            continue
+        seen_claims.add(claim)
         neg, lang = bool(e.get("negated")), e.get("causal_language")
         if neg and lang != "no_relationship":
             e["causal_language"] = "no_relationship"

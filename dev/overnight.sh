@@ -6,9 +6,12 @@
 #   C  full corpus run with the other prompt (skipped if B was too slow or it is already morning)
 #   D  REPORT.md
 #
-# Usage: dev/overnight.sh [--limit N] [--resume RUN_DIR]
+# Usage: dev/overnight.sh [--limit N] [--resume RUN_DIR] [--concurrency N]
 #   --limit N        only the first N papers in the full runs (to test this script against a mock endpoint)
-#   --resume DIR     continue an earlier run folder; phases that finished (.done markers) are skipped
+#   --resume DIR     continue an earlier run folder; phases that finished (.done markers) are skipped. A phase that was
+#                    interrupted keeps its ORIGINAL start time (.NAME.start), so the phase-C time rule and the report's
+#                    wall clock are measured from the first start, and its log is appended to, not overwritten.
+#   --concurrency N  overrides the concurrency (otherwise dev/concurrency_result.json, otherwise 4)
 # Environment: BRINE_URL, BRINE_MODEL, BRINE_API_KEY (inherited, never written anywhere).
 #   B_MAX_SECONDS (default 25200 = 7 h)   phase C is skipped if phase B took longer
 #   DEADLINE_HHMM (default 07:30)         phase C is skipped if phase B ends after the next such time
@@ -18,10 +21,12 @@ cd "$(dirname "$0")/.."
 
 LIMIT=()
 RESUME=""
+C_ARG=""
 while [ "$#" -gt 0 ]; do
   case "$1" in
     --limit) LIMIT=(--limit "$2"); shift 2 ;;
     --resume) RESUME="$2"; shift 2 ;;
+    --concurrency) C_ARG="$2"; shift 2 ;;
     -h|--help) sed -n '2,18p' "$0"; exit 0 ;;
     *) echo "unknown option: $1" >&2; exit 2 ;;
   esac
@@ -30,7 +35,7 @@ done
 START=$(date +%s)
 if [ -n "$RESUME" ]; then RUN="$(realpath "$RESUME")"; else RUN="$(pwd)/dev/overnight/$(date +%Y%m%d_%H%M%S)"; fi
 mkdir -p "$RUN"
-ln -sfn "$RUN" dev/overnight/latest 2>/dev/null || true
+[ -z "${OVERNIGHT_NO_LATEST:-}" ] && { ln -sfn "$RUN" dev/overnight/latest 2>/dev/null || true; }
 LOG="$RUN/overnight.log"
 PY=".venv/bin/python"
 
@@ -41,10 +46,12 @@ record() { printf '%s\t%s\t%s\t%s\t%s\n' "$1" "$2" "$3" "$4" "${5:-}" >> "$RUN/p
 phase() {
   local name="$1"; shift
   if [ -f "$RUN/.$name.done" ]; then log "phase $name: already done, skipping (resume)"; return 0; fi
-  local t0 t1 rc
-  t0=$(date +%s)
-  log "phase $name: START"
-  "$@" > "$RUN/$name.log" 2>&1
+  local t0 t1 rc sf="$RUN/.$name.start"
+  [ -f "$sf" ] || date +%s > "$sf"          # the FIRST start of this phase; a restart does not move it
+  t0=$(cat "$sf")
+  if [ "$t0" -lt "$(date +%s)" ] && [ -s "$RUN/$name.log" ]; then log "phase $name: RESTART (original start $(date -d "@$t0" '+%H:%M:%S'))"; else log "phase $name: START"; fi
+  echo "=== $(date '+%Y-%m-%d %H:%M:%S') phase $name started/restarted ===" >> "$RUN/$name.log"
+  "$@" >> "$RUN/$name.log" 2>&1
   rc=$?
   t1=$(date +%s)
   if [ "$rc" -eq 0 ]; then
@@ -90,7 +97,10 @@ if [ ! -f "$RUN/.tests.done" ]; then
 fi
 
 C=4
-if [ -f dev/concurrency_result.json ]; then
+if [ -n "$C_ARG" ]; then
+  C="$C_ARG"
+  log "concurrency C=$C (from --concurrency)"
+elif [ -f dev/concurrency_result.json ]; then
   C=$($PY -c 'import json; print(int(json.load(open("dev/concurrency_result.json"))["chosen"]))' 2>/dev/null || echo 4)
   log "concurrency C=$C (from dev/concurrency_result.json)"
 else
@@ -127,11 +137,11 @@ full_run() {   # full_run VARIANT PROMPT_FILE   -> run (retry once if it fails),
   return $(( rc != 0 || vrc != 0 ))
 }
 
-B_START=$(date +%s)
 phase "full_$W" full_run "$W" "$WINNER_FILE"
 B_END=$(date +%s)
-B_SECS=$(awk -F'\t' -v n="full_$W" '$1==n {s+=$3-$2} END {print s+0}' "$RUN/phases.tsv" 2>/dev/null)
-[ -z "$B_SECS" ] && B_SECS=$((B_END - B_START))
+B_START=$(cat "$RUN/.full_$W.start" 2>/dev/null || echo "$B_END")      # the original start, also after a restart
+B_SECS=$((B_END - B_START))
+log "phase B: started $(date -d "@$B_START" '+%a %H:%M:%S'), ended $(date -d "@$B_END" '+%a %H:%M:%S'), $B_SECS s in total"
 
 # phase C: skip when B was too slow, or when it is already past the morning deadline
 HHMM="${DEADLINE_HHMM:-07:30}"

@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lane 1 Pipeline Explorer</title>
+<style>
+:root{--bg:#f7f7f5;--panel:#fff;--ink:#1d1d1b;--mute:#66665f;--line:#e2e1dc;--acc:#2f6f5e;--acc2:#b4572f;--soft:#eef4f1;--code:#f1f0ec;--bad:#a33;--ok:#2f6f5e}
+@media (prefers-color-scheme:dark){:root{--bg:#161615;--panel:#1f1f1d;--ink:#ecebe6;--mute:#a3a29b;--line:#34332f;--acc:#6fbfa5;--acc2:#e08a62;--soft:#22302b;--code:#2a2a27;--bad:#e07070;--ok:#6fbfa5}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+nav{position:sticky;top:0;height:100vh;overflow:auto;border-right:1px solid var(--line);padding:22px 14px;background:var(--panel)}
+nav h1{font-size:16px;margin:0 0 4px}nav .sub{color:var(--mute);font-size:12.5px;margin-bottom:16px}
+nav a{display:block;padding:6px 10px;border-radius:7px;color:var(--ink);text-decoration:none;font-size:14px}
+nav a:hover{background:var(--soft)}nav a.on{background:var(--soft);color:var(--acc);font-weight:600}
+nav .n{display:inline-block;width:20px;color:var(--mute);font-variant-numeric:tabular-nums}
+main{padding:30px 40px 80px;max-width:1150px}
+section{display:none}section.on{display:block}
+h2{font-size:24px;margin:0 0 6px}h3{font-size:17px;margin:26px 0 8px}.lead{color:var(--mute);margin:0 0 20px;max-width:820px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:13.5px;margin:8px 0}th,td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+th{color:var(--mute);font-weight:600;font-size:12.5px}td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+pre,code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}pre{background:var(--code);padding:12px;border-radius:8px;overflow:auto;white-space:pre-wrap;max-height:460px;margin:8px 0}
+code{background:var(--code);padding:1px 5px;border-radius:4px}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;margin:14px 0}
+.st{flex:1 1 150px;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--acc);border-radius:8px;padding:10px 12px;cursor:pointer}
+.st b{display:block;font-size:13.5px}.st span{color:var(--mute);font-size:12.5px}
+.pill{display:inline-block;padding:1px 8px;border-radius:99px;font-size:12px;background:var(--soft);color:var(--acc);margin-right:4px}
+.pill.w{background:transparent;border:1px solid var(--acc2);color:var(--acc2)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.kpi{display:flex;gap:12px;flex-wrap:wrap}.kpi div{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px;min-width:130px}
+.kpi b{display:block;font-size:22px;font-variant-numeric:tabular-nums}.kpi span{color:var(--mute);font-size:12.5px}
+select,button{font:inherit;padding:6px 10px;border-radius:7px;border:1px solid var(--line);background:var(--panel);color:var(--ink)}
+button{cursor:pointer}.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}.tabs button.on{border-color:var(--acc);color:var(--acc);font-weight:600}
+.bad{color:var(--bad)}.ok{color:var(--ok)}.mute{color:var(--mute)}
+details{margin:6px 0}summary{cursor:pointer;color:var(--acc)}
+@media (max-width:820px){.wrap{grid-template-columns:1fr}nav{position:static;height:auto}main{padding:18px 16px}.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<p style="margin:0;padding:6px 12px;background:#fff8e1;font:13px sans-serif">Static snapshot of the pipeline explorer (commit bb46b42, 2026-11-15): the paper replay was computed in advance from the saved answers in <code>dev/gui/sample_run</code>; run <code>dev/gui/server.py</code> locally to replay other runs.</p>
+<div class="wrap">
+<nav>
+  <h1>Lane 1 pipeline</h1>
+  <div class="sub">Evidence Jam 2026 · causal claims → one CAMO graph</div>
+  <a href="#overview" data-s="overview"><span class="n">0</span>Overview</a>
+  <a href="#refs" data-s="refs"><span class="n">1</span>Reference annotations</a>
+  <a href="#pre" data-s="pre"><span class="n">2</span>Preprocessing</a>
+  <a href="#onto" data-s="onto"><span class="n">3</span>Ontology grounding</a>
+  <a href="#prompt" data-s="prompt"><span class="n">4</span>LLM prompt</a>
+  <a href="#extract" data-s="extract"><span class="n">5</span>LLM extraction</a>
+  <a href="#post" data-s="post"><span class="n">6</span>Post-processing</a>
+  <a href="#eval" data-s="eval"><span class="n">7</span>Evaluator</a>
+  <a href="#results" data-s="results"><span class="n">8</span>Results</a>
+  <a href="#explore" data-s="explore"><span class="n">9</span>Paper explorer</a>
+</nav>
+<main>
+
+<section id="overview">
+  <h2>From 308 articles to one causal graph</h2>
+  <p class="lead">One command, <code>./run.sh corpus/ output/</code>, turns the restoration articles in <code>corpus/</code> into one merged
+  CAMO v0.10.0 graph in YAML and JSON. A Qwen model on the shared endpoint does the reading; everything around it is
+  deterministic code. Click a stage to read how it works.</p>
+  <div class="flow" id="flow"></div>
+  <div class="kpi" id="kpis"></div>
+  <h3>Submitted configuration</h3>
+  <div class="card" id="cfg"></div>
+  <p class="mute">The judges score annotation quality first, then energy per article (LLM tokens). Every number on these pages comes from
+  our own scorer on eight reference papers; they are development numbers, not the judges' score.</p>
+</section>
+
+<section id="refs">
+  <h2>Reference annotations</h2>
+  <p class="lead">To measure anything we need answers to compare against. Only one exists from a human; the rest we made with Claude and
+  then cleaned.</p>
+  <table id="reftab"><tr><th>file</th><th>paper</th><th>made by</th><th>role</th></tr></table>
+  <h3>How the Claude annotations were made and cleaned</h3>
+  <div class="card">
+  <p>Claude read each paper and wrote a CAMO graph in the style of the organisers' Murphy 2005 example. Because a model wrote them,
+  they are treated as an out-of-sample check, never as truth. Cleaning (<code>dev/annot_fix.py</code>, every change listed in
+  <code>dev/annot_v2/CHANGES.md</code>; originals untouched):</p>
+  <ol>
+  <li><b>Character offsets.</b> 1,190 quoted spans located in the markdown so <code>raw[start:end]</code> is the span.</li>
+  <li><b>Taxon IDs.</b> Species written as names became NCBITaxon IDs where our table has them.</li>
+  <li><b>Terms name the entity only.</b> Method detail in brackets moved out of <code>entity_term</code> / <code>measured_attribute</code>.</li>
+  <li><b>38 hand edits</b> reduced over-specified terms to the entity ("broadcast glyphosate application without species targeting" → "glyphosate application").</li>
+  <li><b>Claim review.</b> All 209 edges of the four first files read against their sentences: 4 edges quoted a sentence that did not support
+  them (fixed), 4 null results that were only in the notes became edges, 11 claims reported from <i>other</i> studies were removed
+  (the human Murphy annotation has none).</li>
+  </ol>
+  <p class="mute">Effect: on ITXNQ843 the pipeline and the annotation stated nearly the same claims, yet loose F1 was 0.05 because every annotated
+  subject carried method detail; after cleaning it was about 0.5.</p>
+  </div>
+  <h3>Development and regression split</h3>
+  <div class="card">Murphy (human) is the primary yardstick and is always reported on its own. Three Claude papers are used while developing
+  (<b>dev3</b>). Four are a fixed <b>regression</b> set (<b>reg4</b>): changes are not tuned on them, they only confirm or reject.</div>
+</section>
+
+<section id="pre">
+  <h2>Stage 1 · Preprocessing</h2>
+  <p class="lead">The model never sees the raw article. Stage 1 keeps the text where the authors state their own findings, numbers
+  every sentence, and adds a species legend and a little context. Default: <b>paragraph-chunks</b>.</p>
+  <h3>Paragraph selection (teammate's <code>team_paper.py</code>, used verbatim)</h3>
+  <div class="grid2">
+  <div class="card"><b>Cleaning</b><ul>
+  <li>unicode normalisation, HTML, citation superscripts, image placeholders, markdown links</li>
+  <li>page artefacts, running headers, metadata lines (affiliations, received/accepted)</li>
+  <li>hyphenation fixed, split paragraphs rejoined, tables and fragments removed</li>
+  <li>inline citations "(Smith et al. 2010)", figure/table references and URLs removed</li>
+  <li>duplicate paragraphs removed (word-shingle overlap)</li></ul></div>
+  <div class="card"><b>Routing by section</b><ul>
+  <li>Abstract, Results, Discussion, Conclusion → <span class="pill">extract</span></li>
+  <li>Methods, title, supplementary → <span class="pill w">context only</span></li>
+  <li>Introduction → dropped (aims sentences kept as context)</li>
+  <li>References, acknowledgements, funding, data → dropped</li></ul></div>
+  <div class="card"><b>Selection by causal cues</b><p class="mute">Each paragraph is scored; a category counts at most twice.</p>
+  <table><tr><th>cue</th><th>weight</th></tr><tr><td>null result ("no significant", "did not affect")</td><td>3 (always kept)</td></tr>
+  <tr><td>causal verb (increase, reduce, suppress, …)</td><td>2</td></tr><tr><td>finding frame ("our results suggest")</td><td>2</td></tr>
+  <tr><td>management / agency</td><td>2</td></tr><tr><td>association, statistic</td><td>2</td></tr><tr><td>comparison, hedge, mechanism</td><td>1</td></tr>
+  <tr><td>methods-like wording</td><td>−1</td></tr></table>Paragraphs scoring ≥ 3 are kept; the abstract always.</div>
+  <div class="card"><b>Packing and numbering</b><ul>
+  <li>Kept paragraphs are packed into chunks of ≤ 2,500 Qwen tokens; one model call per chunk.</li>
+  <li>Each sentence gets a global number and a section tag: <code>[24] (res) …</code>; its raw-markdown character offsets are kept for the source spans.</li>
+  <li>Every chunk repeats the header: TITLE, SPECIES legend, CONTEXT.</li></ul></div>
+  </div>
+  <h3>Header added to every chunk (our stage 1)</h3>
+  <div class="grid2">
+  <div class="card"><b>SPECIES legend</b>: Latin binomials found in the paper, with abbreviations ("S. canadensis") and common names,
+  as T-codes (<code>T1=Sanguinaria canadensis (S. canadensis)</code>). The model writes T-codes; code turns them back into names
+  and NCBITaxon IDs, so the model never has to spell a Latin name or an ID.</div>
+  <div class="card"><b>CONTEXT</b>: about 400 tokens from the Methods/Introduction (site, design, aims) — background only, the
+  prompt says not to annotate it. <b>Token counts</b> use the Qwen tokenizer; a clean install without it uses a precomputed table of
+  Qwen counts for this corpus, so chunks are identical.</div>
+  </div>
+  <p class="mute">Alternative stage-1 models kept for comparison: <code>--preprocess sentence</code> (our sentence-level filter with cited-background
+  removal and statistics compression), <code>paragraph</code>, <code>sentence-chunks</code>. Open the paper explorer to see the kept text, the dropped
+  paragraphs and their reasons for any reference paper.</p>
+</section>
+
+<section id="onto">
+  <h2>Stage 2 · Ontology grounding</h2>
+  <p class="lead">Rule: the LLM never writes an ontology ID. Code looks names up in local tables, and only an ID a person has checked is written.</p>
+  <div class="grid2">
+  <div class="card"><b>Taxa → NCBITaxon</b><p><code>data/ncbitaxon_names.tsv</code>: 1,938 names with NCBI Taxonomy IDs. Every legend species is looked up
+  (exact name, then case-insensitive, then genus + epithet). A taxon node's <code>entity_term</code> becomes e.g.
+  <code>NCBITaxon:126270</code>; the node name keeps the readable species name.</p><p class="mute">Taxon ID accuracy on Murphy matched pairs: 0.99.</p></div>
+  <div class="card"><b>Attributes and entities → PATO / ENVO / …</b><p><code>data/terms.tsv</code>: 25 rows, 20 verified by hand
+  (e.g. height → PATO:0000119). Only verified rows are ever emitted; everything else stays free text, which the schema allows.</p>
+  <p class="mute">Off by default and tested: <code>--taxon-groups</code> (group words such as "rodents" → Rodentia; mixed result). Not in the
+  submission: an exact-label lookup in PATO/ELMO/ENVO/GO/ChEBI from the team's ontology module (built and validated, neutral on our scorer).</p></div>
+  </div>
+</section>
+
+<section id="prompt">
+  <h2>Stage 3a · The prompt</h2>
+  <p class="lead">A compact line format instead of JSON: about four times fewer output tokens, and code (not the model) builds the CAMO objects.
+  One line per claim: <code>F</code> = finding, <code>N</code> = null result.</p>
+  <div class="card"><b>Line anatomy</b>
+  <pre>F|12|T1/initial planting density/+/tax|c|T2/number of individuals/-;T2/height/-|D|exp|stage=seedling|dose=9-11 ramets/m2
+ │  │  └ cause: thing/property/change/type   │ └ effects (; = separate outcomes)     │  │   └ optional keys
+ │  └ sentence numbers                         └ predicate (c causes, p prevents, a associated…)  │  └ design (exp/obs/rev/mod/jud)
+ └ F finding / N null                                                                    └ language D direct / U hedged / A associational</pre></div>
+  <h3>Full system prompt (<code>pipeline/prompt/system.txt</code>)</h3>
+  <pre id="prompttext"></pre>
+</section>
+
+<section id="extract">
+  <h2>Stage 3b · LLM extraction</h2>
+  <p class="lead">One chat call per chunk to the shared endpoint (<code>BRINE_URL</code>, <code>BRINE_MODEL</code>, <code>BRINE_API_KEY</code>
+  from the environment only).</p>
+  <div class="grid2">
+  <div class="card"><b>Call settings</b><ul><li>temperature 0, thinking off (<code>enable_thinking=false</code>, falls back to <code>/no_think</code>)</li>
+  <li>max 3,000 output tokens (no answer reached 2,500 in the full run)</li><li>streaming with usage; retries with back-off on 5xx/429/network errors; 1,200 s cap per answer</li>
+  <li>8 papers in parallel</li></ul></div>
+  <div class="card"><b>Cache, repair, provenance</b><ul><li>answers cached by model + prompt + input + limit: an unchanged input never costs tokens twice</li>
+  <li>lines that cannot be parsed get one repair call with only those lines</li>
+  <li>every answer saved to <code>raw_responses.jsonl</code>, every lost line to <code>losses.jsonl</code> (replayable)</li></ul></div>
+  </div>
+  <div class="kpi"><div><b>757</b><span>calls, full corpus</span></div><div><b>~2.5</b><span>calls per paper</span></div>
+  <div><b>9,308 + 2,263</b><span>tokens per paper (in + out)</span></div><div><b>4.7 h</b><span>full corpus wall clock</span></div></div>
+  <p class="mute">Tried and rejected: thinking on (every call used the whole 12,000-token cap without output), larger chunks (14 % fewer tokens,
+  lower accuracy everywhere).</p>
+</section>
+
+<section id="post">
+  <h2>Stages 4–6 · Post-processing</h2>
+  <p class="lead">Deterministic code turns the claim lines into schema-valid CAMO. Every change here was measured exactly by replaying the
+  same saved model answers through old and new code.</p>
+  <h3>4a · Parse (lenient where the meaning is unambiguous)</h3>
+  <div class="card"><p>About one line in six from this model breaks the format. The old parser dropped those lines (the repair call rescued 2 of 40 on
+  the gold papers). Now:</p>
+  <table><tr><th>model wrote</th><th>read as</th></tr>
+  <tr><td><code>T2/origin/hatchery-reared</code></td><td>property "origin (hatchery-reared)", no invented direction</td></tr>
+  <tr><td><code>0.3 kg/ha</code></td><td>"0.3 kg per ha" (a unit slash is not a field separator)</td></tr>
+  <tr><td><code>F|11|…|N|exp</code> or <code>effect|N;effect|N</code></td><td>a null result (N line)</td></tr>
+  <tr><td><code>A|5|…</code>, <code>U|7|…</code></td><td>an F line with that language (3.4 % of all lines were silently ignored)</td></tr>
+  <tr><td><code>A/+;B/+</code> as cause</td><td>one joint cause "A and B"</td></tr></table>
+  <p>Full corpus: unparseable lines 2,263 → 223, dropped 1,883 → 128.</p></div>
+  <h3>4b · Expand into nodes and edges</h3>
+  <div class="card"><ul>
+  <li>Node = entity (T-code → species + NCBITaxon ID), <code>measured_attribute</code> (the quality: "size" for "size of year 1 rosettes"; name keeps the phrase), change qualifier.</li>
+  <li>One edge per effect: predicate, <code>causal_language</code>, original sentence + source span with character offsets and section.</li>
+  <li>Null result → <code>negated: true</code> + <code>no_relationship</code>; the object keeps the tested direction, never "unchanged" (schema rule).</li>
+  <li>Mediator → its own node and two path edges; dose, comparator, season, life stage, scope, evidence type, philosophical accounts filled from keys and the sentence.</li>
+  <li>Hedged sentence (may, might, appears, suggests) labelled "direct" → "uncertain"; paper-defined abbreviations written out in names.</li>
+  <li><b>Species fan-out:</b> a line listing ≥ 4 species the sentence never names (the model spread "small trees" over the legend) → one "multiple species" node.</li></ul></div>
+  <h3>5 · Guard and merge</h3>
+  <div class="card"><ul><li>Each edge validated with the nodes it uses against the JSON Schema generated from CAMO; an invalid optional field is dropped, an edge with a broken required field is dropped.</li>
+  <li>Predicate/language repairs (causes + associational → associated_with; correlated_with only with a correlation statistic).</li>
+  <li>The same claim from the same sentence under the same conditions is kept once.</li>
+  <li>Merge: every row of <code>corpus/index.csv</code> gets a <code>source_documents</code> entry with its DOI (also if extraction failed); every edge points to one.</li></ul></div>
+  <h3>6 · Write and validate</h3>
+  <div class="card">YAML and JSON written; validated with the JSON Schema and, when installed, <code>linkml-validate -s schema/causalmosaic.yaml -C CausalGraph</code>.
+  A failing paper never stops the run; a run with no edges fails loudly instead of writing an empty graph.</div>
+</section>
+
+<section id="eval">
+  <h2>The evaluator (<code>dev/score/</code>)</h2>
+  <p class="lead">We built our own scorer to compare a predicted graph with a reference graph, edge by edge, at three levels of strictness.</p>
+  <div class="card"><table><tr><th>level</th><th>a predicted edge matches a reference edge when …</th></tr>
+  <tr><td><b>loose</b></td><td>cause and effect entities agree (same NCBITaxon ID, or ≥ 0.5 token overlap of the entity text) and both are null results or both are not</td></tr>
+  <tr><td><b>standard</b></td><td>loose + the effect's measured attribute is similar (Jaccard ≥ 0.5 after lemmas and a synonym table, or the same ID) + directions of change not opposite</td></tr>
+  <tr><td><b>strict</b></td><td>standard + the same direction of change</td></tr></table>
+  <p>Matching is one-to-one (best pairs first). Precision = matched / predicted, recall = matched / reference edges, F1 their harmonic mean. Also
+  reported: null-result precision/recall, causal-language and predicate accuracy on matched pairs, taxon-ID accuracy, and for every miss
+  and extra edge the reason (e.g. "right entities, object attribute differs").</p></div>
+  <h3>How experiments were compared</h3>
+  <div class="grid2">
+  <div class="card"><b>Post-processing changes</b>: replay the saved answers of several endpoint runs through old and new code
+  (<code>dev/replay.py</code>) — exact, no noise, both stage-1 models.</div>
+  <div class="card"><b>Prompt / preprocessing changes</b>: ≥ 2–3 endpoint runs per variant and model, mean and range; identical runs vary
+  (Murphy 0.542–0.583). Murphy, dev3 and reg4 always reported separately (<code>dev/eval8.py</code>); every experiment logged.</div></div>
+</section>
+
+<section id="results">
+  <h2>Results</h2>
+  <p class="lead" id="noise"></p>
+  <h3>Submitted configuration, 3 runs on the eight reference papers (standard F1)</h3>
+  <table id="finaltab"></table>
+  <h3>Full-corpus runs</h3>
+  <table id="fulltab"></table>
+  <h3>Post-processing changes kept</h3>
+  <table id="posttab"></table>
+  <h3>Tried and not adopted</h3>
+  <table id="rejtab"></table>
+</section>
+
+<section id="explore">
+  <h2>Paper explorer</h2>
+  <p class="lead">Runs one reference paper through the submitted code: stage 1 live, the model's answers from a saved endpoint run
+  (<span id="jobname"></span>), then parsing, expansion, guard and the scorer. No tokens are spent.</p>
+  <div><select id="paper"></select> <button id="go">Run</button> <span id="status" class="mute"></span></div>
+  <div id="pout"></div>
+</section>
+
+</main></div>
+<script>
+const $=s=>document.querySelector(s), esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const STAGES=[["refs","References","1 human + 7 Claude"],["pre","Preprocessing","select, number, legend"],["onto","Grounding","NCBITaxon, verified terms"],
+["prompt","Prompt","compact claim lines"],["extract","Extraction","Qwen, temp 0"],["post","Post-processing","parse, expand, guard, merge"],["eval","Evaluator","loose / standard / strict"],["results","Results","numbers"]];
+function show(id){document.querySelectorAll("section").forEach(s=>s.classList.toggle("on",s.id===id));document.querySelectorAll("nav a").forEach(a=>a.classList.toggle("on",a.dataset.s===id));window.scrollTo(0,0)}
+window.addEventListener("hashchange",()=>show(location.hash.slice(1)||"overview"));
+$("#flow").innerHTML=STAGES.map(([id,t,s])=>`<div class="st" onclick="location.hash='${id}'"><b>${t}</b><span>${s}</span></div>`).join("");
+function rows(tab,cols,data){$(tab).innerHTML="<tr>"+cols.map(c=>`<th>${c[1]}</th>`).join("")+"</tr>"+data.map(r=>"<tr>"+cols.map(c=>`<td>${esc(r[c[0]])}</td>`).join("")+"</tr>").join("")}
+fetch("api/overview.json").then(r=>r.json()).then(d=>{
+  $("#prompttext").textContent=d.prompt; $("#jobname").textContent=d.job.split("/").pop();
+  const c=d.submitted; $("#cfg").innerHTML=`<table>${Object.entries(c).map(([k,v])=>`<tr><th>${esc(k)}</th><td>${esc(v)}</td></tr>`).join("")}</table>`;
+  const f=d.final_scores.rows[0];
+  $("#kpis").innerHTML=`<div><b>308</b><span>articles, 0 failed</span></div><div><b>30,208</b><span>edges in the full graph</span></div>
+  <div><b>${f.murphy_std.split(" ")[0]}</b><span>Murphy standard F1</span></div><div><b>0</b><span>schema validation errors</span></div>`;
+  rows("#reftab",[["file","file"],["paper","paper"],["made_by","made by"],["role","role"]],d.references);
+  $("#noise").textContent=d.final_scores.note+" "+d.noise;
+  rows("#finaltab",[["model","stage-1 model"],["murphy_std","Murphy std F1"],["murphy_strict","Murphy strict"],["murphy_null_recall","Murphy null recall"],["dev3_std","dev3 std F1"],["reg4_std","reg4 std F1"],["tokens_per_paper","tokens / paper"]],d.final_scores.rows);
+  rows("#fulltab",[["run","run"],["papers","papers"],["edges","edges"],["valid","validation"],["tokens_per_paper","tokens / paper"],["lost_lines","claim lines lost"]],d.full_runs);
+  rows("#posttab",[["change","change"],["evidence","evidence"],["effect","effect (standard F1)"]],d.postprocessing_effects);
+  rows("#rejtab",[["arm","arm"],["result","result"]],d.rejected);
+  $("#paper").innerHTML=d.papers.map(p=>`<option value="${p.slug}">${p.slug} · ${esc(p.group)}</option>`).join("");
+});
+const pct=x=>x==null?"—":(+x).toFixed(3);
+$("#go").onclick=()=>{const s=$("#paper").value;$("#status").textContent="loading the precomputed replay …";$("#pout").innerHTML="";
+fetch("api/paper/"+s+".json").then(r=>r.json()).then(p=>{ if(p.error){$("#status").textContent=p.error;return}
+ $("#status").textContent="";
+ const L=p.score.levels;
+ let h=`<h3>${esc(p.title)}</h3><p class="mute">${esc(p.doi)} · tokenizer: ${esc(p.tokenizer)}</p>
+ <div class="kpi"><div><b>${p.sentences_kept}</b><span>sentences kept</span></div><div><b>${p.chunks.length}</b><span>chunks / calls</span></div>
+ <div><b>${p.parse.claims}</b><span>claim lines parsed</span></div><div><b>${p.guard.edges_kept}</b><span>edges in the graph</span></div>
+ <div><b>${pct(L.standard.f1)}</b><span>standard F1 vs ${esc(p.score.group)}</span></div></div>
+ <div class="tabs" id="ptabs">${["Stage 1 input","Dropped text","Model answers","Parse","Edges","Score"].map((t,i)=>`<button data-t="${i}" class="${i?"":"on"}">${t}</button>`).join("")}</div><div id="ptab"></div>`;
+ $("#pout").innerHTML=h;
+ const T=[
+  ()=>`<div class="card"><b>Legend</b><table><tr><th>code</th><th>species</th><th>variants</th><th>NCBITaxon</th></tr>${p.legend.map(l=>`<tr><td>${l.id}</td><td><i>${esc(l.name)}</i></td><td>${esc(l.variants.join(", "))}</td><td>${esc(l.ncbitaxon||"—")}</td></tr>`).join("")}</table>
+    <p class="mute">kept sentences by section: ${esc(JSON.stringify(p.sections))}</p></div>`+p.chunks.map((c,i)=>`<details ${i?"":"open"}><summary>chunk ${i+1} · ${c.input_tokens} tokens</summary><pre>${esc(c.input)}</pre></details>`).join(""),
+  ()=>`<table><tr><th>reason</th><th>section</th><th>text</th></tr>${p.dropped.map(d=>`<tr><td>${esc(d.reason)}</td><td>${esc(d.section)}</td><td>${esc(d.text)}</td></tr>`).join("")}</table>`,
+  ()=>p.chunks.map((c,i)=>`<h3>answer to chunk ${i+1} <span class="pill">${c.claims} lines parsed</span>${c.bad.length?`<span class="pill w">${c.bad.length} unparseable</span>`:""}</h3><pre>${esc(c.answer)}</pre>`).join(""),
+  ()=>`<div class="card"><table>${Object.entries(p.parse).map(([k,v])=>`<tr><th>${esc(k)}</th><td class="num">${v}</td></tr>`).join("")}
+    <tr><th>edges after expansion</th><td class="num">${p.expand.edges}</td></tr><tr><th>expansion notes</th><td>${esc(JSON.stringify(p.expand.stats))}</td></tr>
+    <tr><th>edges kept by the guard</th><td class="num">${p.guard.edges_kept}</td></tr><tr><th>guard repairs / drops</th><td>${esc(JSON.stringify(p.guard.stats))}</td></tr></table></div>`+
+    p.chunks.filter(c=>c.bad.length).map(c=>`<b>unparseable lines</b><pre>${esc(c.bad.join("\n"))}</pre>`).join(""),
+  ()=>`<table><tr><th>cause</th><th>predicate</th><th>effect</th><th>language</th><th>sentence</th></tr>${p.edges.map(e=>`<tr><td>${esc(e.subject)}<div class="mute">${esc(e.subject_term)}</div></td><td>${esc(e.predicate)}${e.null?' <span class="pill w">null</span>':""}</td><td>${esc(e.object)}<div class="mute">${esc(e.object_term)} · ${esc(e.object_attribute??"")}</div></td><td>${esc(e.language)}</td><td class="mute">${esc(e.sentence)}</td></tr>`).join("")}</table>`,
+  ()=>`<div class="card"><p>reference: <code>${esc(p.score.reference)}</code> (${esc(p.score.group)}) · ${p.score.n_gold??"?"} reference edges, ${p.score.n_pred??"?"} predicted</p>
+    <table><tr><th>level</th><th>precision</th><th>recall</th><th>F1</th></tr>${["loose","standard","strict"].map(k=>`<tr><td>${k}</td><td class="num">${pct(L[k].precision)}</td><td class="num">${pct(L[k].recall)}</td><td class="num"><b>${pct(L[k].f1)}</b></td></tr>`).join("")}</table>
+    <p class="mute">null results: ${esc(JSON.stringify(p.score.null))}</p></div>
+    <h3>Reference edges not found (${p.score.missed.length})</h3><table><tr><th>reference edge</th><th>why</th><th>closest prediction</th></tr>${p.score.missed.map(m=>`<tr><td>${esc(m.gold)}</td><td class="bad">${esc(m.why)}</td><td class="mute">${esc(m.best)}</td></tr>`).join("")}</table>
+    <h3>Predicted edges with no reference match (${p.score.extra.length})</h3><table><tr><th>prediction</th><th>why</th></tr>${p.score.extra.map(m=>`<tr><td>${esc(m.pred)}</td><td class="mute">${esc(m.why)}</td></tr>`).join("")}</table>`];
+ const sel=i=>{$("#ptab").innerHTML=T[i]();document.querySelectorAll("#ptabs button").forEach(b=>b.classList.toggle("on",+b.dataset.t===i))};
+ document.querySelectorAll("#ptabs button").forEach(b=>b.onclick=()=>sel(+b.dataset.t)); sel(0);
+}).catch(e=>$("#status").textContent=String(e))};
+show(location.hash.slice(1)||"overview");
+</script>
+</body>
+</html>

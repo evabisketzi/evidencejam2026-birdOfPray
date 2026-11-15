@@ -4,8 +4,9 @@
 #   ./build_all.sh                         # everything
 #   ./build_all.sh --extra-taxa "Canis lupus"   # extra options go to build_ontology_indexes.py
 #
-# 1. Python: the active virtualenv, else <repo root>/venv (created if missing), or $PYTHON.
-# 2. Installs requirements-dev.txt only if ijson/rapidfuzz/yaml/curies are not importable.
+# 1. Python: $PYTHON, else the active virtualenv, else <repo root>/.venv, else <repo root>/venv
+#    (created if missing).
+# 2. Installs <repo root>/requirements-dev.txt only if ijson/rapidfuzz/yaml/curies are not importable.
 # 3. Downloads only the raw files missing from <repo root>/raw_json/ (NCBITaxon is 2.4 GB),
 #    then builds all indexes into ontology_index/, NCBITaxon included.
 # 4. Runs tests/test_grounding.py and prints what to commit.
@@ -18,6 +19,7 @@ ROOT="$HERE"
 
 if [[ -n "${PYTHON:-}" ]]; then PY="$PYTHON"
 elif [[ -n "${VIRTUAL_ENV:-}" ]]; then PY="$VIRTUAL_ENV/bin/python"
+elif [[ -x "$ROOT/.venv/bin/python" ]]; then PY="$ROOT/.venv/bin/python"
 else
     if [[ ! -x "$ROOT/venv/bin/python" ]]; then
         echo "== creating $ROOT/venv"
@@ -29,7 +31,7 @@ echo "== python: $PY ($("$PY" --version 2>&1))"
 
 if ! "$PY" -c "import ijson, rapidfuzz, yaml, curies" 2>/dev/null; then
     echo "== installing requirements-dev.txt"
-    "$PY" -m pip install -q -r "$HERE/requirements-dev.txt"
+    "$PY" -m pip install -q -r "$ROOT/requirements-dev.txt"
 fi
 
 echo "== building indexes (raw files: $ROOT/raw_json, corpus: $ROOT/corpus)"

@@ -36,6 +36,15 @@
       "go-full.json: 2026-07-26"
     ]
   },
+  "ncbitaxon": {
+    "built": "2026-11-15",
+    "bytes": 411622,
+    "file": "ncbitaxon.json.gz",
+    "terms": 22163,
+    "versions": [
+      "ncbitaxon.json"
+    ]
+  },
   "pato": {
     "built": "2026-11-14",
     "bytes": 68304,

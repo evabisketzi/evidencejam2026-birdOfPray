@@ -9,6 +9,9 @@ dev/out/
 venv/
 # Raw ontology files: large, and only needed to rebuild ontology_index/ (which IS committed).
 ncbitaxon*.json
+raw_json/
+# Local secrets (BRINE_API_KEY etc.): never commit
+.env
 # Run outputs
 grounding_report.json
 selections.json

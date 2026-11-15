@@ -119,7 +119,7 @@ class Expander:
             s = self.sent.get(n)
             if not s:
                 continue
-            sp = {"text": s.get("clean") or s.get("raw") or ""}
+            sp = {"text": s.get("clean") or s.get("raw") or "", "sentence_id": f"{self.slug}:s{n}"}   # the paper, once nodes are shared
             if s.get("start_char") is not None:
                 sp["start_char"], sp["end_char"] = int(s["start_char"]), int(s["end_char"])
             sec = SECTION_ENUM.get(s.get("section"))

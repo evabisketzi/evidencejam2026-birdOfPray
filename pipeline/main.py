@@ -23,6 +23,7 @@ from .extract import Client, ConfigError, DEFAULT_PROMPT, LLMError, ROOT, config
 from .parse import check_sentences, parse_text
 from . import doi as doimod
 from .guard import guard_paper, merge
+from .dedup import write_reports as write_node_reports
 from .ontology_stage import FIELD_SETS as ONTOLOGY_FIELDS, MODES as ONTOLOGY_MODES, regrounded, stage_from_args
 from .preprocess.assemble import Options, process_paper as process_paper_ours
 from .preprocess.legend import load_taxon_table
@@ -162,8 +163,10 @@ def run(corpus: Path, out_dir: Path, docs: Optional[List[str]] = None, limit: Op
         onto.close()                                                       # select: saves the memo when it grew
     per_doc = {o["doc"]: (o["nodes"], o["edges"]) for o in outcomes}
     dois = doimod.resolve_all(index, corpus)                               # DOI fallback for rows with an empty DOI cell
-    graph = merge(index, per_doc, dois={s: d.doi for s, d in dois.items()})   # raises if there is not a single edge
+    node_map: List[dict] = []
+    graph = merge(index, per_doc, dois={s: d.doi for s, d in dois.items()}, node_map=node_map)   # raises if there is not a single edge
     doimod.write_report(out_dir / "doi_report.csv", index, dois)
+    write_node_reports(out_dir, graph["nodes"], node_map)                # node_map.csv, merged_nodes.csv, near_duplicates.csv
     yp, jp = write_outputs(graph, out_dir)
     errors, validators = validate_outputs(graph, yp, jp)
     out_dir.mkdir(parents=True, exist_ok=True)

@@ -368,3 +368,17 @@ direct (Murphy 33/39/11/17, 4CB9X9XE 2/48/31/19, 3KPITIV3 20/17/59/4, 6HKWT4QG 2
 - Sentence filter: Murphy 0.554 [0.544–0.573]; dev3 0.111; reg4 0.212. Tokens per paper 5,693 + 1,493.
 - The experiment prompts (`x_*.txt` + `.args`) are archived in `dev/experiments/prompts_overnight/` (copy one back to
   `pipeline/prompt/` to rerun an arm through the job runner).
+
+## 2026-11-15 16:55 — node dedup in the merge (`pipeline/dedup.py`), post-processing only — KEPT (not committed yet)
+- Problem: `merge()` concatenated papers, and node IDs are `node:{slug}_{hash of the parse key}`, so the same node was repeated in
+  every paper, and inside one paper two parse keys could become the same node after later rewrites. out_test (3 papers, 265
+  nodes): 4 groups repeated inside a paper, 1 shared by two papers (`Restoration`). The 21 repeated (s, p, o) triples all come
+  from different sentences and are kept on purpose (same_sentence_key).
+- Change: one node per distinct content (every field except id, spans, variable_key, embedding_*, annotator; the exact name IS
+  part of the key, because the scorer reads the entity from the name when entity_term is a CURIE). The ID is
+  `node:v_{sha1(content)[:12]}`, independent of paper order. Edges are untouched except their node references. Spans carry
+  `sentence_id = {slug}:s{n}`. `variable_key` is written. Sidecars: node_map.csv, merged_nodes.csv, near_duplicates.csv.
+- Check (exact, replayed with dev/replay.py from out_test/raw_responses.jsonl; the gold papers' answers are not cached
+  locally, so gold5 was NOT rerun): 265 -> 260 nodes, 239 -> 239 edges, every edge byte-identical after resolving node
+  references to content, linkml-validate OK, 2F76GVEE scores identical (std F1 0.160, strict 0.053, loose 0.171).
+  Tests 303 passed. Both stage-1 models: model-independent (runs after the guard on any output).

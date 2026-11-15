@@ -169,7 +169,8 @@ def test_run_with_ontology_validates_and_changes_only_grounded_fields(monkeypatc
     off = json.loads((tmp_path / "off" / "camo_graph.json").read_text(encoding="utf-8"))
     on = json.loads((tmp_path / "on" / "camo_graph.json").read_text(encoding="utf-8"))
     assert [e["id"] for e in off["edges"]] == [e["id"] for e in on["edges"]]
-    strip = lambda g: [{k: v for k, v in n.items() if k not in ("entity_term", "measured_attribute", "life_stage_term")} for n in g["nodes"]]
+    grounded = ("entity_term", "measured_attribute", "life_stage_term", "id", "variable_key")   # id, variable_key: computed from them (pipeline.dedup)
+    strip = lambda g: [{k: v for k, v in n.items() if k not in grounded} for n in g["nodes"]]
     assert strip(off) == strip(on)                                          # only the grounded fields differ
     attrs = {n.get("measured_attribute") for n in on["nodes"]}
     assert ("PATO:0001019" in attrs) == (mode == "select")                  # 'density' is a related synonym: only the model may pick it

@@ -18,3 +18,5 @@ selections.json
 dev/overnight/
 dev/preproc_compare/
 dev/jobs/
+# tests
+out_test/

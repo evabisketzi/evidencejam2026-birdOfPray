@@ -272,14 +272,19 @@ def source_document(row: Dict[str, str], doi: Optional[str] = None) -> dict:
 
 
 def merge(index_rows: Sequence[Dict[str, str]], per_doc: Dict[str, Tuple[Dict[str, dict], List[dict]]],
-          created: Optional[str] = None, dois: Optional[Dict[str, str]] = None) -> dict:
-    """One CausalGraph.  Every article in index.csv gets a source_documents entry, whether or not extraction worked."""
-    nodes: List[dict] = []
-    edges: List[dict] = []
-    for row in index_rows:
-        n, e = per_doc.get(row["slug"], ({}, []))
-        nodes.extend(n.values())
-        edges.extend(e)
+          created: Optional[str] = None, dois: Optional[Dict[str, str]] = None,
+          node_map: Optional[List[dict]] = None) -> dict:
+    """One CausalGraph.  Every article in index.csv gets a source_documents entry, whether or not extraction worked.
+    Nodes with the same content become one shared node (pipeline.dedup); edges stay per paper.  `node_map`, when given,
+    receives one row per source node id (its document and canonical node)."""
+    from .dedup import dedupe
+    docs = [(row["slug"],) + tuple(per_doc.get(row["slug"], ({}, []))) for row in index_rows]
+    nodes, edges, nmap, dstats = dedupe(docs)
+    if node_map is not None:
+        node_map.extend(nmap)
+    log.info("node merge: %d -> %d nodes (%d groups shared by several papers, %d with repeats inside one paper); %d edges dropped",
+             dstats["nodes in"], dstats["nodes out"], dstats["node groups shared by several papers"],
+             dstats["node groups with repeats inside one paper"], dstats["dropped edge: same claim, same sentence (after node merge)"])
     if not edges:
         raise RuntimeError("no edges at all: extraction failed for every document, refusing to write an invalid graph")
     return {
@@ -299,6 +304,9 @@ def final_integrity(graph: dict) -> List[str]:
     problems += [f"duplicate node id {k}" for k, v in ids.items() if v > 1]
     eids = Counter(e["id"] for e in graph["edges"])
     problems += [f"duplicate edge id {k}" for k, v in eids.items() if v > 1]
+    from .dedup import content_key
+    same = Counter(content_key(n) for n in graph["nodes"])
+    problems += [f"{v} nodes with the same content: {k[:120]}" for k, v in same.items() if v > 1]
     docs = {d["document_id"] for d in graph["source_documents"]}
     for e in graph["edges"]:
         if e["subject"] not in ids or e["object"] not in ids:

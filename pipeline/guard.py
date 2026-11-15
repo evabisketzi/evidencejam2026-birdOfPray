@@ -200,8 +200,10 @@ def same_sentence_key(e: dict) -> tuple:
     sentence is a model repeat (the first is kept); the same claim from different sentences is kept (the gold does that)."""
     spans = tuple(sorted((s.get("start_char"), s.get("end_char"), s.get("text")) for s in e.get("source_spans") or []))
     mids = tuple((e.get("mediation") or {}).get("mediator_node_ids") or [])
+    # conditions are part of the claim: the same pair at another dose, season or comparator is a different claim
+    cond = json.dumps([e.get(k) for k in ("dose", "dose_level", "comparator", "temporal_extent")], sort_keys=True, default=str)
     return (e.get("subject"), e.get("predicate"), e.get("object"), bool(e.get("negated")), mids,
-            spans or e.get("original_sentence"))
+            spans or e.get("original_sentence"), cond)
 
 
 def integrity(slug: str, nodes: Dict[str, dict], edges: List[dict], doc_ids: set, stats: Counter) -> Tuple[Dict[str, dict], List[dict]]:

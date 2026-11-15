@@ -66,7 +66,15 @@ N|19|T1/initial planting density/+/tax|c|T2/number of individuals|exp|stage=seed
 
 A line gives the sentence numbers, the cause, the predicate, one or more effects, the causal language (direct, hedged
 or associational) and the study design, with optional keys for life stage, dose, comparison, season, mediator and
-conditions. `N` lines are null results. If some lines cannot be parsed, the model gets one repair call for those lines.
+conditions. `N` lines are null results.
+
+The parser is lenient where the meaning is unambiguous, because about one claim line in six from this model does not
+follow the format exactly: a value word without a code is kept verbatim on the property (`T2/origin/hatchery-reared`
+becomes the property "origin (hatchery-reared)", no direction is invented); a unit slash (`kg/ha`) is not a field
+separator; a line written as `F|...|N|exp`, or with every effect marked `N`, is a null result; a line that starts with its
+language letter (`A|5|...`) is an F line; a `;`-list of causes stays one joint cause node ("A and B"). Lines that still
+cannot be parsed (a missing cause or effect) get one repair call; every line lost before the graph is listed in
+`losses.jsonl`, and every model answer is saved in `raw_responses.jsonl` so that later code can be replayed on it.
 
 Answers are cached in `.cache/extract/` by model, prompt, input and token limit, so an unchanged input never costs
 tokens twice.
@@ -78,16 +86,22 @@ per effect, with the predicate, causal language, the original sentence and its s
 numbers. A mediator becomes its own node with two path edges. A null result becomes an edge with
 `causal_language: no_relationship` and `negated: true`.
 
-Three rule-based corrections are applied here:
+Rule-based corrections applied here:
 
 - A "direct" claim whose sentence is hedged (may, might, could, appears, suggests) becomes "uncertain".
 - Node names are composed so that they read naturally ("Establishment of X", not "Presence of establishment of X").
 - Abbreviations the paper defines are written out in node names ("Soil volumetric moisture content (VMC)").
+- `measured_attribute` is the quality measured, as the schema defines it: a property "size of year 1 rosettes" gives the
+  attribute "size"; the node name keeps the whole phrase.
+- Species fan-out: when one line lists four or more species codes with the same property and change, and the sentence names
+  none of them (the model spread a group word such as "small trees" over every species in the legend), those species are
+  merged into one "multiple species" node; species the sentence names are kept.
 
 ### 5. Guard and merge
 
 Every node and edge is checked against the schema's rules. An invalid optional field is dropped and the edge kept; an
-edge with a broken required field is dropped. A claim repeated within the same sentence is kept once. Then all papers
+edge with a broken required field is dropped. A claim repeated within the same sentence is kept once; the same pair at
+another dose, season or comparator is a different claim and is kept. Then all papers
 are merged. Every row of `corpus/index.csv` gets a `source_documents` entry with its DOI, including papers where
 extraction failed, and every edge points to one of those entries.
 
@@ -99,12 +113,15 @@ produces an edge, the run fails loudly instead of writing an empty graph.
 
 ## How we evaluate
 
-- **Gold papers:** five, in `dev/gold/`. `murphy2005.yaml` is the organisers' example and the main yardstick. The other
-  four are team annotations, used as an out-of-sample check.
+- **Reference papers:** eight. `dev/gold/murphy2005.yaml` is the organisers' example, the only human annotation, and the
+  main yardstick. Seven were made by Claude (cleaned copies in `dev/annot_v2/`): three are used for development
+  (4CB9X9XE, 3KPITIV3, 6HKWT4QG) and four are a fixed regression set that is not tuned on (ITXNQ843, 2F76GVEE, 4C479SU8,
+  V3H4MP29). Murphy is always reported separately.
 - **Scorer:** `dev/score/`, three levels. *Loose*: the cause and effect entities agree, and both edges are null results
   or both are not. *Standard*: loose, plus the measured attribute of the effect is similar (at least 0.5) and the
   directions of change are not opposite. *Strict*: standard, plus the same direction of change.
-- **Changes to the code after the model** (stages 4 to 6) are compared exactly, on cached model output.
+- **Changes to the code after the model** (stages 4 to 6) are compared exactly, by replaying the saved answers of several
+  endpoint runs (`dev/replay.py`), on both preprocessing models.
 - **Changes to the prompt or the preprocessing** are compared with at least 3 endpoint runs per variant, because
   identical runs differ by about ±0.04 in Murphy standard F1.
 - Every experiment, kept or not, is in `dev/experiments/LOG.md`. Results are summarised in `reports/RESULTS.md`.
@@ -114,6 +131,9 @@ produces an edge, the run fails loudly instead of writing an empty graph.
 | file | purpose |
 |---|---|
 | `eval_murphy.py` | Scores a graph, or the cached model output, on the gold papers. |
+| `eval8.py` | Scores graphs on all eight reference papers: Murphy, three development papers, four fixed regression papers. |
+| `replay.py` | Rebuilds a graph from a run's saved model answers with the current code (exact before/after checks). |
+| `show_io.py` | Prints each model input of a paper next to its answer. |
 | `jobrunner.sh` | Runs queued endpoint jobs, two at a time. |
 | `preflight.sh` | Checks that a commit runs from a clean checkout against a mock endpoint. |
 | `mock_endpoint.py` | A fake endpoint for plumbing tests. |

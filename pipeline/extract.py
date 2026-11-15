@@ -29,6 +29,7 @@ CACHE_DIR = ROOT / ".cache" / "extract"
 DEFAULT_PROMPT = "system.txt"
 CHARS_PER_TOKEN = 3.5
 
+REPAIR = os.environ.get("PIPELINE_REPAIR", "1") == "1"     # the source-free repair call for unparseable lines (dev switch)
 REPAIR_INSTRUCTION = ("The lines below do not follow the output format. Rewrite each one in the format. "
                       "Output only the corrected lines, nothing else.\n\n")
 
@@ -372,6 +373,7 @@ class Extraction:
     n_dropped_sentences: int = 0
     raw: List[str] = field(default_factory=list)
     modes: List[str] = field(default_factory=list)
+    losses: List[dict] = field(default_factory=list)      # every claim line that did not survive, with the reason
 
 
 def extract_paper(client: Client, system: str, user_text: str, valid_numbers: Sequence[int], max_input_tokens: int = 12000,
@@ -392,7 +394,7 @@ def extract_paper(client: Client, system: str, user_text: str, valid_numbers: Se
         claims += c
         bad += b
     ex.n_bad = len(bad)
-    if bad:                                              # one repair call with only the broken lines
+    if bad and REPAIR:                                   # one repair call with only the broken lines
         try:
             r = client.complete(system, REPAIR_INSTRUCTION + "\n".join(bad), label)
             ex.prompt_tokens += r.prompt_tokens
@@ -403,9 +405,19 @@ def extract_paper(client: Client, system: str, user_text: str, valid_numbers: Se
             claims += c
             ex.n_repaired = len(c)
             ex.n_dropped_lines = len(b2) + max(0, len(bad) - len(c) - len(b2))
+            if ex.n_dropped_lines:
+                ex.losses += [{"stage": "parse", "reason": "unparseable, repair did not recover it" if len(c) else
+                               "unparseable, repair returned nothing usable", "line": b} for b in bad]
         except LLMError as e:
             log.warning("repair call failed (%s); dropping %d lines", e, len(bad))
             ex.n_dropped_lines = len(bad)
+            ex.losses += [{"stage": "parse", "reason": f"unparseable, repair call failed ({e})"[:160], "line": b} for b in bad]
+    elif bad:
+        ex.n_dropped_lines = len(bad)
+        ex.losses += [{"stage": "parse", "reason": "unparseable (no repair call)", "line": b} for b in bad]
+    ok = set(valid_numbers)
+    ex.losses += [{"stage": "sentences", "reason": "cites only sentence numbers that are not in the input", "line": c.raw}
+                  for c in claims if not any(n in ok for n in c.sentences)]
     claims, dropped = check_sentences(claims, valid_numbers)
     ex.n_dropped_sentences = dropped
     ex.claims = claims

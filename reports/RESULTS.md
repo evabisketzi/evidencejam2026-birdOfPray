@@ -1,6 +1,6 @@
 # Results
 
-State on 2026-11-14, evening. All numbers are from our own scorer (`dev/score/`) on five gold papers. They are
+State on 2026-11-15, 04:00 EST (after the overnight session). All numbers are from our own scorer (`dev/score/`) on the reference papers (five before 2026-11-15, eight since). They are
 development numbers, not the judges' score.
 
 ## Submitted configuration
@@ -11,6 +11,38 @@ development numbers, not the judges' score.
 | Prompt | `pipeline/prompt/system.txt` |
 | Thinking | off |
 | Output limit per call | 3,000 tokens |
+
+## Overnight changes (2026-11-15) and their measured effect
+
+All of these change only what happens after the model (parsing, node building, the guard). Each was checked exactly by
+replaying the saved answers of several endpoint runs (`dev/replay.py`) on both preprocessing models and all eight
+reference papers: Murphy (human), three development papers and four regression papers that were not tuned on
+(`dev/eval8.py`, Claude references from `dev/annot_v2/`). Numbers are standard F1, mean over the runs.
+
+| change | why | effect |
+|---|---|---|
+| Lenient claim-line parser | 17 % of the model's lines did not follow the format and were mostly lost (repair recovered 2 of 40 on the gold papers) | 4 answer sets per model: paragraph-chunks Murphy 0.571 → 0.576, development 0.125 → 0.142, regression 0.130 → 0.145; sentence 0.550 → 0.555, 0.084 → 0.099, 0.167 → 0.182; null recall up on both |
+| Lines that start with their language letter (`A|5|...`) | 3.4 % of all lines were silently ignored | Murphy unchanged; regression set 0.148 → 0.169 (paragraph-chunks), 0.171 → 0.211 (sentence) |
+| `measured_attribute` = the quality ("size" for "size of year 1 rosettes"), as the schema defines it | the bearer belongs to the entity; the node name keeps the whole phrase | Murphy: sentence 0.517 → 0.544, paragraph-chunks 0.597 → 0.583 (one set each); others unchanged |
+| Species fan-out merged | the model spread "small trees" over all 15 species in the legend (846 edges in the full run) | 4C479SU8: 297 → 79 edges, F1 0.035 → 0.076; nothing else changed |
+| Duplicate check keeps conditions | the same pair at another dose or season is a different claim | no change on the 8 papers |
+
+The submitted configuration with this code, 3 endpoint runs on the eight reference papers (mean [range]):
+
+| model | Murphy std F1 | Murphy strict F1 | Murphy null recall | development (3) std F1 | regression (4) std F1 | tokens per paper |
+|---|---|---|---|---|---|---|
+| **paragraph-chunks (submitted)** | 0.579 [0.575–0.583] | 0.518 | 0.711 | 0.169 [0.163–0.173] | 0.170 [0.166–0.172] | about 7,800 + 2,050 |
+| sentence filter | 0.554 [0.544–0.573] | 0.490 | 0.667 | 0.111 [0.099–0.123] | 0.212 [0.208–0.215] | 5,693 + 1,493 |
+
+Full run with this code (`full_new_1115`; same answers as the earlier full run, only repair calls were new): 308 papers,
+0 failed, 30,208 edges (before: 27,429), JSON Schema + linkml-validate passed; unparseable lines 2,263 → 223; tokens per
+paper 9,308 + 2,263 (before: 10,110 + 2,493, because fewer repair calls are needed).
+
+Tried and not adopted (2 endpoint runs per model each, details in the log): prompts that list every outcome
+(`x_enum`, `x_enum2`) or forbid species lists for groups (`x_grp`); keeping every Results paragraph (`--keep-results`);
+`--taxon-groups`; a legend without generic common names (`--clean-variants`); larger chunks (`--chunk-tokens 4000`, 14 %
+fewer tokens but lower accuracy everywhere). None gave a consistent gain on both models; Murphy varies 0.542–0.583 between
+identical paragraph-chunks runs.
 
 ## Why this configuration
 
@@ -33,7 +65,7 @@ What the table shows:
 - **Murphy:** paragraph-chunks and the sentence filter are tied. The difference (0.570 against 0.563) is smaller than
   the difference between identical runs (about ±0.04).
 - **Out-of-sample:** paragraph-chunks is about twice as good at the standard level (0.069 against 0.032). Most of that
-  comes from 4CB9X9XE (0.174 against 0.068).
+  comes from 4CB9X9XE (0.174 against 0.068). Against the cleaned annotations the lead is smaller (0.156 against 0.139).
 - **Cost:** paragraph-chunks uses about 25 % more tokens per paper on these five papers. Over all 308 papers its input
   is about 8 % larger (1.82 million tokens against 1.68 million, counted offline). We accept this because accuracy is
   scored before energy.
@@ -41,14 +73,14 @@ What the table shows:
 
 ## What is not measured
 
-- **No full-corpus endpoint run of the submitted configuration yet.** The only full run so far (2026-11-13) used the
-  sentence filter: 308 papers processed, 22,938 edges, 23,840 nodes, schema-valid. For paragraph-chunks, all 308
-  papers pass preprocessing offline and the whole pipeline passes against a mock endpoint, but the real endpoint has
-  only seen the five gold papers.
+- **Full-corpus runs:** paragraph-chunks ran on all 308 papers on 2026-11-14/15 (`full_pc_1114`, 4.7 h, 0 failures), and
+  again with the overnight code from the same answers (`full_new_1115`). There is no gold for the other 300 papers.
 - **Absolute accuracy outside Murphy is low** for every variant (standard F1 below 0.1, loose F1 about 0.2).
-- **The gold set is small.** Five papers, three runs per variant. Three of the four out-of-sample annotations
-  (3KPITIV3, 6HKWT4QG, ITXNQ843) are noted in our diagnostics as machine-assisted and have not been confirmed as
-  human-checked; Murphy and 4CB9X9XE are human annotations.
+- **The gold set is small, and only Murphy is a human annotation.** Five papers, three runs per variant. The four
+  out-of-sample annotations (4CB9X9XE, 3KPITIV3, 6HKWT4QG, ITXNQ843) were made by Claude. Part of the low out-of-sample
+  score came from how those files word their entities, not from wrong claims: against cleaned copies
+  (`dev/annot_v2/`, same pipeline output) the out-of-sample standard F1 is 0.156 [0.151–0.162] for paragraph-chunks and
+  0.139 [0.125–0.150] for the sentence filter, and loose F1 is about 0.30 for both.
 
 ## Changes made on 2026-11-14 and their measured effect
 
@@ -76,6 +108,9 @@ These are implemented and tested, change nothing unless switched on, and are sti
 | `--cite-filter relaxed` | Keeps discussion sentences that cite a source but state the authors' own interpretation. |
 | `--retry-underextraction` | Retries a paper once when it yields fewer than 0.15 claims per sentence. |
 | `--prompt system_lang.txt` | A prompt variant for the direct / hedged / associational distinction. |
+| `--keep-results` | Paragraph selection keeps every Results prose paragraph (tested 2026-11-15: worse). |
+| `--clean-variants` | Species legend without generic "common names" such as "species" or "trees" (tested: inconsistent). |
+| `--chunk-tokens N` | Paragraph text per model call (default 2,500; 4,000 tested: 14 % fewer tokens, lower accuracy). |
 
 ## Earlier reports
 

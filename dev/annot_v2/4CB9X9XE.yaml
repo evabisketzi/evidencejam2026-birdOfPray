@@ -1,0 +1,2056 @@
+graph_id: evidencejam2026_lane1_4CB9X9XE
+schema_version: 0.10.0
+provenance:
+  causal_mosaic_version: 0.10.0
+  created: '2026-11-13T23:20:13+00:00'
+  source_corpus: Evidence Jam 2026 Lane 1 corpus
+  project: Evidence Jam 2026 - hand-annotated dev example
+source_documents:
+- document_id: 4CB9X9XE
+  doi: 10.1111/1365-2664.12886
+  title: Selective plant foraging and the top-down suppression of native diversity in a restored prairie
+  authors:
+  - Stefan Schneider
+  - Royce Steeves
+  - Steve Newmaster
+  - Andrew S. MacDougall
+  year: 2017
+  journal: Journal of Applied Ecology
+  study_coordinates:
+  - latitude: 43.64
+    longitude: -80.62
+    coordinate_location_basis:
+    - exact_site
+  study_country: Canada
+  study_state_or_province: Ontario
+  study_period_start: 2011-12
+  study_period_end: 2012-12
+  study_duration_months: 12
+  study_temporal_note: monthly rodent trapping, DNA barcoding of scat and cafeteria trials Dec 2011-Dec 2012; exclosure seed
+    addition April 2012, surveyed late August 2012; captive feeding trials from September 2012
+nodes:
+- id: node:4cb9x9xe_rodent_density_inc
+  name: Increased rodent population density
+  entity_type: taxon
+  entity_term: NCBITaxon:9989
+  measured_attribute: population density
+  state_or_change_qualifier: increased
+  source_spans:
+  - text: Rodent density per month
+    start_char: 25978
+    end_char: 26002
+    section: results
+  - text: rodent density
+    start_char: 26156
+    end_char: 26170
+    section: results
+  - text: rodent densities were highest
+    start_char: 27259
+    end_char: 27288
+    section: results
+  - text: rodent densities by month
+    start_char: 27824
+    end_char: 27849
+    section: results
+  - text: peak rodent population density in July
+    start_char: 35947
+    end_char: 35985
+    section: discussion
+- id: node:4cb9x9xe_rodent_density_dec
+  name: Decreased rodent population density
+  entity_type: taxon
+  entity_term: NCBITaxon:9989
+  measured_attribute: population density
+  state_or_change_qualifier: decreased
+  source_spans:
+  - text: rodent captures declined
+    start_char: 27756
+    end_char: 27780
+    section: results
+  - text: the reduced rodent population size
+    start_char: 36764
+    end_char: 36798
+    section: discussion
+- id: node:4cb9x9xe_rodent_pop_ongoing
+  name: Ongoing persistence of rodent populations at normal to high levels
+  entity_type: taxon
+  entity_term: NCBITaxon:9989
+  measured_attribute: population persistence
+  state_or_change_qualifier: ongoing
+  source_spans:
+  - text: support rodent populations
+    start_char: 1946
+    end_char: 1972
+    section: abstract
+  - text: maintain rodent populations
+    start_char: 32428
+    end_char: 32455
+    section: discussion
+  - text: normal to high population levels of rodents being maintained
+    start_char: 32515
+    end_char: 32575
+    section: discussion
+  - text: maintain rodent populations at high levels
+    start_char: 37673
+    end_char: 37715
+    section: discussion
+- id: node:4cb9x9xe_rodent_present
+  name: Presence of native rodents
+  entity_type: taxon
+  entity_term: NCBITaxon:9989
+  measured_attribute: presence
+  state_or_change_qualifier: present
+  source_spans:
+  - text: rodents
+    start_char: 2487
+    end_char: 2494
+    section: abstract
+- id: node:4cb9x9xe_rodent_absent
+  name: Absence of rodents
+  entity_type: taxon
+  entity_term: NCBITaxon:9989
+  measured_attribute: presence
+  state_or_change_qualifier: absent
+  source_spans:
+  - text: rodents are absent
+    start_char: 33424
+    end_char: 33442
+    section: discussion
+- id: node:4cb9x9xe_pman_pop_dec
+  name: Decreased Peromyscus maniculatus population size
+  entity_type: taxon
+  entity_term: NCBITaxon:10042
+  measured_attribute: population size
+  state_or_change_qualifier: decreased
+  source_spans:
+  - text: sixfold reduction of deer mouse population size
+    start_char: 25648
+    end_char: 25695
+    section: results
+- id: node:4cb9x9xe_pman_captive_present
+  name: Presence of Peromyscus maniculatus in captive feeding trials
+  entity_type: taxon
+  entity_term: NCBITaxon:10042
+  measured_attribute: presence
+  state_or_change_qualifier: present
+  life_stage: reproductive_adult
+  life_stage_term: adult deer mice
+  source_spans:
+  - text: our captive feeding trials
+    start_char: 28588
+    end_char: 28614
+    section: results
+- id: node:4cb9x9xe_ermine_abund_inc
+  name: Increased Mustela erminea abundance
+  entity_type: taxon
+  entity_term: NCBITaxon:36723
+  measured_attribute: PATO:0000070
+  state_or_change_qualifier: increased
+  source_spans:
+  - text: Nine M. erminea were captured
+    start_char: 25516
+    end_char: 25545
+    section: results
+  - text: weasels, which were trapped in highest numbers
+    start_char: 36594
+    end_char: 36640
+    section: discussion
+- id: node:4cb9x9xe_seedprod_inc
+  name: Increased seed production of planted prairie species
+  entity_type: environmental_process
+  entity_term: seed production
+  measured_attribute: seed output
+  state_or_change_qualifier: increased
+  applied_to:
+  - &id001
+    entity_type: composite_variable
+    entity_term: planted native prairie plant species
+  source_spans:
+  - text: peak seed production
+    start_char: 1701
+    end_char: 1721
+    section: abstract
+  - text: the peak in seed production in the field
+    start_char: 27642
+    end_char: 27682
+    section: results
+  - text: peak seed output
+    start_char: 31256
+    end_char: 31272
+    section: discussion
+- id: node:4cb9x9xe_late_summer
+  name: Late-summer period (August-September)
+  entity_type: environmental_variable
+  entity_term: time of year
+  measured_attribute: season
+  state_or_change_qualifier: present
+  source_spans:
+  - text: late summer
+    start_char: 24319
+    end_char: 24330
+    section: results
+- id: node:4cb9x9xe_month
+  name: Month of the year
+  entity_type: environmental_variable
+  entity_term: time of year
+  measured_attribute: month
+  source_spans:
+  - text: seasonal variation
+    start_char: 26812
+    end_char: 26830
+    section: results
+- id: node:4cb9x9xe_cons_prairie_inc
+  name: Increased rodent consumption of planted prairie plants
+  entity_type: environmental_process
+  entity_term: rodent consumption of planted prairie plants
+  measured_attribute: proportion of rodent diet
+  state_or_change_qualifier: increased
+  applied_to:
+  - &id002
+    entity_type: taxon
+    entity_term: NCBITaxon:9989
+  - *id001
+  source_spans:
+  - text: planted prairie species accounted for 87% of plants consumed
+    start_char: 1615
+    end_char: 1675
+    section: abstract
+  - text: rodents preferentially consumed subsets of native prairie plants
+    start_char: 24336
+    end_char: 24400
+    section: results
+  - text: native plant consumption
+    start_char: 26175
+    end_char: 26199
+    section: results
+  - text: native consumers showing preferences for subsets of planted native prairie species
+    start_char: 31105
+    end_char: 31187
+    section: discussion
+- id: node:4cb9x9xe_cons_prairie_dec
+  name: Decreased rodent consumption of native prairie seed
+  entity_type: environmental_process
+  entity_term: rodent consumption of planted prairie plants
+  measured_attribute: consumption level
+  state_or_change_qualifier: decreased
+  applied_to:
+  - *id002
+  - *id001
+  source_spans:
+  - text: diet seasonality
+    start_char: 1750
+    end_char: 1766
+    section: abstract
+  - text: seed consumption appears to end in late fall
+    start_char: 31594
+    end_char: 31638
+    section: discussion
+- id: node:4cb9x9xe_oldfield_spp_consumed_inc
+  name: Increased number of oldfield species consumed by rodents
+  entity_type: composite_variable
+  entity_term: non-planted oldfield plant species
+  measured_attribute: number of species consumed by rodents
+  state_or_change_qualifier: increased
+  applied_to:
+  - *id002
+  source_spans:
+  - text: numbers of oldfield species consumed per month
+    start_char: 26007
+    end_char: 26053
+    section: results
+- id: node:4cb9x9xe_diet_breadth_inc
+  name: Increased breadth of rodent diet
+  entity_type: taxon
+  entity_term: NCBITaxon:9989
+  measured_attribute: number of plant species in diet
+  state_or_change_qualifier: increased
+  source_spans:
+  - text: the widest range of plant species in the rodent diet
+    start_char: 35998
+    end_char: 36050
+    section: discussion
+- id: node:4cb9x9xe_seed_pref
+  name: Rodent seed species preference
+  entity_type: taxon
+  entity_term: NCBITaxon:9989
+  measured_attribute: seed species preference order
+  source_spans:
+  - text: species preference
+    start_char: 26834
+    end_char: 26852
+    section: results
+- id: node:4cb9x9xe_ager_removal_inc
+  name: Increased removal of Andropogon gerardii seed
+  entity_type: taxon
+  entity_term: NCBITaxon:79824
+  measured_attribute: seed removal by rodents
+  state_or_change_qualifier: increased
+  life_stage: seed_or_seed_bank
+  source_spans:
+  - text: Andropogon gerardii, which was ignored most months, was consumed
+    start_char: 27168
+    end_char: 27232
+    section: results
+- id: node:4cb9x9xe_cafeteria_removal_dec
+  name: Decreased seed removal from cafeteria stations
+  entity_type: environmental_process
+  entity_term: seed removal from cafeteria stations
+  measured_attribute: amount of seed removed
+  state_or_change_qualifier: decreased
+  applied_to:
+  - *id002
+  source_spans:
+  - text: removals from the cafeteria stations dropped significantly
+    start_char: 27494
+    end_char: 27552
+    section: results
+  - text: the magnitude of seed removal from the cafeteria trials
+    start_char: 36834
+    end_char: 36889
+    section: discussion
+- id: node:4cb9x9xe_pref_seed_removal_inc
+  name: Increased removal of preferred seed from cafeteria stations
+  entity_type: environmental_process
+  entity_term: seed removal from cafeteria stations
+  measured_attribute: removal of preferred seed
+  state_or_change_qualifier: increased
+  applied_to:
+  - *id002
+  source_spans:
+  - text: the removal of preferred seed from the feeding stations
+    start_char: 27854
+    end_char: 27909
+    section: results
+- id: node:4cb9x9xe_cafeteria_depletion_inc
+  name: Faster depletion of seed from cafeteria stations
+  entity_type: environmental_process
+  entity_term: seed removal from cafeteria stations
+  measured_attribute: rate of seed depletion
+  state_or_change_qualifier: increased
+  applied_to:
+  - *id002
+  source_spans:
+  - text: the most rapid depletion of seed from the widest range of plants in the cafeteria trials
+    start_char: 36136
+    end_char: 36224
+    section: discussion
+- id: node:4cb9x9xe_pref_seed_supply_dec
+  name: Depletion of preferred seed supply
+  entity_type: environmental_variable
+  entity_term: preferred seed supply
+  measured_attribute: availability
+  state_or_change_qualifier: decreased
+  applied_to:
+  - entity_type: taxon
+    entity_term: NCBITaxon:10042
+  source_spans:
+  - text: all preferred seeds were taken
+    start_char: 28379
+    end_char: 28409
+    section: results
+- id: node:4cb9x9xe_seedling_herbivory_occ
+  name: Seedling herbivory by deer mice
+  entity_type: environmental_process
+  entity_term: seedling herbivory
+  state_or_change_qualifier: occurred
+  applied_to:
+  - entity_type: taxon
+    entity_term: NCBITaxon:10042
+  - entity_type: composite_variable
+    entity_term: planted native prairie plant species
+    life_stage: germinant_or_seedling
+  source_spans:
+  - text: Seedling herbivory
+    start_char: 28336
+    end_char: 28354
+    section: results
+- id: node:4cb9x9xe_adult_herbivory_occ
+  name: Herbivory on adult native prairie plants
+  entity_type: environmental_process
+  entity_term: herbivory
+  state_or_change_qualifier: occurred
+  applied_to:
+  - entity_type: taxon
+    entity_term: NCBITaxon:10042
+  - entity_type: composite_variable
+    entity_term: planted native prairie plant species
+    life_stage: reproductive_adult
+  source_spans:
+  - text: consumption of plant parts of adult native species
+    start_char: 28534
+    end_char: 28584
+    section: results
+- id: node:4cb9x9xe_exclosure
+  name: Installation of small-mammal exclosures
+  entity_type: management_intervention
+  entity_term: small-mammal exclosure
+  state_or_change_qualifier: introduced
+  applied_to:
+  - *id002
+  source_spans:
+  - text: The exclosed plots
+    start_char: 28617
+    end_char: 28635
+    section: results
+  - text: the exclosures
+    start_char: 28947
+    end_char: 28961
+    section: results
+  - text: the exclosures
+    start_char: 29064
+    end_char: 29078
+    section: results
+  - text: inside and outside of the exclosures
+    start_char: 21267
+    end_char: 21303
+    section: results
+- id: node:4cb9x9xe_planted_seedling_abund_inc
+  name: Increased abundance of planted native seedlings
+  entity_type: composite_variable
+  entity_term: planted native prairie plant species
+  measured_attribute: PATO:0000070
+  state_or_change_qualifier: increased
+  life_stage: germinant_or_seedling
+  source_spans:
+  - text: twice the abundance of planted native seedlings
+    start_char: 28640
+    end_char: 28687
+    section: results
+- id: node:4cb9x9xe_planted_richness_inc
+  name: Increased species richness of planted prairie species
+  entity_type: composite_variable
+  entity_term: planted native prairie plant species
+  measured_attribute: species richness
+  state_or_change_qualifier: increased
+  source_spans:
+  - text: significantly higher richness of planted species
+    start_char: 28725
+    end_char: 28773
+    section: results
+- id: node:4cb9x9xe_planted_richness_dec
+  name: Decreased species richness of planted prairie species
+  entity_type: composite_variable
+  entity_term: planted native prairie plant species
+  measured_attribute: species richness
+  state_or_change_qualifier: decreased
+  source_spans:
+  - text: reduced prairie diversity outside of experimental exclosures
+    start_char: 2111
+    end_char: 2171
+    section: abstract
+  - text: The richness of planted prairie species outside the cages was especially low
+    start_char: 29080
+    end_char: 29156
+    section: results
+- id: node:4cb9x9xe_ecan_seedling_inc
+  name: Increased number of Elymus canadensis seedlings
+  entity_type: taxon
+  entity_term: NCBITaxon:29675
+  measured_attribute: number of individuals
+  state_or_change_qualifier: increased
+  life_stage: germinant_or_seedling
+  source_spans:
+  - text: 51 individuals
+    start_char: 28920
+    end_char: 28934
+    section: results
+- id: node:4cb9x9xe_oldfield_recruit_inc
+  name: Increased recruitment of oldfield plants
+  entity_type: composite_variable
+  entity_term: non-planted oldfield plant species
+  measured_attribute: recruitment
+  state_or_change_qualifier: increased
+  source_spans:
+  - text: recruitment differences for oldfield plants
+    start_char: 29001
+    end_char: 29044
+    section: results
+- id: node:4cb9x9xe_mowing
+  name: Mowing (experimental defoliation)
+  entity_type: management_intervention
+  entity_term: mowing
+  state_or_change_qualifier: occurred
+  source_spans:
+  - text: experimentally defoliated with mowing
+    start_char: 29183
+    end_char: 29220
+    section: results
+- id: node:4cb9x9xe_seed_detection_inc
+  name: Increased seed detection by small mammals
+  entity_type: environmental_process
+  entity_term: seed detection
+  state_or_change_qualifier: increased
+  applied_to:
+  - *id002
+  source_spans:
+  - text: small mammals were more able to detect native seed
+    start_char: 29248
+    end_char: 29298
+    section: results
+- id: node:4cb9x9xe_seed_avail_dec
+  name: Decreased availability of native prairie seed
+  entity_type: environmental_variable
+  entity_term: seed availability
+  state_or_change_qualifier: decreased
+  applied_to:
+  - *id001
+  source_spans:
+  - text: food limitation
+    start_char: 1786
+    end_char: 1801
+    section: abstract
+  - text: food limitation
+    start_char: 31650
+    end_char: 31665
+    section: discussion
+- id: node:4cb9x9xe_oldfield_present
+  name: Presence of introduced oldfield plant species
+  entity_type: composite_variable
+  entity_term: non-planted oldfield plant species
+  measured_attribute: presence
+  state_or_change_qualifier: present
+  source_spans:
+  - text: these introduced species
+    start_char: 32371
+    end_char: 32395
+    section: discussion
+- id: node:4cb9x9xe_rod_cons_oldfield
+  name: Rodent consumption of non-planted oldfield plants
+  entity_type: environmental_process
+  entity_term: rodent consumption of oldfield plants
+  state_or_change_qualifier: occurred
+  applied_to:
+  - *id002
+  - entity_type: composite_variable
+    entity_term: non-planted oldfield plant species
+  source_spans:
+  - text: Non-targeted oldfield species
+    start_char: 1871
+    end_char: 1900
+    section: abstract
+  - text: rodent consumers
+    start_char: 35565
+    end_char: 35581
+    section: discussion
+  - text: The consumption of non-targeted oldfield species
+    start_char: 37602
+    end_char: 37650
+    section: discussion
+- id: node:4cb9x9xe_granivory_inc
+  name: Increased rodent granivory on planted prairie species
+  entity_type: environmental_process
+  entity_term: granivory
+  measured_attribute: intensity
+  state_or_change_qualifier: increased
+  applied_to:
+  - *id002
+  - *id001
+  source_spans:
+  - text: targeted granivory
+    start_char: 2075
+    end_char: 2093
+    section: abstract
+  - text: indirect consumer effects
+    start_char: 2400
+    end_char: 2425
+    section: abstract
+  - text: granivory
+    start_char: 2648
+    end_char: 2657
+    section: abstract
+  - text: intense granivore pressure
+    start_char: 32598
+    end_char: 32624
+    section: discussion
+  - text: This targeted granviory
+    start_char: 33020
+    end_char: 33043
+    section: discussion
+  - text: high consumption levels of native seed by native consumers
+    start_char: 33857
+    end_char: 33915
+    section: discussion
+  - text: targeted granivory
+    start_char: 37819
+    end_char: 37837
+    section: discussion
+  - text: intense granivory
+    start_char: 38346
+    end_char: 38363
+    section: discussion
+- id: node:4cb9x9xe_granivory_occ
+  name: Rodent granivory on planted prairie species
+  entity_type: environmental_process
+  entity_term: granivory
+  state_or_change_qualifier: occurred
+  applied_to:
+  - *id002
+  - *id001
+  source_spans:
+  - text: targeted granivory
+    start_char: 2075
+    end_char: 2093
+    section: abstract
+  - text: targeted granivory
+    start_char: 37819
+    end_char: 37837
+    section: discussion
+- id: node:4cb9x9xe_prairie_recruit_dec
+  name: Decreased recruitment of planted prairie species
+  entity_type: composite_variable
+  entity_term: planted native prairie plant species
+  measured_attribute: recruitment
+  state_or_change_qualifier: decreased
+  source_spans:
+  - text: future recruitment difficulties
+    start_char: 2609
+    end_char: 2640
+    section: abstract
+  - text: inhibiting recruitment by some native prairie plants
+    start_char: 32633
+    end_char: 32685
+    section: discussion
+  - text: future recruitment may be significantly constrained
+    start_char: 33474
+    end_char: 33525
+    section: discussion
+  - text: future recruitment difficulties
+    start_char: 38377
+    end_char: 38408
+    section: discussion
+- id: node:4cb9x9xe_restoration_success_dec
+  name: Decreased restoration success of planted tallgrass prairie
+  entity_type: environmental_variable
+  entity_term: restoration success
+  state_or_change_qualifier: decreased
+  applied_to:
+  - *id001
+  source_spans:
+  - text: reduce the restoration success of tallgrass prairie
+    start_char: 2499
+    end_char: 2550
+    section: abstract
+  - text: the restoration success of planted high-diversity prairie
+    start_char: 33084
+    end_char: 33141
+    section: discussion
+- id: node:4cb9x9xe_initial_success_inc
+  name: Increased initial establishment of prairie plantings
+  entity_type: composite_variable
+  entity_term: planted native prairie plant species
+  measured_attribute: initial establishment
+  state_or_change_qualifier: increased
+  source_spans:
+  - text: prairie plantings on unvegetated fields may initially succeed
+    start_char: 33354
+    end_char: 33415
+    section: discussion
+- id: node:4cb9x9xe_oldfield_establish_inc
+  name: Increased establishment of introduced oldfield species
+  entity_type: composite_variable
+  entity_term: non-planted oldfield plant species
+  measured_attribute: establishment
+  state_or_change_qualifier: increased
+  source_spans:
+  - text: establishment by non-target species
+    start_char: 2360
+    end_char: 2395
+    section: abstract
+  - text: facilitation of introduced species
+    start_char: 33941
+    end_char: 33975
+    section: discussion
+- id: node:4cb9x9xe_oldfield_expansion_dec
+  name: Decreased expansion rate of oldfield plant species
+  entity_type: composite_variable
+  entity_term: non-planted oldfield plant species
+  measured_attribute: expansion rate
+  state_or_change_qualifier: decreased
+  source_spans:
+  - text: the expansion rate of these plant species
+    start_char: 35458
+    end_char: 35499
+    section: discussion
+- id: node:4cb9x9xe_prairie_persistence_dec
+  name: Decreased persistence of rare prairie species
+  entity_type: composite_variable
+  entity_term: planted native prairie plant species
+  measured_attribute: persistence
+  state_or_change_qualifier: decreased
+  source_spans:
+  - text: hamper their persistence
+    start_char: 37857
+    end_char: 37881
+    section: discussion
+- id: node:4cb9x9xe_prairie_persistence_inc
+  name: Increased persistence of rare prairie species
+  entity_type: composite_variable
+  entity_term: planted native prairie plant species
+  measured_attribute: persistence
+  state_or_change_qualifier: increased
+  source_spans:
+  - text: some prairie plants, already regionally rare
+    start_char: 38124
+    end_char: 38168
+    section: discussion
+  - text: the plants they may indirectly protect
+    start_char: 39159
+    end_char: 39197
+    section: discussion
+- id: node:4cb9x9xe_seed_addition
+  name: Seed addition of prairie species
+  entity_type: management_intervention
+  entity_term: seed addition
+  state_or_change_qualifier: introduced
+  applied_to:
+  - *id001
+  source_spans:
+  - text: seed additions alone
+    start_char: 38242
+    end_char: 38262
+    section: discussion
+- id: node:4cb9x9xe_predator_habitat
+  name: Restoration of habitat features favouring rodent predators
+  entity_type: management_intervention
+  entity_term: habitat restoration for rodent predators
+  state_or_change_qualifier: introduced
+  applied_to:
+  - entity_type: composite_variable
+    entity_term: raptors
+  - entity_type: taxon
+    entity_term: Taxidea taxus
+  source_spans:
+  - text: restoring habitat features that favor rodent predators
+    start_char: 38943
+    end_char: 38997
+    section: discussion
+- id: node:4cb9x9xe_predator_abund_inc
+  name: Increased abundance of rodent predators
+  entity_type: composite_variable
+  entity_term: rodent predators
+  measured_attribute: PATO:0000070
+  state_or_change_qualifier: increased
+  applied_to:
+  - entity_type: taxon
+    entity_term: Taxidea taxus
+  source_spans:
+  - text: rodent predators such as raptors and small mammalian carnivores
+    start_char: 38981
+    end_char: 39044
+    section: discussion
+- id: node:4cb9x9xe_rhirta_recruit_inc
+  name: Increased recruitment of Rudbeckia hirta
+  entity_type: taxon
+  entity_term: NCBITaxon:52299
+  measured_attribute: recruitment
+  state_or_change_qualifier: increased
+  source_spans:
+  - text: recruited in large numbers
+    start_char: 21240
+    end_char: 21266
+    section: results
+edges:
+- id: 4CB9X9XE-e01
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_seedprod_inc
+  predicate: associated_with
+  object: node:4cb9x9xe_cons_prairie_inc
+  causal_language: associational
+  philosophical_accounts:
+  - regularity
+  original_sentence: The exceptions were August–September, when planted prairie species accounted for 87% of plants consumed
+    and coincided with their peak seed production.
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: explicitly_asserted
+    significance: not_reported
+    analysis_method: descriptive_only
+  scope: assertional
+  temporal_extent:
+    observation_seasons:
+    - summer
+    - autumn
+  evidential_basis: &id003
+    evidence_types:
+    - observational_longitudinal
+    evidence_objects:
+    - correlation
+  source_spans:
+  - text: The exceptions were August–September, when planted prairie species accounted for 87% of plants consumed and coincided
+      with their peak seed production.
+    start_char: 1572
+    end_char: 1722
+    section: abstract
+- id: 4CB9X9XE-e02
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_seed_avail_dec
+  predicate: causes
+  object: node:4cb9x9xe_cons_prairie_dec
+  causal_language: uncertain_causal
+  philosophical_accounts:
+  - counterfactual
+  - mechanistic
+  original_sentence: Cafeteria trials suggested diet seasonality to be explained by food limitation – native prairie seeds
+    were consumed year-round when made available.
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: explicitly_asserted
+    significance: not_reported
+  scope: assertional
+  evidential_basis:
+    evidence_types:
+    - observational_longitudinal
+    evidence_objects:
+    - mechanism
+  source_spans:
+  - text: Cafeteria trials suggested diet seasonality to be explained by food limitation – native prairie seeds were consumed
+      year-round when made available.
+    start_char: 1723
+    end_char: 1870
+    section: abstract
+- id: 4CB9X9XE-e03
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_rod_cons_oldfield
+  predicate: contributes_to
+  object: node:4cb9x9xe_rodent_pop_ongoing
+  causal_language: uncertain_causal
+  philosophical_accounts:
+  - mechanistic
+  original_sentence: Non-targeted oldfield species thus appeared to be of sufficient quality to support rodent populations
+    (peaking at 23 individuals ha<sup>1</sup> in summer), but without rescuing rarer prairie species from targeted granivory
+    and resulting in reduced prairie diversity outside of experimental exclosures.
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: not_addressed
+    significance: not_tested
+  scope: assertional
+  source_spans:
+  - text: Non-targeted oldfield species thus appeared to be of sufficient quality to support rodent populations (peaking at
+      23 individuals ha<sup>1</sup> in summer), but without rescuing rarer prairie species from targeted granivory and resulting
+      in reduced prairie diversity outside of experimental exclosures.
+    start_char: 1871
+    end_char: 2172
+    section: abstract
+- id: 4CB9X9XE-e04
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_rod_cons_oldfield
+  predicate: prevents
+  object: node:4cb9x9xe_granivory_occ
+  causal_language: no_relationship
+  philosophical_accounts:
+  - counterfactual
+  original_sentence: Non-targeted oldfield species thus appeared to be of sufficient quality to support rodent populations
+    (peaking at 23 individuals ha<sup>1</sup> in summer), but without rescuing rarer prairie species from targeted granivory
+    and resulting in reduced prairie diversity outside of experimental exclosures.
+  ecosystem_context: temperate_subhumid_grasslands
+  negated: true
+  strength:
+    status: not_addressed
+    significance: not_tested
+  scope: assertional
+  source_spans:
+  - text: Non-targeted oldfield species thus appeared to be of sufficient quality to support rodent populations (peaking at
+      23 individuals ha<sup>1</sup> in summer), but without rescuing rarer prairie species from targeted granivory and resulting
+      in reduced prairie diversity outside of experimental exclosures.
+    start_char: 1871
+    end_char: 2172
+    section: abstract
+- id: 4CB9X9XE-e05
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_granivory_inc
+  predicate: causes
+  object: node:4cb9x9xe_planted_richness_dec
+  causal_language: direct_causal
+  philosophical_accounts:
+  - interventionist
+  - counterfactual
+  original_sentence: Non-targeted oldfield species thus appeared to be of sufficient quality to support rodent populations
+    (peaking at 23 individuals ha<sup>1</sup> in summer), but without rescuing rarer prairie species from targeted granivory
+    and resulting in reduced prairie diversity outside of experimental exclosures.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator:
+  - status: explicitly_asserted
+    comparator_type: untreated_control
+    comparator_description: inside experimental exclosures (rodents excluded)
+  direction: &id006
+    status: asserted
+    evidence_for_direction: experimental
+  strength:
+    status: explicitly_asserted
+    significance: significant
+    analysis_method: anova
+  scope: assertional
+  evidential_basis: &id007
+    evidence_types:
+    - randomized_experiment
+    evidence_objects:
+    - correlation
+  source_spans:
+  - text: Non-targeted oldfield species thus appeared to be of sufficient quality to support rodent populations (peaking at
+      23 individuals ha<sup>1</sup> in summer), but without rescuing rarer prairie species from targeted granivory and resulting
+      in reduced prairie diversity outside of experimental exclosures.
+    start_char: 1871
+    end_char: 2172
+    section: abstract
+- id: 4CB9X9XE-e06
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_granivory_inc
+  predicate: contributes_to
+  object: node:4cb9x9xe_oldfield_establish_inc
+  causal_language: uncertain_causal
+  philosophical_accounts:
+  - mechanistic
+  original_sentence: Our work illustrates how anthropogenic-based changes to producer communities may affect feeding pathways
+    in grassland food webs, potentially facilitating establishment by non-target species via indirect consumer effects that
+    can be difficult to detect.
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: not_addressed
+    significance: not_tested
+  scope: prototypical
+  source_spans:
+  - text: Our work illustrates how anthropogenic-based changes to producer communities may affect feeding pathways in grassland
+      food webs, potentially facilitating establishment by non-target species via indirect consumer effects that can be difficult
+      to detect.
+    start_char: 2206
+    end_char: 2458
+    section: abstract
+- id: 4CB9X9XE-e07
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_rodent_present
+  predicate: causes
+  object: node:4cb9x9xe_restoration_success_dec
+  causal_language: uncertain_causal
+  philosophical_accounts:
+  - mechanistic
+  original_sentence: These findings suggest that rodents may reduce the restoration success of tallgrass prairie in our region,
+    with some planted species likely to suffer future recruitment difficulties due to granivory.
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: not_addressed
+    significance: not_tested
+  scope: contingent
+  context_dependence:
+    status: explicitly_asserted
+    geographic_scope: in our region (southwestern Ontario)
+  source_spans:
+  - text: These findings suggest that rodents may reduce the restoration success of tallgrass prairie in our region, with
+      some planted species likely to suffer future recruitment difficulties due to granivory.
+    start_char: 2459
+    end_char: 2658
+    section: abstract
+- id: 4CB9X9XE-e08
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_granivory_inc
+  predicate: causes
+  object: node:4cb9x9xe_prairie_recruit_dec
+  causal_language: uncertain_causal
+  philosophical_accounts:
+  - mechanistic
+  original_sentence: These findings suggest that rodents may reduce the restoration success of tallgrass prairie in our region,
+    with some planted species likely to suffer future recruitment difficulties due to granivory.
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: not_addressed
+    significance: not_tested
+  scope: contingent
+  source_spans:
+  - text: These findings suggest that rodents may reduce the restoration success of tallgrass prairie in our region, with
+      some planted species likely to suffer future recruitment difficulties due to granivory.
+    start_char: 2459
+    end_char: 2658
+    section: abstract
+- id: 4CB9X9XE-e09
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_late_summer
+  predicate: associated_with
+  object: node:4cb9x9xe_cons_prairie_inc
+  causal_language: associational
+  philosophical_accounts:
+  - regularity
+  original_sentence: We detected pronounced seasonal diet trends with the monthly DNA sampling, with non-targeted oldfield
+    species constituting most of the diet annually except in late summer when rodents preferentially consumed subsets of native
+    prairie plants presumably as seed ( $F_{4,11} = 17.2$ , P < 0.0001).
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: explicitly_asserted
+    significance: significant
+    analysis_method: anova
+  scope: assertional
+  context_dependence: &id004
+    status: explicitly_asserted
+    geographic_scope: 18 ha restored tallgrass prairie, rare Charitable Research Reserve, Blair, southwestern Ontario
+    temporal_scope: December 2011 to December 2012
+  temporal_extent:
+    observation_seasons:
+    - summer
+  evidential_basis: *id003
+  source_spans:
+  - text: We detected pronounced seasonal diet trends with the monthly DNA sampling, with non-targeted oldfield species constituting
+      most of the diet annually except in late summer when rodents preferentially consumed subsets of native prairie plants
+      presumably as seed ( $F_{4,11} = 17.2$ , P < 0.0001).
+    start_char: 24160
+    end_char: 24454
+    section: results
+- id: 4CB9X9XE-e10
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_ermine_abund_inc
+  predicate: associated_with
+  object: node:4cb9x9xe_pman_pop_dec
+  causal_language: associational
+  philosophical_accounts:
+  - regularity
+  original_sentence: Nine M. erminea were captured in the latter months of the year (December 2011 and August-November 2012),
+    and were correlated with a sixfold reduction of deer mouse population size during August and September 2012 (Table 1).
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: explicitly_asserted
+    significance: not_tested
+    analysis_method: descriptive_only
+  scope: assertional
+  context_dependence: *id004
+  temporal_extent:
+    observation_seasons:
+    - summer
+    - autumn
+  evidential_basis: *id003
+  source_spans:
+  - text: Nine M. erminea were captured in the latter months of the year (December 2011 and August-November 2012), and were
+      correlated with a sixfold reduction of deer mouse population size during August and September 2012 (Table 1).
+    start_char: 25516
+    end_char: 25739
+    section: results
+- id: 4CB9X9XE-e11
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_rodent_density_inc
+  predicate: correlated_with
+  object: node:4cb9x9xe_oldfield_spp_consumed_inc
+  causal_language: associational
+  philosophical_accounts:
+  - regularity
+  - probabilistic
+  original_sentence: Rodent density per month and numbers of oldfield species consumed per month were positively correlated
+    ( $R^2 = 0.166$ , P = 0.041), while no relationship was detectable between rodent density and native plant consumption
+    $(R^2 = 0.0786,$ P = 0.43).
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: explicitly_asserted
+    significance: significant
+    analysis_method: regression
+    p_value: 0.041
+    effect_metric: variance_explained
+    quantitative_numeric: 0.166
+  scope: assertional
+  context_dependence: *id004
+  evidential_basis: *id003
+  source_spans:
+  - text: Rodent density per month and numbers of oldfield species consumed per month were positively correlated ( $R^2 =
+      0.166$ , P = 0.041), while no relationship was detectable between rodent density and native plant consumption  $(R^2
+      = 0.0786,$ P = 0.43).
+    start_char: 25978
+    end_char: 26228
+    section: results
+- id: 4CB9X9XE-e12
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_rodent_density_inc
+  predicate: correlated_with
+  object: node:4cb9x9xe_cons_prairie_inc
+  causal_language: no_relationship
+  philosophical_accounts:
+  - regularity
+  original_sentence: Rodent density per month and numbers of oldfield species consumed per month were positively correlated
+    ( $R^2 = 0.166$ , P = 0.041), while no relationship was detectable between rodent density and native plant consumption
+    $(R^2 = 0.0786,$ P = 0.43).
+  ecosystem_context: temperate_subhumid_grasslands
+  negated: true
+  strength:
+    status: explicitly_asserted
+    significance: not_significant
+    analysis_method: regression
+    p_value: 0.43
+    effect_metric: variance_explained
+    quantitative_numeric: 0.0786
+  scope: assertional
+  context_dependence: *id004
+  evidential_basis: *id003
+  source_spans:
+  - text: Rodent density per month and numbers of oldfield species consumed per month were positively correlated ( $R^2 =
+      0.166$ , P = 0.041), while no relationship was detectable between rodent density and native plant consumption  $(R^2
+      = 0.0786,$ P = 0.43).
+    start_char: 25978
+    end_char: 26228
+    section: results
+- id: 4CB9X9XE-e13
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_month
+  predicate: associated_with
+  object: node:4cb9x9xe_seed_pref
+  causal_language: no_relationship
+  philosophical_accounts:
+  - regularity
+  original_sentence: Seed removals from the cafeteria trials occurred in every month, with no seasonal variation in species
+    preference based on order of removal from the feeding stations
+  ecosystem_context: temperate_subhumid_grasslands
+  negated: true
+  strength:
+    status: explicitly_asserted
+    significance: not_reported
+  scope: assertional
+  context_dependence: *id004
+  evidential_basis: *id003
+  source_spans:
+  - text: Seed removals from the cafeteria trials occurred in every month, with no seasonal variation in species preference
+      based on order of removal from the feeding stations
+    start_char: 26739
+    end_char: 26904
+    section: results
+- id: 4CB9X9XE-e14
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_rodent_density_inc
+  predicate: associated_with
+  object: node:4cb9x9xe_ager_removal_inc
+  causal_language: associational
+  philosophical_accounts:
+  - regularity
+  original_sentence: Andropogon gerardii, which was ignored most months, was consumed during June and July when rodent densities
+    were highest
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: explicitly_asserted
+    significance: not_reported
+  scope: assertional
+  context_dependence: *id004
+  temporal_extent:
+    observation_seasons:
+    - early_summer
+    - summer
+  evidential_basis: *id003
+  source_spans:
+  - text: Andropogon gerardii, which was ignored most months, was consumed during June and July when rodent densities were
+      highest
+    start_char: 27168
+    end_char: 27288
+    section: results
+- id: 4CB9X9XE-e15
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_seedprod_inc
+  predicate: associated_with
+  object: node:4cb9x9xe_cafeteria_removal_dec
+  causal_language: associational
+  philosophical_accounts:
+  - regularity
+  original_sentence: There were variations among months in the amount of seed taken - removals from the cafeteria stations
+    dropped significantly in late summer $(F_{11,156} = 2.013, P = 0.0305)$ Tukey's HSD), which corresponded with the peak
+    in seed production in the field, when the planted species were most prevalent in DNA scat, but also when rodent captures
+    declined (Fig. 4).
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: explicitly_asserted
+    significance: significant
+    analysis_method: anova
+    p_value: 0.0305
+  scope: assertional
+  context_dependence: *id004
+  temporal_extent:
+    observation_seasons:
+    - summer
+  evidential_basis: *id003
+  source_spans:
+  - text: There were variations among months in the amount of seed taken - removals from the cafeteria stations dropped significantly
+      in late summer  $(F_{11,156} = 2.013, P = 0.0305)$ Tukey's HSD), which corresponded with the peak in seed production
+      in the field, when the planted species were most prevalent in DNA scat, but also when rodent captures declined (Fig.
+      4).
+    start_char: 27429
+    end_char: 27790
+    section: results
+- id: 4CB9X9XE-e16
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_rodent_density_dec
+  predicate: associated_with
+  object: node:4cb9x9xe_cafeteria_removal_dec
+  causal_language: associational
+  philosophical_accounts:
+  - regularity
+  original_sentence: There were variations among months in the amount of seed taken - removals from the cafeteria stations
+    dropped significantly in late summer $(F_{11,156} = 2.013, P = 0.0305)$ Tukey's HSD), which corresponded with the peak
+    in seed production in the field, when the planted species were most prevalent in DNA scat, but also when rodent captures
+    declined (Fig. 4).
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: explicitly_asserted
+    significance: significant
+    analysis_method: anova
+    p_value: 0.0305
+  scope: assertional
+  context_dependence: *id004
+  temporal_extent:
+    observation_seasons:
+    - summer
+  evidential_basis: *id003
+  source_spans:
+  - text: There were variations among months in the amount of seed taken - removals from the cafeteria stations dropped significantly
+      in late summer  $(F_{11,156} = 2.013, P = 0.0305)$ Tukey's HSD), which corresponded with the peak in seed production
+      in the field, when the planted species were most prevalent in DNA scat, but also when rodent captures declined (Fig.
+      4).
+    start_char: 27429
+    end_char: 27790
+    section: results
+- id: 4CB9X9XE-e17
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_rodent_density_inc
+  predicate: correlated_with
+  object: node:4cb9x9xe_pref_seed_removal_inc
+  causal_language: no_relationship
+  philosophical_accounts:
+  - regularity
+  original_sentence: There was no correlation between rodent densities by month and the removal of preferred seed from the
+    feeding stations - removal was similarly high in summer during the population peak and when rodent numbers were low in
+    winter $(R^2 = 0.210,$ P = 0.137).
+  ecosystem_context: temperate_subhumid_grasslands
+  negated: true
+  strength:
+    status: explicitly_asserted
+    significance: not_significant
+    analysis_method: regression
+    p_value: 0.137
+    effect_metric: variance_explained
+    quantitative_numeric: 0.21
+  scope: assertional
+  context_dependence: *id004
+  evidential_basis: *id003
+  source_spans:
+  - text: There was no correlation between rodent densities by month and the removal of preferred seed from the feeding stations
+      - removal was similarly high in summer during the population peak and when rodent numbers were low in winter  $(R^2
+      = 0.210,$ P = 0.137).
+    start_char: 27791
+    end_char: 28047
+    section: results
+- id: 4CB9X9XE-e18
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_pref_seed_supply_dec
+  predicate: precedes
+  object: node:4cb9x9xe_seedling_herbivory_occ
+  causal_language: associational
+  philosophical_accounts:
+  - regularity
+  original_sentence: Seedling herbivory was only observed after all preferred seeds were taken, and only for two Asteraceae
+    forb species out of the seven planted species ( $F_{3,7} = 16.6$ , P < 0.0001).
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: explicitly_asserted
+    significance: significant
+    analysis_method: anova
+  scope: assertional
+  evidential_basis: &id005
+    evidence_types:
+    - quasi_experiment
+    evidence_objects:
+    - correlation
+  temporal_extent:
+    duration_text: 2-week captive feeding trials starting September 2012
+  source_spans:
+  - text: Seedling herbivory was only observed after all preferred seeds were taken, and only for two Asteraceae forb species
+      out of the seven planted species ( $F_{3,7} = 16.6$ , P < 0.0001).
+    start_char: 28336
+    end_char: 28518
+    section: results
+- id: 4CB9X9XE-e19
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_pman_captive_present
+  predicate: causes
+  object: node:4cb9x9xe_adult_herbivory_occ
+  causal_language: no_relationship
+  philosophical_accounts:
+  - interventionist
+  original_sentence: We detected no consumption of plant parts of adult native species in our captive feeding trials.
+  ecosystem_context: temperate_subhumid_grasslands
+  negated: true
+  strength:
+    status: explicitly_asserted
+    significance: not_tested
+    analysis_method: descriptive_only
+  scope: assertional
+  evidential_basis: *id005
+  source_spans:
+  - text: We detected no consumption of plant parts of adult native species in our captive feeding trials.
+    start_char: 28519
+    end_char: 28615
+    section: results
+- id: 4CB9X9XE-e20
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_exclosure
+  predicate: associated_with
+  object: node:4cb9x9xe_planted_seedling_abund_inc
+  causal_language: associational
+  philosophical_accounts:
+  - interventionist
+  - counterfactual
+  original_sentence: The exclosed plots had twice the abundance of planted native seedlings ( $F_{1,5} = 5.92$ , P = 0.0196)
+    and significantly higher richness of planted species ( $F_{1.5} = 13.8$ , P < 0.001) than areas lacking protection from
+    small mammals (Figs 2 and S1).
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: &id008
+  - status: explicitly_asserted
+    comparator_type: untreated_control
+    comparator_description: uncaged plots open to small mammals
+  direction: *id006
+  scope: assertional
+  strength:
+    status: explicitly_asserted
+    significance: significant
+    analysis_method: anova
+    p_value: 0.0196
+    quantitative_value: twice the abundance
+  temporal_extent: &id009
+    observation_seasons:
+    - summer
+    time_since_intervention_text: seed added 8 April 2012; recruitment surveyed late August 2012
+  evidential_basis: *id007
+  source_spans:
+  - text: The exclosed plots had twice the abundance of planted native seedlings ( $F_{1,5} = 5.92$ , P = 0.0196) and significantly
+      higher richness of planted species ( $F_{1.5} = 13.8$ , P < 0.001) than areas lacking protection from small mammals
+      (Figs 2 and S1).
+    start_char: 28617
+    end_char: 28871
+    section: results
+- id: 4CB9X9XE-e21
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_exclosure
+  predicate: associated_with
+  object: node:4cb9x9xe_planted_richness_inc
+  causal_language: associational
+  philosophical_accounts:
+  - interventionist
+  - counterfactual
+  original_sentence: The exclosed plots had twice the abundance of planted native seedlings ( $F_{1,5} = 5.92$ , P = 0.0196)
+    and significantly higher richness of planted species ( $F_{1.5} = 13.8$ , P < 0.001) than areas lacking protection from
+    small mammals (Figs 2 and S1).
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator: *id008
+  direction: *id006
+  scope: assertional
+  strength:
+    status: explicitly_asserted
+    significance: significant
+    analysis_method: anova
+  temporal_extent: *id009
+  evidential_basis: *id007
+  source_spans:
+  - text: The exclosed plots had twice the abundance of planted native seedlings ( $F_{1,5} = 5.92$ , P = 0.0196) and significantly
+      higher richness of planted species ( $F_{1.5} = 13.8$ , P < 0.001) than areas lacking protection from small mammals
+      (Figs 2 and S1).
+    start_char: 28617
+    end_char: 28871
+    section: results
+- id: 4CB9X9XE-e22
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_exclosure
+  predicate: associated_with
+  object: node:4cb9x9xe_ecan_seedling_inc
+  causal_language: associational
+  philosophical_accounts:
+  - interventionist
+  - counterfactual
+  original_sentence: Most notable was E. canadensis (C3 grass), with 51 individuals observed in the exclosures, but none in
+    open areas.
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator:
+  - status: explicitly_asserted
+    comparator_type: untreated_control
+    comparator_description: open areas (none observed)
+  direction: *id006
+  strength:
+    status: explicitly_asserted
+    significance: not_tested
+    analysis_method: descriptive_only
+  scope: assertional
+  temporal_extent: *id009
+  evidential_basis: *id007
+  source_spans:
+  - text: Most notable was E. canadensis (C3 grass), with 51 individuals observed in the exclosures, but none in open areas.
+    start_char: 28872
+    end_char: 28986
+    section: results
+- id: 4CB9X9XE-e23
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_exclosure
+  predicate: associated_with
+  object: node:4cb9x9xe_oldfield_recruit_inc
+  causal_language: no_relationship
+  philosophical_accounts:
+  - interventionist
+  - counterfactual
+  original_sentence: There were no recruitment differences for oldfield plants inside vs. outside the exclosures.
+  ecosystem_context: temperate_subhumid_grasslands
+  negated: true
+  comparator: *id008
+  direction: *id006
+  strength:
+    status: explicitly_asserted
+    significance: not_significant
+    analysis_method: anova
+  scope: assertional
+  temporal_extent: *id009
+  evidential_basis: *id007
+  source_spans:
+  - text: There were no recruitment differences for oldfield plants inside vs. outside the exclosures.
+    start_char: 28987
+    end_char: 29079
+    section: results
+- id: 4CB9X9XE-e24
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_mowing
+  predicate: associated_with
+  object: node:4cb9x9xe_planted_richness_dec
+  causal_language: associational
+  philosophical_accounts:
+  - interventionist
+  - mechanistic
+  original_sentence: The richness of planted prairie species outside the cages was especially low in seeded plots that were
+    experimentally defoliated with mowing (Fig. S1), suggesting that small mammals were more able to detect native seed in
+    these
+  ecosystem_context: temperate_subhumid_grasslands
+  mediation:
+    status: explicitly_asserted
+    mediator_node_ids:
+    - node:4cb9x9xe_seed_detection_inc
+    pathway_description: small mammals were more able to detect native seed in mowed areas
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - seeded plots
+    - outside rodent exclosures
+  direction: *id006
+  strength:
+    status: explicitly_asserted
+    significance: significant
+    analysis_method: anova
+  scope: contingent
+  temporal_extent: *id009
+  evidential_basis:
+    evidence_types:
+    - randomized_experiment
+    evidence_objects:
+    - both
+  source_spans:
+  - text: The richness of planted prairie species outside the cages was especially low in seeded plots that were experimentally
+      defoliated with mowing (Fig. S1), suggesting that small mammals were more able to detect native seed in these
+    start_char: 29080
+    end_char: 29307
+    section: results
+- id: 4CB9X9XE-e25
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_mowing
+  predicate: contributes_to
+  object: node:4cb9x9xe_seed_detection_inc
+  causal_language: uncertain_causal
+  philosophical_accounts:
+  - mechanistic
+  original_sentence: The richness of planted prairie species outside the cages was especially low in seeded plots that were
+    experimentally defoliated with mowing (Fig. S1), suggesting that small mammals were more able to detect native seed in
+    these
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: not_addressed
+    significance: not_tested
+  scope: contingent
+  evidential_basis:
+    evidence_types:
+    - randomized_experiment
+    evidence_objects:
+    - mechanism
+  source_spans:
+  - text: The richness of planted prairie species outside the cages was especially low in seeded plots that were experimentally
+      defoliated with mowing (Fig. S1), suggesting that small mammals were more able to detect native seed in these
+    start_char: 29080
+    end_char: 29307
+    section: results
+- id: 4CB9X9XE-e26
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_exclosure
+  predicate: associated_with
+  object: node:4cb9x9xe_rhirta_recruit_inc
+  causal_language: no_relationship
+  philosophical_accounts:
+  - interventionist
+  - counterfactual
+  original_sentence: Rudbeckia hirta is a native prairie forb with tiny seeds that does not suffer significant rodent granivory
+    (see Fig. S1) and recruited in large numbers inside and outside of the exclosures.
+  ecosystem_context: temperate_subhumid_grasslands
+  negated: true
+  comparator: *id008
+  direction: *id006
+  strength:
+    status: explicitly_asserted
+    significance: not_significant
+  scope: assertional
+  evidential_basis: *id007
+  source_spans:
+  - text: '*Rudbeckia hirta* is a native prairie forb with tiny seeds that does not suffer significant rodent granivory (see
+      Fig. S1) and recruited in large numbers inside and outside of the exclosures.'
+    start_char: 21113
+    end_char: 21304
+    section: results
+- id: 4CB9X9XE-e27
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_seedprod_inc
+  predicate: associated_with
+  object: node:4cb9x9xe_cons_prairie_inc
+  causal_language: associational
+  philosophical_accounts:
+  - regularity
+  original_sentence: We mostly observed the first outcome, with native consumers showing preferences for subsets of planted
+    native prairie species despite their rarity regionally, and almost exclusively at times of peak seed output.
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: explicitly_asserted
+    significance: not_reported
+  scope: assertional
+  evidential_basis: *id003
+  source_spans:
+  - text: We mostly observed the first outcome, with native consumers showing preferences for subsets of planted native prairie
+      species despite their rarity regionally, and almost exclusively at times of peak seed output.
+    start_char: 31062
+    end_char: 31273
+    section: discussion
+- id: 4CB9X9XE-e28
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_seed_avail_dec
+  predicate: causes
+  object: node:4cb9x9xe_cons_prairie_dec
+  causal_language: uncertain_causal
+  philosophical_accounts:
+  - counterfactual
+  - mechanistic
+  original_sentence: The consumption of seeds of these plants were observed year-round in the monthly cafeteria trials, with
+    same subset of species taken consistently and in the same order, suggesting that consumption levels in this system could
+    be determined more by seed availability than by changes in consumer preference by season (i.e. seed consumption appears
+    to end in late fall because of food limitation, rather than switching to different species).
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: not_addressed
+    significance: not_tested
+  scope: assertional
+  temporal_extent:
+    observation_seasons:
+    - autumn
+  evidential_basis:
+    evidence_types:
+    - observational_longitudinal
+    evidence_objects:
+    - mechanism
+  source_spans:
+  - text: The consumption of seeds of these plants were observed year-round in the monthly cafeteria trials, with same subset
+      of species taken consistently and in the same order, suggesting that consumption levels in this system could be determined
+      more by seed availability than by changes in consumer preference by season (i.e. seed consumption appears to end in
+      late fall because of food limitation, rather than switching to different species).
+    start_char: 31274
+    end_char: 31711
+    section: discussion
+- id: 4CB9X9XE-e29
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_oldfield_present
+  predicate: contributes_to
+  object: node:4cb9x9xe_rodent_pop_ongoing
+  causal_language: uncertain_causal
+  philosophical_accounts:
+  - mechanistic
+  original_sentence: However, with our observed deer mouse population densities at normal to high levels for southern Canada
+    (Davidson & Morris 2001), the implication is that these introduced species provide sufficient resources to maintain rodent
+    populations in this system.
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: not_addressed
+    significance: not_tested
+  scope: assertional
+  source_spans:
+  - text: However, with our observed deer mouse population densities at normal to high levels for southern Canada (Davidson
+      & Morris 2001), the implication is that these introduced species provide sufficient resources to maintain rodent populations
+      in this system.
+    start_char: 32217
+    end_char: 32471
+    section: discussion
+- id: 4CB9X9XE-e30
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_rodent_pop_ongoing
+  predicate: causes
+  object: node:4cb9x9xe_granivory_inc
+  causal_language: uncertain_causal
+  philosophical_accounts:
+  - mechanistic
+  original_sentence: 'If true, the net effect is likely twofold: normal to high population levels of rodents being maintained,
+    which in turn exerts intense granivore pressure thereby inhibiting recruitment by some native prairie plants.'
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: not_addressed
+    significance: not_tested
+  scope: contingent
+  context_dependence: &id010
+    status: explicitly_asserted
+    scope_conditions:
+    - if introduced oldfield species sustain rodent populations
+  source_spans:
+  - text: 'If true, the net effect is likely twofold: normal to high population levels of rodents being maintained, which
+      in turn exerts intense granivore pressure thereby inhibiting recruitment by some native prairie plants.'
+    start_char: 32472
+    end_char: 32686
+    section: discussion
+- id: 4CB9X9XE-e31
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_granivory_inc
+  predicate: causes
+  object: node:4cb9x9xe_prairie_recruit_dec
+  causal_language: uncertain_causal
+  philosophical_accounts:
+  - mechanistic
+  original_sentence: 'If true, the net effect is likely twofold: normal to high population levels of rodents being maintained,
+    which in turn exerts intense granivore pressure thereby inhibiting recruitment by some native prairie plants.'
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: not_addressed
+    significance: not_tested
+  scope: contingent
+  context_dependence: *id010
+  source_spans:
+  - text: 'If true, the net effect is likely twofold: normal to high population levels of rodents being maintained, which
+      in turn exerts intense granivore pressure thereby inhibiting recruitment by some native prairie plants.'
+    start_char: 32472
+    end_char: 32686
+    section: discussion
+- id: 4CB9X9XE-e32
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_oldfield_present
+  predicate: contributes_to
+  object: node:4cb9x9xe_prairie_recruit_dec
+  causal_language: uncertain_causal
+  philosophical_accounts:
+  - mechanistic
+  original_sentence: 'If true, the net effect is likely twofold: normal to high population levels of rodents being maintained,
+    which in turn exerts intense granivore pressure thereby inhibiting recruitment by some native prairie plants.'
+  ecosystem_context: temperate_subhumid_grasslands
+  mediation:
+    status: explicitly_asserted
+    mediator_node_ids:
+    - node:4cb9x9xe_rodent_pop_ongoing
+    - node:4cb9x9xe_granivory_inc
+    pathway_description: introduced species maintain rodent populations, which exert intense granivore pressure that inhibits
+      native recruitment
+  strength:
+    status: not_addressed
+    significance: not_tested
+  scope: contingent
+  context_dependence: *id010
+  source_spans:
+  - text: 'If true, the net effect is likely twofold: normal to high population levels of rodents being maintained, which
+      in turn exerts intense granivore pressure thereby inhibiting recruitment by some native prairie plants.'
+    start_char: 32472
+    end_char: 32686
+    section: discussion
+- id: 4CB9X9XE-e33
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_granivory_inc
+  predicate: contributes_to
+  object: node:4cb9x9xe_restoration_success_dec
+  causal_language: uncertain_causal
+  philosophical_accounts:
+  - mechanistic
+  original_sentence: This targeted granviory may present a substantial challenge for the restoration success of planted high-diversity
+    prairie, if subsets of species are preferentially consumed by native rodents once the prairie reaches canopy closure and
+    rodent populations become established.
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: not_addressed
+    significance: not_tested
+  scope: contingent
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - once the prairie reaches canopy closure and rodent populations become established
+  source_spans:
+  - text: This targeted granviory may present a substantial challenge for the restoration success of planted high-diversity
+      prairie, if subsets of species are preferentially consumed by native rodents once the prairie reaches canopy closure
+      and rodent populations become established.
+    start_char: 33020
+    end_char: 33293
+    section: discussion
+- id: 4CB9X9XE-e34
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_rodent_absent
+  predicate: contributes_to
+  object: node:4cb9x9xe_initial_success_inc
+  causal_language: uncertain_causal
+  philosophical_accounts:
+  - counterfactual
+  - mechanistic
+  original_sentence: This creates a subtle but difficult restoration challenge – prairie plantings on unvegetated fields may
+    initially succeed because rodents are absent (see Germain et al. 2013), but future recruitment may be significantly constrained
+    for some species.
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: not_addressed
+    significance: not_tested
+  scope: contingent
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - plantings on unvegetated fields
+  source_spans:
+  - text: This creates a subtle but difficult restoration challenge – prairie plantings on unvegetated fields may initially
+      succeed because rodents are absent (see Germain et al. 2013), but future recruitment may be significantly constrained
+      for some species.
+    start_char: 33294
+    end_char: 33543
+    section: discussion
+- id: 4CB9X9XE-e35
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_rodent_present
+  predicate: causes
+  object: node:4cb9x9xe_prairie_recruit_dec
+  causal_language: uncertain_causal
+  philosophical_accounts:
+  - mechanistic
+  original_sentence: This creates a subtle but difficult restoration challenge – prairie plantings on unvegetated fields may
+    initially succeed because rodents are absent (see Germain et al. 2013), but future recruitment may be significantly constrained
+    for some species.
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: not_addressed
+    significance: not_tested
+  scope: contingent
+  source_spans:
+  - text: This creates a subtle but difficult restoration challenge – prairie plantings on unvegetated fields may initially
+      succeed because rodents are absent (see Germain et al. 2013), but future recruitment may be significantly constrained
+      for some species.
+    start_char: 33294
+    end_char: 33543
+    section: discussion
+- id: 4CB9X9XE-e36
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_granivory_inc
+  predicate: contributes_to
+  object: node:4cb9x9xe_oldfield_establish_inc
+  causal_language: uncertain_causal
+  philosophical_accounts:
+  - counterfactual
+  - mechanistic
+  original_sentence: We observed high consumption levels of native seed by native consumers, suggesting the possible facilitation
+    of introduced species initially
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: not_addressed
+    significance: not_tested
+  scope: contingent
+  context_dependence:
+    status: explicitly_asserted
+    scope_conditions:
+    - all things being equal
+    - initial establishment of introduced oldfield species
+  source_spans:
+  - text: We observed high consumption levels of native seed by native consumers, suggesting the possible facilitation of
+      introduced species initially
+    start_char: 33845
+    end_char: 33985
+    section: discussion
+- id: 4CB9X9XE-e37
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_rod_cons_oldfield
+  predicate: causes
+  object: node:4cb9x9xe_oldfield_expansion_dec
+  causal_language: uncertain_causal
+  philosophical_accounts:
+  - counterfactual
+  original_sentence: One implication is the expansion rate of these plant species, including some aggressive invasives, could
+    even be curtailed by rodent consumers, compared to what it would be in their absence
+  ecosystem_context: temperate_subhumid_grasslands
+  comparator:
+  - status: explicitly_asserted
+    comparator_type: not_applicable
+    comparator_description: hypothetical absence of rodent consumers
+  strength:
+    status: not_addressed
+    significance: not_tested
+  scope: prototypical
+  source_spans:
+  - text: One implication is the expansion rate of these plant species, including some aggressive invasives, could even be
+      curtailed by rodent consumers, compared to what it would be in their absence
+    start_char: 35439
+    end_char: 35628
+    section: discussion
+- id: 4CB9X9XE-e38
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_rodent_density_inc
+  predicate: associated_with
+  object: node:4cb9x9xe_diet_breadth_inc
+  causal_language: associational
+  philosophical_accounts:
+  - regularity
+  original_sentence: For example, at peak rodent population density in July we observed the widest range of plant species
+    in the rodent diet, including non-native and potentially invasive trees, grasses, and forbs, as well as the most rapid
+    depletion of seed from the widest range of plants in the cafeteria trials
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: explicitly_asserted
+    significance: not_reported
+  scope: assertional
+  temporal_extent:
+    observation_seasons:
+    - summer
+  evidential_basis: *id003
+  source_spans:
+  - text: For example, at peak rodent population density in July we observed the widest range of plant species in the rodent
+      diet, including non-native and potentially invasive trees, grasses, and forbs, as well as the most rapid depletion of
+      seed from the widest range of plants in the cafeteria trials
+    start_char: 35931
+    end_char: 36224
+    section: discussion
+- id: 4CB9X9XE-e39
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_rodent_density_inc
+  predicate: associated_with
+  object: node:4cb9x9xe_cafeteria_depletion_inc
+  causal_language: associational
+  philosophical_accounts:
+  - regularity
+  original_sentence: For example, at peak rodent population density in July we observed the widest range of plant species
+    in the rodent diet, including non-native and potentially invasive trees, grasses, and forbs, as well as the most rapid
+    depletion of seed from the widest range of plants in the cafeteria trials
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: explicitly_asserted
+    significance: not_reported
+  scope: assertional
+  temporal_extent:
+    observation_seasons:
+    - summer
+  evidential_basis: *id003
+  source_spans:
+  - text: For example, at peak rodent population density in July we observed the widest range of plant species in the rodent
+      diet, including non-native and potentially invasive trees, grasses, and forbs, as well as the most rapid depletion of
+      seed from the widest range of plants in the cafeteria trials
+    start_char: 35931
+    end_char: 36224
+    section: discussion
+- id: 4CB9X9XE-e40
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_ermine_abund_inc
+  predicate: contributes_to
+  object: node:4cb9x9xe_rodent_density_dec
+  causal_language: uncertain_causal
+  philosophical_accounts:
+  - mechanistic
+  original_sentence: There could also be a predatory influence of weasels, which were trapped in highest numbers in late summer.
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: not_addressed
+    significance: not_tested
+  scope: assertional
+  temporal_extent:
+    observation_seasons:
+    - summer
+  evidential_basis:
+    evidence_types:
+    - observational_longitudinal
+    evidence_objects:
+    - mechanism
+  source_spans:
+  - text: There could also be a predatory influence of weasels, which were trapped in highest numbers in late summer.
+    start_char: 36549
+    end_char: 36656
+    section: discussion
+- id: 4CB9X9XE-e41
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_rodent_density_dec
+  predicate: associated_with
+  object: node:4cb9x9xe_cafeteria_removal_dec
+  causal_language: no_relationship
+  philosophical_accounts:
+  - regularity
+  original_sentence: although the reduced rodent population size was not associated with changes in the magnitude of seed
+    removal from the cafeteria trials.
+  ecosystem_context: temperate_subhumid_grasslands
+  negated: true
+  strength:
+    status: explicitly_asserted
+    significance: not_reported
+  scope: assertional
+  evidential_basis: *id003
+  source_spans:
+  - text: although the reduced rodent population size was not associated with changes in the magnitude of seed removal from
+      the cafeteria trials.
+    start_char: 36755
+    end_char: 36890
+    section: discussion
+- id: 4CB9X9XE-e42
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_rod_cons_oldfield
+  predicate: contributes_to
+  object: node:4cb9x9xe_rodent_pop_ongoing
+  causal_language: uncertain_causal
+  philosophical_accounts:
+  - mechanistic
+  original_sentence: The consumption of non-targeted oldfield species appears sufficient to maintain rodent populations at
+    high levels (Davidson & Morris 2001).
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: not_addressed
+    significance: not_tested
+  scope: assertional
+  source_spans:
+  - text: The consumption of non-targeted oldfield species appears sufficient to maintain rodent populations at high levels
+      (Davidson & Morris 2001).
+    start_char: 37602
+    end_char: 37741
+    section: discussion
+- id: 4CB9X9XE-e43
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_rod_cons_oldfield
+  predicate: prevents
+  object: node:4cb9x9xe_granivory_occ
+  causal_language: no_relationship
+  philosophical_accounts:
+  - counterfactual
+  original_sentence: However, this seems to be insufficient to shelter rarer prairie species from targeted granivory, which
+    in turn may hamper their persistence.
+  ecosystem_context: temperate_subhumid_grasslands
+  negated: true
+  strength:
+    status: not_addressed
+    significance: not_tested
+  scope: assertional
+  source_spans:
+  - text: However, this seems to be insufficient to shelter rarer prairie species from targeted granivory, which in turn may
+      hamper their persistence.
+    start_char: 37742
+    end_char: 37882
+    section: discussion
+- id: 4CB9X9XE-e44
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_granivory_inc
+  predicate: causes
+  object: node:4cb9x9xe_prairie_persistence_dec
+  causal_language: uncertain_causal
+  philosophical_accounts:
+  - mechanistic
+  original_sentence: However, this seems to be insufficient to shelter rarer prairie species from targeted granivory, which
+    in turn may hamper their persistence.
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: not_addressed
+    significance: not_tested
+  scope: assertional
+  source_spans:
+  - text: However, this seems to be insufficient to shelter rarer prairie species from targeted granivory, which in turn may
+      hamper their persistence.
+    start_char: 37742
+    end_char: 37882
+    section: discussion
+- id: 4CB9X9XE-e45
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_seed_addition
+  predicate: contributes_to
+  object: node:4cb9x9xe_prairie_persistence_inc
+  causal_language: uncertain_causal
+  philosophical_accounts:
+  - agency
+  - counterfactual
+  original_sentence: It also suggests that some prairie plants, already regionally rare, may be locked in an extinction debt
+    that may be difficult to solve with seed additions alone, with little consumption detected on adults or seedlings (Germain
+    et al. 2013) but intense granivory that suggest future recruitment difficulties (Bricker, Pearson & Maron 2010).
+  ecosystem_context: temperate_subhumid_grasslands
+  sufficiency: explicitly_denied
+  strength:
+    status: not_addressed
+    significance: not_tested
+  scope: contingent
+  source_spans:
+  - text: It also suggests that some prairie plants, already regionally rare, may be locked in an extinction debt that may
+      be difficult to solve with seed additions alone, with little consumption detected on adults or seedlings (Germain et
+      al. 2013) but intense granivory that suggest future recruitment difficulties (Bricker, Pearson & Maron 2010).
+    start_char: 38102
+    end_char: 38441
+    section: discussion
+- id: 4CB9X9XE-e46
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_granivory_inc
+  predicate: causes
+  object: node:4cb9x9xe_prairie_recruit_dec
+  causal_language: uncertain_causal
+  philosophical_accounts:
+  - mechanistic
+  original_sentence: It also suggests that some prairie plants, already regionally rare, may be locked in an extinction debt
+    that may be difficult to solve with seed additions alone, with little consumption detected on adults or seedlings (Germain
+    et al. 2013) but intense granivory that suggest future recruitment difficulties (Bricker, Pearson & Maron 2010).
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: not_addressed
+    significance: not_tested
+  scope: prototypical
+  source_spans:
+  - text: It also suggests that some prairie plants, already regionally rare, may be locked in an extinction debt that may
+      be difficult to solve with seed additions alone, with little consumption detected on adults or seedlings (Germain et
+      al. 2013) but intense granivory that suggest future recruitment difficulties (Bricker, Pearson & Maron 2010).
+    start_char: 38102
+    end_char: 38441
+    section: discussion
+- id: 4CB9X9XE-e47
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_predator_habitat
+  predicate: contributes_to
+  object: node:4cb9x9xe_predator_abund_inc
+  causal_language: uncertain_causal
+  philosophical_accounts:
+  - agency
+  original_sentence: It may also be important to consider restoring habitat features that favor rodent predators such as raptors
+    and small mammalian carnivores such as badgers (Taxidea taxus), although these species tend to be even rarer and more
+    at-risk in grasslands than the plants they may indirectly protect
+  ecosystem_context: temperate_subhumid_grasslands
+  strength:
+    status: not_addressed
+    significance: not_tested
+  scope: prototypical
+  evidential_basis:
+    evidence_types:
+    - expert_judgment
+    evidence_objects:
+    - mechanism
+  source_spans:
+  - text: It may also be important to consider restoring habitat features that favor rodent predators such as raptors and
+      small mammalian carnivores such as badgers (Taxidea taxus), although these species tend to be even rarer and more at-risk
+      in grasslands than the plants they may indirectly protect
+    start_char: 38906
+    end_char: 39197
+    section: discussion
+- id: 4CB9X9XE-e48
+  source_document: 4CB9X9XE
+  subject: node:4cb9x9xe_predator_abund_inc
+  predicate: contributes_to
+  object: node:4cb9x9xe_prairie_persistence_inc
+  causal_language: uncertain_causal
+  philosophical_accounts:
+  - agency
+  - mechanistic
+  original_sentence: It may also be important to consider restoring habitat features that favor rodent predators such as raptors
+    and small mammalian carnivores such as badgers (Taxidea taxus), although these species tend to be even rarer and more
+    at-risk in grasslands than the plants they may indirectly protect
+  ecosystem_context: temperate_subhumid_grasslands
+  mediation:
+    status: implicitly_assumed
+    mediator_node_ids:
+    - node:4cb9x9xe_rodent_density_dec
+    pathway_description: predators reduce rodents, indirectly protecting prairie plants from granivory
+  strength:
+    status: not_addressed
+    significance: not_tested
+  scope: prototypical
+  evidential_basis:
+    evidence_types:
+    - expert_judgment
+    evidence_objects:
+    - mechanism
+  source_spans:
+  - text: It may also be important to consider restoring habitat features that favor rodent predators such as raptors and
+      small mammalian carnivores such as badgers (Taxidea taxus), although these species tend to be even rarer and more at-risk
+      in grasslands than the plants they may indirectly protect
+    start_char: 38906
+    end_char: 39197
+    section: discussion

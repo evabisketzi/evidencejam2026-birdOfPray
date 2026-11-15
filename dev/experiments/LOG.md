@@ -141,3 +141,230 @@ direct (Murphy 33/39/11/17, 4CB9X9XE 2/48/31/19, 3KPITIV3 20/17/59/4, 6HKWT4QG 2
 - **Reading:** entities are still found (Murphy loose F1 holds) but no longer match at the standard level, on both models,
   far outside the noise. The causal-language accuracy on matched pairs was higher (0.70 / 0.76 vs 0.675 / 0.621), on far fewer pairs.
 - **Left in place:** the file `system_v1.txt` and its test are still in the working tree, unused (not deleted without the user's say).
+
+## 2026-11-14 — prompt `system_lang.txt` (causal language and predicate)  — REVERTED (not adopted; prompt stays `system.txt`)
+- **Change:** prompt variant: a manipulated treatment or explicit causal verb (also with likely/probably) = D; hedged = U;
+  an observed difference or co-occurrence without manipulation or causal verb = A with predicate a.
+- **Type:** input-changing → 3 endpoint runs per arm, gold5, `cache=refresh` (`lang_sf_r1-3`, `lang_pc_r1-3`); controls
+  `ctrl_sf_r1-3`, `tp_new_pc_r1-3` on the same code state. Out-of-sample numbers below use the ORIGINAL annotations.
+- **Result (sentence model), mean [range]:** Murphy std F1 0.563 [0.550–0.569] → 0.550 [0.534–0.579]; causal-language
+  accuracy 0.675 → 0.708 [0.692–0.718]; predicate accuracy 0.805 → 0.791; out-of-sample std F1 0.032 → 0.040, loose 0.176 → 0.212.
+  Tokens per paper 6,319+2,181 → 6,574+2,191.
+- **Result (paragraph-chunks model):** Murphy std F1 0.570 [0.559–0.591] → 0.544 [0.493–0.585]; causal-language accuracy
+  0.621 → 0.592 [0.529–0.658]; null recall 0.644 → 0.511 [0.267–0.667]; out-of-sample std F1 0.069 → 0.047, loose 0.191 → 0.166.
+- **Reading:** a small language gain on the sentence model (about the size of the run-to-run range), a loss on the
+  submitted paragraph-chunks model. Fails the "both models" rule.
+- **Not run:** the other batch-1 arms (`taxon_groups=on`, `preprocess=sentence-chunks`): they need the runner restarted
+  with the new keys.
+
+## 2026-11-14 — cleaned copies of the machine-made annotations (`dev/annot_v2/`)  — evaluation data, not a pipeline change
+- **Fact (user, 2026-11-14):** only Murphy 2005 is human-annotated; 4CB9X9XE, 3KPITIV3, 6HKWT4QG, ITXNQ843 (and
+  2F76GVEE, 4C479SU8, V3H4MP29 in `data/`) were made by Claude.
+- **Change:** `dev/annot_fix.py` writes cleaned copies to `dev/annot_v2/` (originals untouched): character offsets for
+  1,190 spans, 9 species names → NCBITaxon IDs, method detail in brackets removed from terms, 38 hand edits
+  (`term_edits.tsv`) that reduce over-specified terms to the entity. No claim added, removed or re-judged. All 7 files
+  pass linkml-validate. Details and every change: `dev/annot_v2/README.md`, `CHANGES.md`.
+- **Why:** on ITXNQ843 the pipeline and the annotation state nearly the same claims, yet loose F1 was about 0.05, because
+  every annotated subject carried method detail ("broadcast glyphosate application without species targeting").
+- **Effect on scores (same pipeline output, mean of the 4 out-of-sample papers, 3 runs):** sentence std F1 0.032 → 0.134
+  [0.120–0.145], loose 0.176 → 0.304; paragraph-chunks std F1 0.069 → 0.153 [0.148–0.158], loose 0.191 → 0.298.
+  ITXNQ843 loose 0.05–0.07 → 0.45–0.51; 4CB9X9XE unchanged. Murphy is not affected.
+- **Claim review (same day):** all 209 edges of the four gold5 files read against their sentences. 4CB9X9XE and 6HKWT4QG:
+  nothing changed. 3KPITIV3: 4 edges now quote the sentence that supports them (three light-ring edges quoted the one
+  sentence that contradicts the paper's own finding). ITXNQ843: 4 null results that were only in the annotation notes
+  are edges now (55 → 59). No predicate, language or direction was found wrong. Not covered: claims in sentences the
+  annotation never quotes; the three further papers. Out-of-sample null recall on the cleaned files: sentence 0.000 in
+  all 3 runs, paragraph-chunks 0.273.
+- **Cited-study claims removed (user decision, same day):** Murphy annotates none (25 findings, all the study's own), so
+  11 edges whose claim is reported from another study were deleted (3KPITIV3 1, 6HKWT4QG 5, ITXNQ843 5). Final edge counts
+  48 / 45 / 55 / 54. Final scores on the cleaned files (same control runs): sentence std F1 0.139 [0.125–0.150], loose 0.310
+  [0.307–0.314]; paragraph-chunks std F1 0.156 [0.151–0.162], loose 0.301 [0.294–0.311]. These supersede the figures above.
+- **Use:** `EVAL_OTHERS_DIR=dev/annot_v2 .venv/bin/python dev/eval_murphy.py GRAPH --others`. `dev/gold/` still holds the
+  originals (hook-protected). Numbers on the cleaned files are not comparable with earlier out-of-sample numbers.
+- **What the remaining gap shows:** 3KPITIV3: the pipeline writes "blue rings" as a free-text variable where the annotation
+  uses the species plus an attribute; 4CB9X9XE: "rodent density" as a variable where the annotation uses the Rodentia ID
+  (the unmeasured `--taxon-groups` flag targets this).
+
+## 2026-11-14 (night) — tooling for unattended work: saved answers, replay, prompt sidecar, eight-paper scorer  — infrastructure
+- **Why:** Claude's shell has no BRINE variables; the only endpoint access is the running job runner (fixed keys, cannot be
+  restarted unattended). The cache keeps one answer per input, so downstream changes could only be checked on ONE response set.
+- **Change:** every run writes `raw_responses.jsonl` (all answers in call order) and `losses.jsonl` (every claim line lost before
+  the graph: unparseable after/without repair, unknown sentence numbers, failed papers). `dev/replay.py JOB OUT.yaml` replays
+  a run's answers through the current code (checked exact: identical edges and nodes on a mock run). `pipeline/prompt/<p>.args`
+  adds command-line flags for experiment prompts (later args win, so `--docs` overrides the job's set); `system.txt` has none.
+  `dev/eval8.py` scores Murphy (human) / dev3 (4CB9X9XE, 3KPITIV3, 6HKWT4QG) / reg4 (ITXNQ843, 2F76GVEE, 4C479SU8, V3H4MP29),
+  Claude references from `dev/annot_v2/`, reg4 not tuned on. `dev/show_io.py SLUG` prints each chunk input with its answer.
+- **Reference inventory (verified):** 8 files: `dev/gold/murphy2005.yaml` (human); Claude-made: 4 in `dev/gold/`, 3 in `data/`
+  (2F76GVEE, 4C479SU8, V3H4MP29), cleaned copies of all 7 in `dev/annot_v2/`.
+
+## 2026-11-14 (night) — lenient claim-line parser  — KEPT (post-processing; exact on cached answers)
+- **Finding:** 17 % of claim lines from the current prompt did not parse (1,090 of 6,304 in the answers of the running full
+  run); on gold5 the repair call recovered 2 of 40 (paragraph-chunks) and 16 of 53 (sentence) — the rest were dropped silently.
+  Causes: a value word the format has no code for (`T2/origin/hatchery-reared`, `peat chemistry/pH/high`, 645 + 334 lines),
+  `;`-lists of causes, unit slashes (`kg/ha`), `F|...|N|exp` (a null written as an F line, 78).
+- **Change (`pipeline/parse.py`):** the value word is kept verbatim on the property (`pH (high)`), no direction invented; a unit
+  slash is `per`; an F line with language N is an N line; a `;` list of causes is ONE joint cause node ("A and B", plan rule:
+  joint stays joint). Lines missing a cause or effect still fail. `PIPELINE_STRICT_PARSE=1` restores the old parser.
+- **Result (paragraph-chunks, cached answers, 7 papers — V3H4MP29 not cached yet):** Murphy std F1 0.591 → 0.603, loose
+  0.773 → 0.809; dev3 0.133 → 0.148; reg4 (3 papers) 0.083 → 0.092. Responses that need a repair call: 196 → 57 of 290.
+- **Source check:** the recovered Murphy/6HKWT4QG/ITXNQ843/4CB9X9XE edges were read against their sentences; the wrong ones
+  are wrong in the model's line (e.g. "low native forb cover causes glyphosate application"), not made wrong by the parser.
+- **Not yet:** the sentence model and a second response set (replays of the b8_* runs follow).
+
+## 2026-11-14 (night) — null convention check  — NO CHANGE
+- Murphy gold: 15 negated edges; 7 put `unchanged` on the object ("not affected"), the others the negated direction. The CAMO
+  v0.10.0 definitions of `negated` and `no_relationship` say the object keeps the qualifier a positive finding would use and
+  is never `unchanged`. Our guard already follows that; the Murphy `unchanged` values predate the rule and are not copied.
+
+## 2026-11-14 (night) — duplicate check keeps conditions  — KEPT (fidelity; no effect on the 8 papers)
+- `guard.same_sentence_key` now includes dose, dose_level, comparator, temporal_extent: the same pair from one sentence at
+  another dose or season is a different claim. Cached 8-paper scores identical.
+
+## 2026-11-15 00:10 — lenient parser confirmed on 4 response sets per model; `|N;` per-effect nulls; property/property/change
+- **Replay of b8_*_r1-2 and e8_*_r1-2 (4 distinct answer sets per model, 8 papers), strict vs lenient, mean [range]:**
+  paragraph-chunks: Murphy std F1 0.571 [0.511–0.600] → 0.576 [0.551–0.594], null recall 0.583 → 0.683; dev3 0.125 → 0.142;
+  reg4 0.130 → 0.145. Sentence: Murphy 0.550 [0.462–0.612] → 0.555 [0.539–0.592], null recall 0.450 → 0.633; dev3 0.084 →
+  0.099; reg4 0.167 → 0.182. Better or equal on every group, both models. KEPT.
+- Caveat: in runs started after the lenient code, the saved repair answer belongs to the lenient set of broken lines, so the
+  strict replay of those runs is slightly disadvantaged; b8_sf_r1 (pre-change) shows the same direction.
+- With the lenient parser live (b8_pc_r1): 3 of 479 lines unparseable (was about 14 %); repair recovered 1. Two more forms
+  added afterwards: `effect|N;effect|N|exp` (every effect marked null -> N line; Murphy sentence model: these two lines carried
+  the nulls the repair call used to rescue) and `thing/property/property/change`.
+
+## 2026-11-15 00:10 — measured_attribute = head of an "X of Y" property  — KEPT (follows the CAMO definition)
+- **Change (`expand.py`):** a property "size of year 1 rosettes" gives `measured_attribute: size`; the node name keeps the
+  whole phrase. The schema defines measured_attribute as the quality (PATO: abundance, density, cover, height); the bearer
+  belongs to the entity. `PIPELINE_HEAD_ATTRIBUTE=0` switches it off for comparisons.
+- **Result (replay, one set each):** Murphy std F1: sentence baseline 0.517 → 0.544; paragraph-chunks baseline 0.597 → 0.583;
+  enumeration prompt (paragraph-chunks) 0.439 → 0.594, strict 0.387 → 0.568. dev3 and reg4 identical in all three.
+
+## 2026-11-15 00:10 — prompt `x_enum.txt` (list every outcome; null enumerations)  — INCONCLUSIVE, not adopted
+- **Change:** three rule edits + two generic examples (non-Murphy wording): every listed outcome its own effect, null
+  enumerations complete, ratio/joint treatment stays single, property "as specific as the paper".
+- **Result, 2 runs per arm (baseline = identical copy of system.txt, same code), mean [range]:** paragraph-chunks Murphy
+  0.579 [0.575–0.583] → 0.572 [0.551–0.594] (strict 0.524 → 0.547, recall 0.583 → 0.639), dev3 0.159 → 0.124, reg4 0.137 →
+  0.153, null recall up on dev3/reg4. Sentence: Murphy 0.544 → 0.566, dev3 0.111 → 0.086, reg4 0.171 → 0.192.
+- **Source check:** Murphy sentences 7 and 11 now give all nine / all four listed outcomes (the plan's f7 case is fixed in the
+  raw answers). But on 6HKWT4QG (sentence model) the model dropped the T-codes ("root growth" instead of T1/root growth): the
+  same drift as system_v1, probably from "as specific as the paper". Follow-up `x_enum2.txt`: property line restored, T-code
+  rule and a separate-vs-joint cause rule added (runs f8_*).
+
+## 2026-11-15 00:40 — `--keep-results` (paragraph selection keeps every Results prose paragraph)  — REVERTED (flag stays, off)
+- **Change:** in `team_paper.keep_paragraph`, a Results paragraph that is not a caption or heading is kept whatever its cue
+  score (the plan's "ecozone paragraph" case: 3KPITIV3, Murphy's leafing-phenology paragraph, 4CB9X9XE's "no seasonal
+  variation"). Offline: +4.9 % input on the 8 papers, +2.9 % input tokens and 757 -> 773 calls over all 308.
+- **Result, paragraph-chunks, 2 runs per arm, same code (b8_pc vs s8_pc):** Murphy std F1 0.579 [0.575–0.583] -> 0.537
+  [0.533–0.541]; dev3 0.159 -> 0.095 (4CB9X9XE 0.173 -> 0.078 although only one sentence was added: the new paragraphs change
+  the chunk packing, and the answers for the unchanged text change with it); reg4 0.137 -> 0.144. Worse; the sentence model is
+  not affected (does not use this selection).
+
+## 2026-11-15 01:00 — species fan-out merged  — KEPT (fidelity; found on a regression paper, judged on the source)
+- **Finding:** the model spreads group words ("small trees", "seedling densities") over every species in the legend: 4C479SU8
+  (paragraph-chunks) had 15 edges per sentence for T3–T17, species the sentences never name (the legend even lists "trees"
+  as a variant of Populus tremuloides). Over the running full run's answers: 102 lines with >= 5 T-codes in one field
+  (about 846 edges) in 55 of 903 answers.
+- **Change (`expand.py`, `PIPELINE_FANOUT=0` = off):** when one line lists >= 4 bare T-codes with the same property and change,
+  species that the cited sentences do not name (full name, "G. species", or a non-generic variant) are merged into ONE
+  "multiple species" effect (composite); named species are kept. The same for a joint cause.
+- **Result (replay of b8_*_r1-2):** Murphy, dev3, the whole sentence model: identical. Paragraph-chunks 4C479SU8: 297 -> 79
+  edges, std precision 0.022 -> 0.076, F1 0.035 -> 0.076 (reg4 mean 0.137 -> 0.148). Not tuned: the rule was chosen from the
+  source text before scoring.
+
+## 2026-11-15 — full-corpus run of the submitted configuration (job `full_pc_1114`)  — safety-net graph
+- **Config:** commit 250b105 code (pipeline/ was unmodified when the job started at 20:55), `--preprocess paragraph-chunks`,
+  `system.txt`, cache on. Output: `dev/jobs/out/full_pc_1114/`.
+- **Result:** 308 papers, 0 failed, 0 fell back to the sentence filter; 1 paper with no edges (TNY6N7LX); 27,429 edges,
+  31,081 nodes, 2,684 null results; JSON Schema + linkml-validate passed; 4 h 41 min wall clock (shared endpoint, other
+  jobs running in the second slot).
+- **Tokens:** 3,114,029 in + 767,945 out = 3,881,974 (per paper 10,110 + 2,493). The 2026-11-13 sentence run: 2,264,689 +
+  618,438 = 2,883,127 (7,353 + 2,008): +35 % tokens for +20 % edges and +28 % null results.
+- **Gold papers (cached answers, so equal to one of the tp_new_pc runs):** Murphy std F1 0.584; out-of-sample on the
+  cleaned annotations (dev/annot_v2): 4CB9X9XE 0.182, 3KPITIV3 0.111, 6HKWT4QG 0.108, ITXNQ843 0.254 (mean 0.164).
+- **Parse losses:** 2,263 unparseable lines, 407 repaired, 1,883 dropped (about 8 % of lines; sentence run 1,417).
+
+## 2026-11-15 01:40 — full run of the submitted configuration (`full_pc_1114`, paragraph-chunks, system.txt, code of 250b105)
+- **Run:** 20:55–01:36 (16,873 s), 308 papers, 0 failed, 308 source_documents (285 DOIs from index.csv, 23 none);
+  27,429 edges, 31,081 nodes, 2,684 null results; JSON Schema + linkml-validate passed.
+- **Losses (old parser):** 20,220 claim lines parsed; 2,263 unparseable, repair recovered 407, 1,883 dropped (about 9 %).
+- **Tokens:** 3,114,029 prompt + 767,945 completion; per paper 10,110 + 2,493, 757 calls. The 2026-11-13 sentence run:
+  7,353 + 2,008 per paper, 321 calls. Paragraph-chunks costs +38 % prompt / +24 % completion tokens per paper over all 308
+  papers (each chunk repeats system prompt + header; repair calls on 68 % of answers with the old parser).
+- **Gold papers from this graph:** Murphy std F1 0.584, strict 0.526, loose 0.759, null recall 0.733. Original annotations:
+  4CB9X9XE 0.182, 3KPITIV3 0.037, 6HKWT4QG 0.082, ITXNQ843 0.000. Cleaned (annot_v2): dev3 mean 0.133, reg4 mean 0.099.
+
+## 2026-11-15 02:20 — lines that start with their language letter (`A|5|...`, `U|7|...`)  — KEPT (post-processing)
+- **Finding:** 943 of about 28,400 claim lines in the full run's answers (3.4 %) start with A, U or D instead of F; the parser
+  only looked at F|/N| lines, so they were ignored without being counted as lost. 2F76GVEE (sentence model): 64 answer lines,
+  36 edges.
+- **Change (`parse.py`, lenient only):** `A|`, `U|`, `D|` followed by a sentence number = an F line with that language (used
+  when the line has no language field of its own).
+- **Result (replay, all 2-run arms, same answers):** Murphy unchanged everywhere; baseline reg4 paragraph-chunks 0.148 -> 0.169,
+  sentence 0.171 -> 0.211; dev3 paragraph-chunks 0.159 -> 0.167, sentence unchanged.
+
+## 2026-11-15 02:20 — prompt `x_enum2.txt`  — REVERTED (system.txt stays)
+- x_enum without "as specific as the paper", plus a T-code rule and a separate-vs-joint cause rule. 2 runs per model,
+  replayed with the current code. Paragraph-chunks: Murphy 0.580 [0.570–0.590] vs baseline 0.579, dev3 0.139 vs 0.167, reg4
+  0.167 vs 0.169. Sentence: Murphy 0.453 [0.371–0.536] vs 0.544, dev3 0.126 vs 0.111, reg4 0.187 vs 0.211. Worse on the
+  sentence model, no gain on paragraph-chunks. With the current code x_enum (first version) is also no better: paragraph-
+  chunks Murphy 0.572 / dev3 0.124 / reg4 0.169; sentence 0.566 / 0.086 / 0.238.
+
+## 2026-11-15 02:20 — `--taxon-groups` (2 runs per model, current code)  — NOT ADOPTED (inconsistent; flag stays off)
+- Paragraph-chunks: Murphy 0.576 vs 0.579; dev3 0.216 [0.215–0.217] vs 0.167 [0.163–0.171] (4CB9X9XE 0.17 -> 0.31: "rodents"
+  gets the Rodentia ID); reg4 0.152 vs 0.169. Sentence: Murphy 0.566 vs 0.544; dev3 0.174 vs 0.111; reg4 0.167 vs 0.211.
+- Why reg4 falls: one added legend line ("T18=small mammals") flips 4C479SU8 into the species fan-out (both models, both
+  runs); 4C479SU8 0.25 -> 0.02 on the sentence model. Gains on the development papers, losses on the fixed regression set
+  -> by the predeclared rule the simpler parent stays. Worth retrying only together with a fix for the fan-out.
+
+## 2026-11-15 02:50 — prompt `x_grp.txt` (one rule: a group stays one thing; no T-codes for unnamed species)  — REVERTED
+- 2 runs per model, current code. Paragraph-chunks: Murphy 0.536 [0.532–0.539] vs baseline 0.579 [0.575–0.583] (outside the
+  range), dev3 0.132 vs 0.167, reg4 0.192 vs 0.169 (4C479SU8 0.08 -> 0.20: the fan-out is gone). Sentence: Murphy 0.538 vs
+  0.544, dev3 0.093 vs 0.111, reg4 0.229 vs 0.211. Murphy (human gold) and dev3 fall on both models -> not adopted; the
+  deterministic fan-out merge in expand.py stays the fix for the fan-out.
+
+## 2026-11-15 03:15 — `--clean-variants` (legend without generic "common names")  — REVERTED (flag stays, off)
+- Finding: the legend's "common name before (Genus species)" rule takes generic words: "Peromyscus maniculatus (species)",
+  "Solidago canadensis (native oldfield species)", "Rudbeckia hirta (... trial)", "Populus tremuloides (trees)".
+- A first, broad filter (v8, 1 run per model) also removed real names (reed canary grass); the narrow one (w8: a single
+  generic word, or a phrase ending in species/trial/plants/...) was run 2x per model. Paragraph-chunks: Murphy 0.558
+  [0.542–0.573] vs 0.579 [0.575–0.583], dev3 0.123 vs 0.167 (4CB9X9XE 0.17 -> 0.09), reg4 0.182 vs 0.169. Sentence: Murphy
+  0.527 vs 0.544, dev3 0.135 [0.102–0.168] vs 0.111 (4CB9X9XE 0.02–0.25 between the two runs), reg4 0.221 vs 0.211.
+  Murphy down on both models, dev3 in opposite directions -> simpler parent kept.
+- General reading of tonight's input-side arms (5 of them): small input changes move single papers a lot (4CB9X9XE,
+  4C479SU8) in both directions; none gave a consistent gain on both models. The consistent gains were all post-processing.
+
+## 2026-11-15 03:25 — `--chunk-tokens 4000` (fewer, larger paragraph chunks; energy)  — REVERTED (flag stays, default 2,500)
+- 2 runs, paragraph-chunks, 8 papers. Tokens per paper 7,846 + 2,041 (baseline mean) -> 6,624 + 1,960 (-14 %).
+  Murphy std F1 0.548 [0.536–0.559] vs 0.579 [0.575–0.583], null recall 0.467 vs 0.700; dev3 0.112 vs 0.167; reg4 0.151 vs
+  0.169. Worse on every group; accuracy is scored before energy.
+
+## 2026-11-15 03:50 — CORRECTION to the `--clean-variants` and `--taxon-groups` entries: Murphy is unaffected by both
+- Neither flag changes Murphy's input (its legend has no generic variant and no group word), and x_cv.txt / x_tg.txt are
+  byte-identical to system.txt. So the Murphy numbers of w8_* and t8_* are additional draws of the BASELINE, not effects.
+  Murphy paragraph-chunks over 6 identical-input draws: 0.575, 0.583 (b8), 0.542, 0.573 (w8), 0.575, 0.577 (t8): mean 0.571,
+  range 0.542–0.583. Sentence over 6 draws: 0.544, 0.544, 0.511, 0.544, 0.544, 0.588.
+- The decisions stand on dev3/reg4: clean-variants moves 4CB9X9XE in opposite directions on the two models (paragraph-chunks
+  0.17 -> 0.09, sentence 0.07 -> 0.13); taxon groups lowers reg4 on both. Both flags stay off.
+
+## 2026-11-15 03:50 — full run with tonight's code (`full_new_1115`, cache on: the answers of full_pc_1114, plus the latest
+## refresh for the 8 reference papers; only repair calls went to the endpoint)  — the configuration to submit
+- 308 papers, 0 failed, 308 source_documents; 30,208 edges (full_pc_1114: 27,429), 34,733 nodes, 2,869 null results;
+  JSON Schema + linkml-validate passed. Unparseable lines 2,263 -> 223 (repair recovered 106; 128 dropped, listed in
+  losses.jsonl with 147 records in all). 178 same-sentence repeats dropped. 1,152 s.
+- Tokens as a fresh run would count them: 9,308 + 2,263 per paper (full_pc_1114: 10,110 + 2,493): fewer repair calls.
+- Gold papers in this graph (one draw each): Murphy std F1 0.542 (the w8_pc draw, see above), dev3 0.152, reg4 0.167.
+  Old full graph (different draw): Murphy 0.584, dev3 0.133, reg4 0.099.
+- Model choice re-checked with tonight's code (2 runs each, replayed): paragraph-chunks vs sentence: Murphy 0.579 vs 0.544,
+  dev3 0.167 vs 0.111, reg4 0.169 vs 0.211; pooled over the 7 Claude papers both 0.168. Paragraph-chunks stays (Murphy, the
+  human gold, favours it in every draw); the sentence filter is about 27 % cheaper in tokens over the corpus.
+
+## 2026-11-15 05:45 — thinking=on (max_tokens 12000), paragraph-chunks, 8 papers, 2 runs  — REJECTED (no output)
+- Every call used the full 12,000 completion tokens (about 23 tok/s, 8–9 min per call) and returned no claim lines; several
+  calls hit the 1,200 s total timeout. Both runs FAILED with "no edges at all" after 90–100 min. Thinking stays off: it
+  is about 5x the completion tokens per call and, at this cap, produces nothing.
+
+## 2026-11-15 05:50 — submitted configuration with tonight's code: 3 runs (b8_*_r1-3, replayed with the final code)
+- Paragraph-chunks (submitted): Murphy std F1 0.579 [0.575–0.583], strict 0.518, loose 0.801, null recall 0.711; dev3
+  0.169 [0.163–0.173]; reg4 0.170 [0.166–0.172]. Tokens per paper on the 8 papers about 7,800 + 2,050.
+- Sentence filter: Murphy 0.554 [0.544–0.573]; dev3 0.111; reg4 0.212. Tokens per paper 5,693 + 1,493.
+- The experiment prompts (`x_*.txt` + `.args`) are archived in `dev/experiments/prompts_overnight/` (copy one back to
+  `pipeline/prompt/` to rerun an arm through the job runner).

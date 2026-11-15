@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import logging
+import os
 import re
 from dataclasses import dataclass, field
 from typing import Dict, Iterable, List, Optional, Sequence, Tuple
@@ -36,7 +37,8 @@ _DESIGN = {"exp": "exp", "experiment": "exp", "experimental": "exp", "obs": "obs
            "rev": "rev", "review": "rev", "meta-analysis": "rev", "meta_analysis": "rev", "meta": "rev", "mod": "mod",
            "model": "mod", "modeling": "mod", "modelling": "mod", "simulation": "mod", "jud": "jud", "judgment": "jud",
            "judgement": "jud", "judgment_call": "jud"}
-_LINE = re.compile(r"^\s*([FfNn])\s*\|")
+_LINE_STRICT = re.compile(r"^\s*([FfNn])\s*\|")
+_LINE_LENIENT = re.compile(r"^\s*(?:[FfNn]\s*\||[AaUuDd]\s*\|\s*\[?\d)")   # 'A|5|...': the language letter written as the kind
 
 
 class ParseError(ValueError):
@@ -49,6 +51,7 @@ class Var:
     prop: Optional[str] = None
     change: Optional[str] = None          # one of CHANGES
     vtype: Optional[str] = None           # one of TYPES
+    parts: Tuple["Var", ...] = ()         # a joint cause ('A;B' in the CAUSE field): one node named 'A and B'
 
     def key(self, stage: Optional[str] = None) -> Tuple:
         return (norm(self.thing), norm(self.prop), self.change, self.vtype, stage)
@@ -85,7 +88,58 @@ def type_of(x: Optional[str]) -> Optional[str]:
     return _TYPE_WORDS.get(x)
 
 
+# Lenient parsing (2026-11-14): a value word the format has no code for ('T2/origin/hatchery-reared', 'pH/high') is kept
+# verbatim on the property instead of losing the line; 'kg/ha' is not a field separator; an F line whose language is N is a
+# null result; a ';' list of causes is one joint cause.  PIPELINE_STRICT_PARSE=1 restores the old behaviour (comparisons).
+LENIENT = os.environ.get("PIPELINE_STRICT_PARSE", "") != "1"
+_UNIT_SLASH = re.compile(r"(?<=[\w²³%])\s*/\s*(?=(?:ha|m|m2|m²|m3|m³|km|km2|km²|cm|cm2|mm|yr|year|y|d|day|days|h|hr|s|L|l|g|kg|mg|"
+                         r"t|plot|plots|tree|trees|ind|individual|individuals|quadrat|ramet|ramets|month|week|wk|ml|mL|ppm)\b"
+                         r"(?![\w(]*\s*/\s*(?:tax|var|com|proc|mgmt)\b))")
+_LINE = _LINE_LENIENT if LENIENT else _LINE_STRICT
+_NULL_PER_EFFECT = re.compile(r"\|\s*N\s*;\s*", re.I)
+_NULL_LANG = {"n", "null", "ns", "none", "no", "no_relationship", "no relationship", "nr", "no effect"}
+
+
+def _qual(prop: Optional[str], value: str) -> str:
+    return f"{prop} ({value})" if prop else value
+
+
 def parse_var(s: str) -> Optional[Var]:
+    v = _parse_var_strict(s)
+    if v is not None or not LENIENT:
+        return v
+    s2 = _UNIT_SLASH.sub(" per ", s)
+    v = _parse_var_strict(s2)
+    if v is not None:
+        return v
+    parts = [p.strip() for p in s2.strip().split("/")]
+    n = len(parts)
+    if not parts[0] or n < 3 or n > 4:
+        return None
+    thing, a, b = parts[0], parts[1], parts[2]
+    vt = type_of(parts[3]) if n == 4 and parts[3] else None
+    if n == 4 and parts[3] and vt is None:
+        if change_of(parts[3]) and a and b and not change_of(b):    # thing/property/property/change: one property
+            return Var(thing, f"{a} {b}", change_of(parts[3]))
+        return None
+    if change_of(a):                                       # thing/change/<value>: the value describes the thing
+        return Var(f"{b} {thing}" if b else thing, None, change_of(a), vt)     # 'late planting(T1)
+    return Var(thing, _qual(a or None, b), None, vt)       # thing/property/<value>: value kept on the property
+
+
+def parse_cause(s: str) -> Optional[Var]:
+    """The CAUSE field: one variable, or (lenient) several separated by ';' = one joint cause."""
+    v = parse_var(s)
+    if v is not None or not LENIENT or ";" not in s:
+        return v
+    comps = [parse_var(c) for c in s.split(";") if c.strip()]
+    if len(comps) < 2 or any(c is None for c in comps):
+        return None
+    types = {c.vtype for c in comps}
+    return Var(" and ".join(c.thing for c in comps), None, None, types.pop() if len(types) == 1 else None, tuple(comps))
+
+
+def _parse_var_strict(s: str) -> Optional[Var]:
     parts = [p.strip() for p in s.strip().split("/")]
     n = len(parts)
     if not parts or not parts[0] or n > 4:
@@ -143,14 +197,19 @@ def parse_line(line: str) -> Claim:
     m = _LINE.match(line)
     if not m:
         raise ParseError("not an F| or N| line")
+    if LENIENT and line.lstrip()[:1] in "Ff":
+        line = _NULL_PER_EFFECT.sub(";", line)               # 'A|N;B|N|exp': every effect marked null -> 'A;B|N|exp'
     parts = [p.strip() for p in line.strip().split("|")]
     kind = parts[0].strip().upper()
+    lang_kind = None
+    if kind in ("A", "U", "D"):                              # lenient only (_LINE_LENIENT): an F line, kind = its language
+        kind, lang_kind = "F", kind
     if len(parts) < 6:
         raise ParseError("too few fields")
     sentences = parse_sentences(parts[1])
     if not sentences:
         raise ParseError("no sentence numbers")
-    cause = parse_var(parts[2])
+    cause = parse_cause(parts[2])
     if cause is None:
         raise ParseError("cause not parseable")
     pw = _norm_word(parts[3])
@@ -162,13 +221,15 @@ def parse_line(line: str) -> Claim:
         raise ParseError("effect not parseable")
     rest = parts[5:]
     language: Optional[str] = None
+    if kind == "F" and LENIENT and _norm_word(rest[0]) in _NULL_LANG and len(rest) >= 2:
+        kind, rest = "N", rest[1:]                           # 'F|...|N|exp': the model's way of writing a null result
     if kind == "F":
         lw = _norm_word(rest[0])
         if lw in _LANG:
             language = _LANG[lw]
             rest = rest[1:]
         elif _norm_word(rest[0]) in _DESIGN:                 # language missing: the field after the effects is the design
-            language = None
+            language = lang_kind
         else:
             raise ParseError(f"unknown language {rest[0]!r}")
     else:

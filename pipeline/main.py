@@ -57,6 +57,16 @@ def underextracted(n_claims: int, n_sentences: int) -> bool:
     return n_sentences >= 20 and n_claims / n_sentences < UNDER_EXTRACTION
 
 
+def sidecar_args(prompt: str) -> List[str]:
+    """Extra command-line arguments from pipeline/prompt/<prompt>.args (dev experiments only; system.txt has none).  Later
+    arguments win, so a sidecar `--docs ...` replaces the job's document set."""
+    for cand in (prompt, prompt + ".txt"):
+        p = ROOT / "pipeline" / "prompt" / (cand + ".args")
+        if cand and "/" not in cand and p.is_file():
+            return p.read_text(encoding="utf-8").split()
+    return []
+
+
 def read_index(corpus: Path) -> List[Dict[str, str]]:
     with open(corpus / "index.csv", encoding="utf-8", newline="") as f:
         return [r for r in csv.DictReader(f) if r.get("slug")]
@@ -97,6 +107,8 @@ def process_one(row: Dict[str, str], corpus: Path, client: Client, system: str, 
                          "dropped_lines": ex.n_dropped_lines, "dropped_sentence_refs": ex.n_dropped_sentences,
                          "edges_expanded": len(exp.edges), "edges_kept": len(edges)}
         out["modes"] = sorted(set(ex.modes))
+        out["raw"] = list(ex.raw)                                                             # replayable (dev/replay.py)
+        out["losses"] = list(ex.losses)
     except Exception as e:  # noqa: BLE001 - isolate every paper
         out["error"] = f"{type(e).__name__}: {e}"
         log.warning("%s failed: %s", slug, out["error"])
@@ -108,9 +120,11 @@ def process_one(row: Dict[str, str], corpus: Path, client: Client, system: str, 
 def run(corpus: Path, out_dir: Path, docs: Optional[List[str]] = None, limit: Optional[int] = None, concurrency: int = 4,
         thinking: bool = False, prompt: str = DEFAULT_PROMPT, use_cache: bool = True, max_input_tokens: int = 12000,
         max_tokens: int = 3000, preprocess: str = "paragraph-chunks", refresh_cache: bool = False, cite_filter: str = "strict",
-        taxon_groups: bool = False, retry_underextraction: bool = False, ontology: str = "lookup", ontology_fields: str = "all") -> int:
+        taxon_groups: bool = False, retry_underextraction: bool = False, keep_results: bool = False,
+        clean_variants: bool = False, chunk_tokens: int = 0, ontology: str = "lookup", ontology_fields: str = "all") -> int:
     t0 = time.time()
-    opts = Options(cite_filter=cite_filter, taxon_groups=taxon_groups)
+    opts = Options(cite_filter=cite_filter, taxon_groups=taxon_groups, keep_results=keep_results, clean_variants=clean_variants,
+                   chunk_tokens=chunk_tokens)
     pre_fn = get_preprocessor(preprocess)
     cfg = config_from_env(thinking, use_cache, max_tokens)
     cfg.refresh_cache = refresh_cache                 # raises ConfigError if a variable is missing
@@ -163,10 +177,19 @@ def run(corpus: Path, out_dir: Path, docs: Optional[List[str]] = None, limit: Op
         for o in outcomes:
             w.writerow([o["doc"], o["prompt_tokens"], o["completion_tokens"], f"{o['seconds']:.2f}", o["chunks"], "on" if thinking else "off"])
     with open(out_dir / "run_log.json", "w", encoding="utf-8") as f:
-        json.dump({"prompt": pname, "preprocess": preprocess, "cite_filter": cite_filter, "taxon_groups": taxon_groups,
+        json.dump({"prompt": pname, "preprocess": preprocess, "cite_filter": cite_filter, "taxon_groups": taxon_groups, "keep_results": keep_results, "clean_variants": clean_variants, "chunk_tokens": chunk_tokens,
                    "retry_underextraction": retry_underextraction, "ontology": ontology, "ontology_fields": ontology_fields,
                    "thinking": "on" if thinking else "off", "model": cfg.model, "tokenizer": tok_name,
-                   "papers": [{k: v for k, v in o.items() if k not in ("nodes", "edges", "ontology_terms")} for o in outcomes]}, f, indent=1)
+                   "papers": [{k: v for k, v in o.items() if k not in ("nodes", "edges", "raw", "losses", "ontology_terms")} for o in outcomes]}, f, indent=1)
+    with open(out_dir / "raw_responses.jsonl", "w", encoding="utf-8") as f:      # the model's answers, in call order
+        for o in outcomes:
+            f.write(json.dumps({"doc": o["doc"], "responses": o.get("raw", [])}, ensure_ascii=False) + "\n")
+    with open(out_dir / "losses.jsonl", "w", encoding="utf-8") as f:            # claim lines lost before the graph
+        for o in outcomes:
+            for x in o.get("losses", []):
+                f.write(json.dumps({"doc": o["doc"], **x}, ensure_ascii=False) + "\n")
+            if o["error"]:
+                f.write(json.dumps({"doc": o["doc"], "stage": "paper", "reason": o["error"]}, ensure_ascii=False) + "\n")
     print(summary(graph, outcomes, time.time() - t0, validators, doimod.counts(dois)))
     if onto is not None:
         print(onto.summary())
@@ -258,6 +281,9 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--preprocess", choices=("sentence", "sentence-chunks", "paragraph", "paragraph-chunks"), default="paragraph-chunks", help="stage 1: paragraph-level scoring and selection with one call per paragraph chunk (team_paper.py; default), the same with the whole paper in one call (paragraph), or sentence-level filtering (sentence; sentence-chunks = the same sentences, one call per ~2,500-token chunk)")
     ap.add_argument("--cite-filter", choices=("strict", "relaxed"), default="strict", help="relaxed: in discussion/conclusions also keep cited sentences that refer back to the authors' own results")
     ap.add_argument("--taxon-groups", action="store_true", help="group words (rodents, conifers, grasses, ...) get a SPECIES legend entry with the group's NCBITaxon ID")
+    ap.add_argument("--chunk-tokens", type=int, default=0, help="paragraph-chunks: paragraph tokens per model call (default 2500)")
+    ap.add_argument("--clean-variants", action="store_true", help="species legend: drop generic 'common names' (species, trees, trial, ...)")
+    ap.add_argument("--keep-results", action="store_true", help="paragraph preprocessing: keep every Results prose paragraph (captions excluded) whatever its cue score")
     ap.add_argument("--retry-underextraction", action="store_true", help="retry a paper once (own cache entry) when claims per sentence fall below UNDER_EXTRACTION")
     ap.add_argument("--ontology", choices=ONTOLOGY_MODES, default="lookup", help="stage 5b, ontology/ground_terms.py on the LLM step's nodes: lookup (default) = IDs only for unique exact matches in the committed indexes (NCBITaxon for taxa the TSV missed, ELMO, ENVO, GO, PATO, ChEBI, PO, UBERON; no LLM); select = also let the model pick among candidates by number (one short call per paper); off = free text stays")
     ap.add_argument("--ontology-fields", choices=ONTOLOGY_FIELDS, default="all", help="entities: ground entity_term and life_stage_term only, keep measured_attribute as free text")
@@ -267,6 +293,9 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--max-tokens", type=int, default=3000)
     ap.add_argument("-v", "--verbose", action="store_true")
     a = ap.parse_args(argv)
+    side = sidecar_args(a.prompt)
+    if side:                    # dev experiments: pipeline/prompt/<prompt>.args adds flags the job runner has no key for
+        a = ap.parse_args(list(sys.argv[1:] if argv is None else argv) + side)
     logging.basicConfig(level=logging.DEBUG if a.verbose else logging.INFO, format="%(asctime)s %(levelname)s %(message)s", datefmt="%H:%M:%S")
     try:
         if a.smoke:
@@ -276,7 +305,8 @@ def main(argv: Optional[List[str]] = None) -> int:
             ap.error("corpus and output directories are required (or use --smoke SLUG)")
         return run(Path(a.corpus), Path(a.output), [d.strip() for d in a.docs.split(",") if d.strip()] if a.docs else None, a.limit,
                    a.concurrency, a.thinking == "on", a.prompt, not a.no_cache, a.max_input_tokens, a.max_tokens, a.preprocess, a.refresh_cache,
-                   a.cite_filter, a.taxon_groups, a.retry_underextraction, a.ontology, a.ontology_fields)
+                   a.cite_filter, a.taxon_groups, a.retry_underextraction, a.keep_results, a.clean_variants, a.chunk_tokens,
+                   a.ontology, a.ontology_fields)
     except (ConfigError, RuntimeError) as e:
         print(f"error: {e}", file=sys.stderr)
         return 2 if isinstance(e, ConfigError) else 1

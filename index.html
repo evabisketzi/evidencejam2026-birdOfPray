@@ -18,7 +18,8 @@ nav{position:sticky;top:0;height:100vh;overflow:auto;border-right:1px solid var(
 nav h1{font-size:16px;margin:0 0 4px}nav .sub{color:var(--mute);font-size:12.5px;margin-bottom:16px}
 nav a{display:block;padding:6px 10px;border-radius:7px;color:var(--ink);text-decoration:none;font-size:14px}
 nav a:hover{background:var(--soft)}nav a.on{background:var(--soft);color:var(--acc);font-weight:600}
-nav .n{display:inline-block;width:20px;color:var(--mute);font-variant-numeric:tabular-nums}
+nav .n{display:inline-block;width:30px;color:var(--mute);font-variant-numeric:tabular-nums;font-size:12.5px}
+nav .ng{margin:16px 10px 4px;font-size:12px;font-weight:600;color:var(--mute)}
 main{padding:30px 40px 80px;max-width:1150px}
 section{display:none}section.on{display:block}
 h2{font-family:var(--serif);font-weight:600;font-size:26px;margin:0 0 6px}h3{font-size:17px;margin:26px 0 8px}.lead{color:var(--mute);margin:0 0 20px;max-width:820px}
@@ -92,12 +93,12 @@ details{margin:6px 0}summary{cursor:pointer;color:var(--acc)}
 .ov-effects{display:flex;flex-direction:column;gap:7px;flex:1}
 
 /* the six stages */
-.ov-stages{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(6,1fr);gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--panel)}
-.ov-stages li+li{border-left:1px solid var(--line)}
+.ov-stages{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(7,1fr);gap:1px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--line)}
+.ov-stages li{background:var(--panel)}
 .ov-stages a{display:flex;flex-direction:column;gap:6px;height:100%;padding:14px 14px 16px;position:relative}
 .ov-stages a:hover{background:var(--soft)}
 .ov-stages a:focus-visible{outline-offset:-3px}
-.ov-n{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:12.5px;font-weight:700;background:var(--ink);color:var(--panel)}
+.ov-n{min-width:24px;padding:0 5px;border-radius:12px !important;width:max-content;height:24px;border-radius:50%;display:grid;place-items:center;font-size:12.5px;font-weight:700;background:var(--ink);color:var(--panel)}
 .ov-stages b{font-size:15px;line-height:1.25}
 .ov-stages span:not(.ov-n){font-size:13px;color:var(--mute);line-height:1.45;flex:1}
 .ov-stages em{font-style:normal;font-size:13px;font-weight:650;color:var(--acc);font-variant-numeric:tabular-nums}
@@ -132,10 +133,8 @@ details{margin:6px 0}summary{cursor:pointer;color:var(--acc)}
 .ov-config summary{font-size:14px;font-weight:600;color:var(--acc);width:max-content}
 .ov-config table{margin-top:10px}
 
-@media (max-width:1100px){
-  .ov-stages{grid-template-columns:repeat(3,1fr)}
-  .ov-stages li:nth-child(4){border-left:0}
-  .ov-stages li:nth-child(n+4){border-top:1px solid var(--line)}
+@media (max-width:1400px){
+  .ov-stages{grid-template-columns:repeat(4,1fr)}
 }
 @media (max-width:1180px){
   .ov-trace-steps{grid-template-columns:1fr;gap:28px}
@@ -147,15 +146,43 @@ details{margin:6px 0}summary{cursor:pointer;color:var(--acc)}
 @media (max-width:560px){
   .ov-trace{padding:14px}
   .ov-stages{grid-template-columns:1fr 1fr}
-  .ov-stages li{border-left:0 !important;border-top:1px solid var(--line)}
-  .ov-stages li:nth-child(even){border-left:1px solid var(--line) !important}
-  .ov-stages li:nth-child(-n+2){border-top:0}
   .ov-row{grid-template-columns:104px 1fr 42px;gap:10px}
   .ov-axis{margin-left:114px;margin-right:52px}
   .ov-facts div{grid-template-columns:104px 1fr}
   .ov-line{font-size:12px}
 }
 @media (prefers-reduced-motion:reduce){.ov-tr{transition:none}.ov-tr:hover{transform:none}}
+/* ---- stage 5b page ---- */
+.ov-inline{color:var(--acc);font-weight:600;text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--acc) 35%,transparent)}
+#onto .ov-links a,#lookup .ov-links a{color:var(--acc);font-weight:600;text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--acc) 35%,transparent)}
+#onto .ov-links,#lookup .ov-links{display:flex;flex-wrap:wrap;gap:6px 18px;margin:10px 0 0;font-size:14px}
+.lk-flow{list-style:none;margin:6px 0 8px;padding:0;display:flex;flex-wrap:wrap;align-items:center;gap:8px 0}
+.lk-flow li{display:flex;align-items:center}
+.lk-flow li+li::before{content:"";width:22px;height:2px;background:var(--mute);opacity:.5;margin:0 4px}
+.lk-flow a,.lk-flow .on{display:flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid var(--line);border-radius:99px;background:var(--panel);color:var(--ink);text-decoration:none;font-size:14px}
+.lk-flow a:hover{border-color:var(--acc)}
+.lk-flow span{display:grid;place-items:center;min-width:22px;height:22px;padding:0 5px;border-radius:11px;background:var(--ink);color:var(--panel);font-size:11.5px;font-weight:700}
+.lk-flow .on{border:1.5px solid var(--acc);background:var(--soft);font-weight:650;color:var(--acc)}
+.lk-flow .on span{background:var(--acc)}
+.lk-decide{display:grid;grid-template-columns:minmax(200px,.8fr) 1.6fr;gap:0 40px;align-items:center;margin:10px 0 12px;position:relative}
+.lk-term{display:flex;flex-direction:column;gap:6px;padding:16px 18px;border-radius:12px;background:var(--panel);border:1px solid var(--line);position:relative}
+.lk-term::after{content:"";position:absolute;right:-34px;top:50%;width:28px;height:2px;background:var(--mute);opacity:.5}
+.lk-term span{color:var(--mute);font-size:14px}
+.lk-term code{align-self:flex-start;font-size:12px}
+.lk-outcomes{display:flex;flex-direction:column;gap:8px;border-left:2px solid color-mix(in srgb,var(--mute) 50%,transparent);padding-left:18px}
+.lk-out{display:grid;grid-template-columns:120px 1fr;gap:12px;align-items:baseline;padding:11px 14px;border-radius:10px;background:var(--panel);border:1px solid var(--line);border-left-width:4px}
+.lk-out b{font-size:14.5px}.lk-out span{font-size:14px;color:var(--mute)}
+.lk-ok{border-left-color:var(--acc)}.lk-ok b{color:var(--acc)}
+.lk-review{border-left-color:var(--acc2)}.lk-review b{color:var(--acc2)}
+.lk-none{border-left-color:var(--mute)}
+.lk-table td:first-child{white-space:nowrap}
+@media (max-width:900px){
+  .lk-decide{grid-template-columns:1fr;gap:22px}
+  .lk-term::after{right:auto;left:50%;top:auto;bottom:-16px;width:2px;height:12px}
+  .lk-outcomes{border-left:0;padding-left:0}
+  .lk-out{grid-template-columns:1fr;gap:4px}
+  #lookup table{display:block;overflow-x:auto;max-width:100%}
+}
 </style>
 </head>
 <body>
@@ -164,18 +191,21 @@ details{margin:6px 0}summary{cursor:pointer;color:var(--acc)}
 <nav>
   <h1>Lane 1 pipeline</h1>
   <div class="sub">Evidence Jam 2026 · causal claims → one CAMO graph</div>
-  <a href="#overview" data-s="overview"><span class="n">0</span>Overview</a>
-  <a href="#refs" data-s="refs"><span class="n">1</span>Reference annotations</a>
-  <a href="#pre" data-s="pre"><span class="n">2</span>Preprocessing</a>
-  <a href="#onto" data-s="onto"><span class="n">3</span>Ontology grounding</a>
-  <a href="#prompt" data-s="prompt"><span class="n">4</span>LLM prompt</a>
-  <a href="#extract" data-s="extract"><span class="n">5</span>LLM extraction</a>
-  <a href="#post" data-s="post"><span class="n">6</span>Post-processing</a>
-  <a href="#eval" data-s="eval"><span class="n">7</span>Evaluator</a>
-  <a href="#results" data-s="results"><span class="n">8</span>Results</a>
-  <a href="#ablations" data-s="ablations"><span class="n">9</span>Ablation studies</a>
-  <a href="#failures" data-s="failures"><span class="n">10</span>Failures &amp; bottlenecks</a>
-  <a href="#explore" data-s="explore"><span class="n">11</span>Paper explorer</a>
+  <a href="#overview" data-s="overview"><span class="n"></span>Overview</a>
+  <a href="#refs" data-s="refs"><span class="n"></span>Reference annotations</a>
+  <div class="ng">Pipeline stages</div>
+  <a href="#pre" data-s="pre"><span class="n">1</span>Preprocessing</a>
+  <a href="#onto" data-s="onto"><span class="n">2</span>Taxon grounding</a>
+  <a href="#prompt" data-s="prompt"><span class="n">3a</span>LLM prompt</a>
+  <a href="#extract" data-s="extract"><span class="n">3b</span>LLM extraction</a>
+  <a href="#post" data-s="post"><span class="n">4–6</span>Post-processing</a>
+  <a href="#lookup" data-s="lookup"><span class="n">5b</span>Ontology lookup</a>
+  <div class="ng">Evaluation</div>
+  <a href="#eval" data-s="eval"><span class="n"></span>Evaluator</a>
+  <a href="#results" data-s="results"><span class="n"></span>Results</a>
+  <a href="#ablations" data-s="ablations"><span class="n"></span>Ablation studies</a>
+  <a href="#failures" data-s="failures"><span class="n"></span>Failures &amp; bottlenecks</a>
+  <a href="#explore" data-s="explore"><span class="n"></span>Paper explorer</a>
 </nav>
 <main>
 
@@ -231,13 +261,14 @@ details{margin:6px 0}summary{cursor:pointer;color:var(--acc)}
   </figure>
 
   <div class="ov-block" aria-labelledby="ov-stages-h">
-    <h3 id="ov-stages-h" class="ov-h">The six stages</h3>
+    <h3 id="ov-stages-h" class="ov-h">The seven stages</h3>
     <ol class="ov-stages">
       <li><a href="#pre"><span class="ov-n">1</span><b>Preprocess</b><span>Clean the PDF text, keep paragraphs that state findings, chunks of ≤ 2,500 tokens</span><em>≈ 2.5 chunks per paper</em></a></li>
       <li><a href="#onto"><span class="ov-n">2</span><b>Ground taxa</b><span>Species legend looked up in a checked NCBITaxon table, in code</span><em>0.99 taxon-ID accuracy on Murphy</em></a></li>
       <li class="is-llm"><a href="#extract"><span class="ov-n">3</span><b>Extract with Qwen</b><span>One call per chunk, thinking off, temperature 0, answers cached</span><em>9.3k in + 2.3k out per paper</em></a></li>
       <li><a href="#post"><span class="ov-n">4</span><b>Parse and expand</b><span>Lenient line parser, one edge per effect, nulls become negated</span><em>lost lines 1,883 → 128</em></a></li>
       <li><a href="#post"><span class="ov-n">5</span><b>Guard and merge</b><span>Each edge checked against the schema, repaired or dropped; all 308 source documents</span><em>30,208 edges</em></a></li>
+      <li><a href="#lookup"><span class="ov-n">5b</span><b>Ontology lookup</b><span>Remaining free-text terms matched exactly in 8 ontology indexes; the guard runs again</span><em>no model call</em></a></li>
       <li><a href="#post"><span class="ov-n">6</span><b>Write and validate</b><span>YAML and JSON, JSON Schema and linkml-validate; a failing paper never stops the run</span><em>0 schema errors</em></a></li>
     </ol>
   </div>
@@ -276,7 +307,8 @@ details{margin:6px 0}summary{cursor:pointer;color:var(--acc)}
         <div class="ov-axis" aria-hidden="true"><span>0</span><span>0.25</span><span>0.5</span><span>0.75</span><span>1</span></div>
       </div>
       <p class="ov-note">The shaded band on Murphy is how much identical runs vary (0.542–0.583). The Claude-made references word
-      entities their own way, so their lower scores partly measure wording. These are our own scorer's numbers, not the judges'.</p>
+      entities their own way, so their lower scores partly measure wording. These are our own scorer's numbers, not the judges',
+      measured before the <a href="#lookup" class="ov-inline">ontology lookup</a> became the default.</p>
       <p class="ov-links"><a href="#results">All results</a><a href="#eval">How the scorer matches edges</a></p>
     </div>
 
@@ -374,16 +406,19 @@ details{margin:6px 0}summary{cursor:pointer;color:var(--acc)}
 </section>
 
 <section id="onto">
-  <h2>Stage 2 · Ontology grounding</h2>
-  <p class="lead">Rule: the LLM never writes an ontology ID. Code looks names up in local tables, and only an ID a person has checked is written.</p>
+  <h2>Stage 2 · Taxon grounding</h2>
+  <p class="lead">Species are grounded before the model is called, so the model never spells a Latin name or writes an ID: it sees
+  and writes only the legend codes <code>T1</code>, <code>T2</code>, and code turns them back into names and NCBITaxon IDs.
+  The other terms are grounded later, in <a href="#lookup">stage 5b, the ontology lookup</a>.</p>
   <div class="grid2">
-  <div class="card"><b>Taxa → NCBITaxon</b><p><code>data/ncbitaxon_names.tsv</code>: 1,938 names with NCBI Taxonomy IDs. Every legend species is looked up
+  <div class="card"><b>Legend species → NCBITaxon</b><p><code>data/ncbitaxon_names.tsv</code>: 1,938 names with NCBI Taxonomy IDs. Every legend species is looked up
   (exact name, then case-insensitive, then genus + epithet). A taxon node's <code>entity_term</code> becomes e.g.
   <code>NCBITaxon:126270</code>; the node name keeps the readable species name.</p><p class="mute">Taxon ID accuracy on Murphy matched pairs: 0.99.</p></div>
-  <div class="card"><b>Attributes and entities → PATO / ENVO / …</b><p><code>data/terms.tsv</code>: 25 rows, 20 verified by hand
-  (e.g. height → PATO:0000119). Only verified rows are ever emitted; everything else stays free text, which the schema allows.</p>
-  <p class="mute">Off by default and tested: <code>--taxon-groups</code> (group words such as "rodents" → Rodentia; mixed result). Not in the
-  submission: an exact-label lookup in PATO/ELMO/ENVO/GO/ChEBI from the team's ontology module (built and validated, neutral on our scorer).</p></div>
+  <div class="card"><b>What happens to the other terms</b><p>Attributes, environments, chemicals, processes, life stages and taxa that are not in the
+  legend stay free text through stages 3–5. Stage 5b then looks them up in eight ontology indexes and writes an ID only on an exact,
+  unambiguous match.</p>
+  <p class="mute">Off by default and tested: <code>--taxon-groups</code> (group words such as "rodents" → Rodentia; mixed result, see the
+  ablations).</p><p class="ov-links"><a href="#lookup">Read stage 5b</a></p></div>
   </div>
 </section>
 
@@ -498,9 +533,77 @@ details{margin:6px 0}summary{cursor:pointer;color:var(--acc)}
   <li>Predicate/language repairs (causes + associational → associated_with; correlated_with only with a correlation statistic).</li>
   <li>The same claim from the same sentence under the same conditions is kept once.</li>
   <li>Merge: every row of <code>corpus/index.csv</code> gets a <code>source_documents</code> entry with its DOI (also if extraction failed); every edge points to one.</li></ul></div>
+  <h3>5b · Ontology lookup</h3>
+  <div class="card">Free-text terms left after the guard are looked up in eight ontology indexes; an exact, unambiguous match gets its ID, then
+  the guard runs again. No model call. <a href="#lookup" class="ov-inline">How the lookup works</a></div>
   <h3>6 · Write and validate</h3>
   <div class="card">YAML and JSON written; validated with the JSON Schema and, when installed, <code>linkml-validate -s schema/causalmosaic.yaml -C CausalGraph</code>.
   A failing paper never stops the run; a run with no edges fails loudly instead of writing an empty graph.</div>
+</section>
+
+<section id="lookup">
+  <h2>Stage 5b · Ontology lookup</h2>
+  <p class="lead">After the guard, code looks up every free-text term of each paper in eight committed ontology indexes and writes an ID only when
+  exactly one label or exact synonym matches. Then the guard runs again. There is no model call, so stage 3 is still the only one.
+  Default since 2026-11-15: <code>--ontology lookup</code>.</p>
+
+  <ol class="lk-flow" aria-label="Where stage 5b sits in the pipeline">
+    <li><a href="#post"><span>4</span>Parse and expand</a></li>
+    <li><a href="#post"><span>5</span>Guard and merge</a></li>
+    <li class="on"><span>5b</span>Ontology lookup</li>
+    <li><a href="#post"><span>5</span>Guard again</a></li>
+    <li><a href="#post"><span>6</span>Write and validate</a></li>
+  </ol>
+
+  <h3>How a term gets an ID</h3>
+  <div class="lk-decide">
+    <div class="lk-term">
+      <b>A free-text term</b>
+      <span>an entity, measured attribute or life stage the earlier stages left as text, e.g. <i>height</i></span>
+      <code>ontology/ground_terms.py</code>
+    </div>
+    <div class="lk-outcomes">
+      <div class="lk-out lk-ok"><b>Resolved</b><span>Exactly one label or exact synonym matches in the indexes for that slot. The ID is written,
+        e.g. <code>height → PATO:0000119</code>.</span></div>
+      <div class="lk-out lk-review"><b>Needs review</b><span>Several candidates match. Nothing is written; the term stays free text and the
+        candidates are kept in the report.</span></div>
+      <div class="lk-out lk-none"><b>No match</b><span>No label or synonym matches. The term stays free text, which the schema allows.</span></div>
+    </div>
+  </div>
+  <p class="mute">Why so strict: a wrong ID is worse than none. A free-text term is still correct and searchable; a wrong CURIE silently links a
+  claim to the wrong concept. Every lookup and its status is written to <code>ontology_report.json</code> in the output folder.</p>
+
+  <h3>The eight indexes</h3>
+  <p class="mute">Committed in <code>ontology/ontology_index/</code>, with versions and sources in <code>manifest.json</code>. The middle column is
+  what the CAMO schema says each ontology is for.</p>
+  <table class="lk-table">
+    <tr><th>index</th><th>ontology</th><th>CAMO uses it for</th><th>example from the schema</th></tr>
+    <tr><td><code>ncbitaxon.json.gz</code></td><td>NCBI Taxonomy</td><td>taxa, including ones not in the stage 2 legend</td><td><code>NCBITaxon:3472</code> <i>Sanguinaria canadensis</i></td></tr>
+    <tr><td><code>envo.json.gz</code></td><td>ENVO</td><td>environments, environmental materials and processes</td><td><code>ENVO:01000253</code> grassland</td></tr>
+    <tr><td><code>chebi.json.gz</code></td><td>ChEBI</td><td>chemicals</td><td><code>CHEBI:24279</code> glucosinolate</td></tr>
+    <tr><td><code>go.json.gz</code></td><td>Gene Ontology</td><td>biological processes and process rates</td><td><code>GO:0008150</code> biological process</td></tr>
+    <tr><td><code>pato.json.gz</code></td><td>PATO</td><td>qualities: the measured attribute (height, mass, density)</td><td><code>PATO:0000119</code> height</td></tr>
+    <tr><td><code>elmo.json.gz</code></td><td>ELMO, Ecolink Model Ontology</td><td>the ecological entity layer CAMO is built on</td><td class="mute">—</td></tr>
+    <tr><td><code>po.json.gz</code></td><td>Plant Ontology</td><td>plant development stages (<code>life_stage_term</code>)</td><td><code>PO:0007131</code> seedling development stage</td></tr>
+    <tr><td><code>uberon.json.gz</code></td><td>UBERON</td><td>animal life-cycle stages (<code>life_stage_term</code>)</td><td><code>UBERON:0000105</code> life cycle stage</td></tr>
+  </table>
+  <p class="mute"><code>units.yaml</code> sits next to the indexes. How the indexes are built and rebuilt: <code>ontology/GROUNDING.md</code>.</p>
+
+  <h3>Modes</h3>
+  <table>
+    <tr><th><code>--ontology</code></th><th>what it does</th><th>model calls</th></tr>
+    <tr><td><b>lookup</b> (default)</td><td>exact label or exact synonym only, as above</td><td class="num">0</td></tr>
+    <tr><td>select</td><td>the model picks among the candidates (<code>ontology/select_terms.py</code>)</td><td class="num">1 short call per paper</td></tr>
+    <tr><td>off</td><td>no lookup; terms not grounded in stage 2 stay free text</td><td class="num">0</td></tr>
+  </table>
+
+  <h3>What we know about its effect</h3>
+  <div class="grid2">
+    <div class="card"><b>Measured on another pipeline's graphs</b><p>Murphy unchanged; out-of-sample standard F1 −0.011. That analysis attributes
+    the drop to our scorer, which does not know ELMO, ENVO and GO labels, so a correct ID can count as a mismatch against a reference written in words.</p></div>
+    <div class="card"><b>Not yet measured on our own output</b><p>The step became the default after the scoring runs reported on this site, so
+    every F1 score here was measured without it.</p><p class="ov-links"><a href="#results">Results</a><a href="#eval">The scorer</a></p></div>
+  </div>
 </section>
 
 <section id="eval">

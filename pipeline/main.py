@@ -17,10 +17,13 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 from .expand import expand_claims
-from .extract import Client, ConfigError, DEFAULT_PROMPT, LLMError, ROOT, config_from_env, extract_paper, load_prompt
+from .extract import Client, ConfigError, DEFAULT_PROMPT, LLMError, ROOT, config_from_env, extract_paper, glean, load_prompt
 from .parse import check_sentences, parse_text
 from . import doi as doimod
+from .features import OFF, Features, add_provenance
+from . import study as studymod
 from .guard import guard_paper, merge
+from .ontology_stage import FIELD_SETS as ONTOLOGY_FIELDS, MODES as ONTOLOGY_MODES, regrounded, stage_from_args
 from .preprocess.assemble import Options, process_paper as process_paper_ours
 from .preprocess.legend import load_taxon_table
 from .preprocess.tokens import get_counter
@@ -60,7 +63,9 @@ def read_index(corpus: Path) -> List[Dict[str, str]]:
 
 
 def process_one(row: Dict[str, str], corpus: Path, client: Client, system: str, count, table, max_input_tokens: int,
-                pre_fn=None, opts: Optional[Options] = None, retry_client: Optional[Client] = None) -> dict:
+                pre_fn=None, opts: Optional[Options] = None, retry_client: Optional[Client] = None, ontology=None,
+                features: Features = OFF, stamp: Optional[tuple] = None, continue_truncated: bool = False,
+                study_client: Optional[Client] = None, glean_mode: str = "off") -> dict:
     slug = row["slug"]
     out = {"doc": slug, "error": None, "prompt_tokens": 0, "completion_tokens": 0, "seconds": 0.0, "chunks": 0,
            "nodes": {}, "edges": [], "stats": {}}
@@ -71,9 +76,11 @@ def process_one(row: Dict[str, str], corpus: Path, client: Client, system: str, 
         valid = [s["n"] for s in pre.sidecar["sentences"]]
         if not valid:
             raise RuntimeError("preprocessing kept no sentences")
-        ex = extract_paper(client, system, pre.txt, valid, max_input_tokens, slug, pre.sidecar.get("chunk_texts"))   # stage 3
+        ex = extract_paper(client, system, pre.txt, valid, max_input_tokens, slug, pre.sidecar.get("chunk_texts"),
+                           continue_truncated)                                                                    # stage 3
         if retry_client is not None and underextracted(len(ex.claims), len(valid)):
-            ex2 = extract_paper(retry_client, system, pre.txt, valid, max_input_tokens, slug, pre.sidecar.get("chunk_texts"))
+            ex2 = extract_paper(retry_client, system, pre.txt, valid, max_input_tokens, slug, pre.sidecar.get("chunk_texts"),
+                                continue_truncated)
             out["retry"] = {"claims_first": len(ex.claims), "claims_retry": len(ex2.claims)}
             log.info("%s: under-extraction retry: %d -> %d claims", slug, len(ex.claims), len(ex2.claims))
             ex2.prompt_tokens += ex.prompt_tokens; ex2.completion_tokens += ex.completion_tokens; ex2.seconds += ex.seconds
@@ -81,13 +88,30 @@ def process_one(row: Dict[str, str], corpus: Path, client: Client, system: str, 
                 ex = ex2
             else:
                 ex.prompt_tokens, ex.completion_tokens, ex.seconds = ex2.prompt_tokens, ex2.completion_tokens, ex2.seconds
+        if glean_mode != "off":                                                              # --glean
+            glean(client, system, pre.txt, pre.sidecar["sentences"], ex, valid, glean_mode, slug)
         out.update(prompt_tokens=ex.prompt_tokens, completion_tokens=ex.completion_tokens, seconds=ex.seconds, chunks=ex.chunks)
-        exp = expand_claims(slug, ex.claims, pre.sidecar)                                     # stage 4
-        nodes, edges, stats = guard_paper(slug, exp.nodes, exp.edges)                         # stage 5 (per paper)
+        exp = expand_claims(slug, ex.claims, pre.sidecar, features)                           # stage 4
+        nodes, edges, stats = guard_paper(slug, exp.nodes, exp.edges, features)               # stage 5 (per paper)
+        if ontology is not None:                                                              # stage 5b (--ontology)
+            nodes, edges, ostats, otok = regrounded(nodes, edges, slug, ontology, guard_paper)
+            stats.update(ostats)
+            out["prompt_tokens"] += otok["prompt_tokens"]
+            out["completion_tokens"] += otok["completion_tokens"]
+        if study_client is not None:                                                         # --study
+            facts, stok = studymod.study_facts(study_client, row.get("title", ""), pre.sidecar.get("context", ""), slug)
+            out["prompt_tokens"] += stok["prompt_tokens"]
+            out["completion_tokens"] += stok["completion_tokens"]
+            out["study"] = facts
+            stats["study: evidence_types from the study design"] += studymod.apply_design(edges, facts.get("study_design"))
+        if features.provenance and stamp:                                                    # --provenance (last: final IDs)
+            add_provenance(nodes, edges, *stamp)
         out.update(nodes=nodes, edges=edges, stats=dict(stats))
         out["counts"] = {"sentences": len(valid), "claims": len(ex.claims), "bad_lines": ex.n_bad, "repaired": ex.n_repaired,
                          "dropped_lines": ex.n_dropped_lines, "dropped_sentence_refs": ex.n_dropped_sentences,
-                         "edges_expanded": len(exp.edges), "edges_kept": len(edges)}
+                         "edges_expanded": len(exp.edges), "edges_kept": len(edges),
+                         "truncated_calls": ex.n_truncated, "continuation_calls": ex.n_continued,
+                         "glean_calls": ex.n_glean_calls, "gleaned_claims": ex.n_gleaned}
         out["modes"] = sorted(set(ex.modes))
     except Exception as e:  # noqa: BLE001 - isolate every paper
         out["error"] = f"{type(e).__name__}: {e}"
@@ -100,7 +124,8 @@ def process_one(row: Dict[str, str], corpus: Path, client: Client, system: str, 
 def run(corpus: Path, out_dir: Path, docs: Optional[List[str]] = None, limit: Optional[int] = None, concurrency: int = 4,
         thinking: bool = False, prompt: str = DEFAULT_PROMPT, use_cache: bool = True, max_input_tokens: int = 12000,
         max_tokens: int = 3000, preprocess: str = "paragraph-chunks", refresh_cache: bool = False, cite_filter: str = "strict",
-        taxon_groups: bool = False, retry_underextraction: bool = False) -> int:
+        taxon_groups: bool = False, retry_underextraction: bool = False, ontology: str = "off", ontology_fields: str = "all",
+        features: Features = OFF, continue_truncated: bool = False, study: bool = False, glean_mode: str = "off") -> int:
     t0 = time.time()
     opts = Options(cite_filter=cite_filter, taxon_groups=taxon_groups)
     pre_fn = get_preprocessor(preprocess)
@@ -124,20 +149,29 @@ def run(corpus: Path, out_dir: Path, docs: Optional[List[str]] = None, limit: Op
         rcfg = copy.copy(cfg)
         rcfg.cache_salt = "underextraction-retry-1"        # its own cache entry: cached re-runs reproduce the retry exactly
         retry_client = Client(rcfg, retry_log=out_dir / "retries.csv")
+    onto = stage_from_args(ontology, ontology_fields, cfg, Client)
+    study_client = studymod.make_client(cfg, Client) if study else None
+    import datetime as _dt
+    stamp = (cfg.model, _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"))
     log.info("prompt=%s thinking=%s tokenizer=%s papers=%d concurrency=%d", pname, "on" if thinking else "off", tok_name, len(todo), concurrency)
     outcomes: List[dict] = []
     done = 0
     with ThreadPoolExecutor(max_workers=max(1, concurrency)) as pool:
-        futs = [pool.submit(process_one, r, corpus, client, system, count, table, max_input_tokens, pre_fn, opts, retry_client)
+        futs = [pool.submit(process_one, r, corpus, client, system, count, table, max_input_tokens, pre_fn, opts, retry_client, onto,
+                            features, stamp, continue_truncated, study_client, glean_mode)
                 for r in todo]
         for f in futs:
             outcomes.append(f.result())
             done += 1
             if done % 10 == 0 or done == len(futs):
                 log.info("%d/%d papers done (%d failed)", done, len(futs), sum(1 for o in outcomes if o["error"]))
+    if onto is not None:
+        onto.close()
+        log.info("%s", onto.summary())
     per_doc = {o["doc"]: (o["nodes"], o["edges"]) for o in outcomes}
     dois = doimod.resolve_all(index, corpus)                               # DOI fallback for rows with an empty DOI cell
-    graph = merge(index, per_doc, dois={s: d.doi for s, d in dois.items()})   # raises if there is not a single edge
+    graph = merge(index, per_doc, dois={s: d.doi for s, d in dois.items()},
+                  study={o["doc"]: o["study"] for o in outcomes if o.get("study")})   # raises if there is not a single edge
     doimod.write_report(out_dir / "doi_report.csv", index, dois)
     yp, jp = write_outputs(graph, out_dir)
     errors, validators = validate_outputs(graph, yp, jp)
@@ -149,7 +183,9 @@ def run(corpus: Path, out_dir: Path, docs: Optional[List[str]] = None, limit: Op
             w.writerow([o["doc"], o["prompt_tokens"], o["completion_tokens"], f"{o['seconds']:.2f}", o["chunks"], "on" if thinking else "off"])
     with open(out_dir / "run_log.json", "w", encoding="utf-8") as f:
         json.dump({"prompt": pname, "preprocess": preprocess, "cite_filter": cite_filter, "taxon_groups": taxon_groups,
-                   "retry_underextraction": retry_underextraction, "thinking": "on" if thinking else "off", "model": cfg.model, "tokenizer": tok_name,
+                   "retry_underextraction": retry_underextraction, "ontology": ontology, "ontology_fields": ontology_fields,
+                   "features": sorted(k for k, v in vars(features).items() if v),
+                   "continue_truncated": continue_truncated, "study": study, "glean": glean_mode, "thinking": "on" if thinking else "off", "model": cfg.model, "tokenizer": tok_name,
                    "papers": [{k: v for k, v in o.items() if k not in ("nodes", "edges")} for o in outcomes]}, f, indent=1)
     print(summary(graph, outcomes, time.time() - t0, validators, doimod.counts(dois)))
     if errors:
@@ -233,6 +269,14 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--cite-filter", choices=("strict", "relaxed"), default="strict", help="relaxed: in discussion/conclusions also keep cited sentences that refer back to the authors' own results")
     ap.add_argument("--taxon-groups", action="store_true", help="group words (rodents, conifers, grasses, ...) get a SPECIES legend entry with the group's NCBITaxon ID")
     ap.add_argument("--retry-underextraction", action="store_true", help="retry a paper once (own cache entry) when claims per sentence fall below UNDER_EXTRACTION")
+    ap.add_argument("--ontology", choices=ONTOLOGY_MODES, default="off", help="stage 5b, ontology/ground_terms.py: lookup = IDs for unique exact matches in the committed indexes (ELMO, ENVO, GO, PATO, ChEBI, PO, UBERON; no LLM); select = also let the model pick among candidates by number (one short call per paper)")
+    ap.add_argument("--ontology-fields", choices=ONTOLOGY_FIELDS, default="all", help="entities: ground entity_term and life_stage_term only, keep measured_attribute as free text")
+    ap.add_argument("--glean", choices=("off", "auto", "always"), default="off", help="one extra call per paper on result/discussion sentences no claim cites (auto: only those with a significance token or a result word, and only if there are at least 3)")
+    ap.add_argument("--study", action="store_true", help="one short call per paper on the CONTEXT block: study design, country, region and years for source_documents; evidence_types from the design")
+    ap.add_argument("--continue-truncated", action="store_true", help="when a reply is cut off at --max-tokens, send the sentences after the last one it cited (at most twice per chunk)")
+    ap.add_argument("--fit-attributes", action="store_true", help="life-stage and direction words leave measured_attribute (life_stage, life_stage_term, qualifier)")
+    ap.add_argument("--double-negative", action="store_true", help="'prevents' with a 'decreased' object becomes 'causes'")
+    ap.add_argument("--provenance", action="store_true", help="annotator, annotation_timestamp and variable_key on nodes and edges")
     ap.add_argument("--refresh-cache", action="store_true", help="call the model even when an answer is cached, and store the new answer")
     ap.add_argument("--no-cache", action="store_true")
     ap.add_argument("--max-input-tokens", type=int, default=12000)
@@ -247,7 +291,8 @@ def main(argv: Optional[List[str]] = None) -> int:
             ap.error("corpus and output directories are required (or use --smoke SLUG)")
         return run(Path(a.corpus), Path(a.output), [d.strip() for d in a.docs.split(",") if d.strip()] if a.docs else None, a.limit,
                    a.concurrency, a.thinking == "on", a.prompt, not a.no_cache, a.max_input_tokens, a.max_tokens, a.preprocess, a.refresh_cache,
-                   a.cite_filter, a.taxon_groups, a.retry_underextraction)
+                   a.cite_filter, a.taxon_groups, a.retry_underextraction, a.ontology, a.ontology_fields,
+                   Features(a.fit_attributes, a.double_negative, a.provenance), a.continue_truncated, a.study, a.glean)
     except (ConfigError, RuntimeError) as e:
         print(f"error: {e}", file=sys.stderr)
         return 2 if isinstance(e, ConfigError) else 1

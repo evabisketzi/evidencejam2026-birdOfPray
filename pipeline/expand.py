@@ -8,6 +8,7 @@ from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple
 
 from . import grounding
+from .features import OFF, Features, fit_var
 from .parse import Claim, Var, parse_var
 from .preprocess.abbrev import expand_abbreviations
 
@@ -69,8 +70,9 @@ def _cap(s: str) -> str:
 
 
 class Expander:
-    def __init__(self, slug: str, side: dict):
+    def __init__(self, slug: str, side: dict, features: Features = OFF):
         self.slug = slug
+        self.features = features
         self.side = side
         self.sent = {int(s["n"]): s for s in side.get("sentences", [])}
         self.species = {sp["id"]: sp for sp in side.get("species", [])}
@@ -137,6 +139,9 @@ class Expander:
         return "environmental_variable"
 
     def node(self, var: Var, stage: Optional[str], spans: List[dict], null_effect: bool = False) -> str:
+        stage_term = None
+        if self.features.fit_attributes:                # stage / direction words out of the attribute (--fit-attributes)
+            var, stage, stage_term = fit_var(var, stage)
         kind, text, word, tid = self.resolve(var.thing)
         change = var.change
         if null_effect and change == "=":
@@ -168,6 +173,8 @@ class Expander:
                 node["applied_to"] = applied
             if stage in STAGE_ENUM:
                 node["life_stage"] = STAGE_ENUM[stage]
+            if stage_term:
+                node["life_stage_term"] = stage_term
             node["source_spans"] = []
             self.out.nodes[nid] = node
         for sp in spans:
@@ -387,5 +394,5 @@ def calibrate_language(lang: str, design: str, text: str) -> str:
     return lang
 
 
-def expand_claims(slug: str, claims: List[Claim], side: dict) -> Expanded:
-    return Expander(slug, side).expand(claims)
+def expand_claims(slug: str, claims: List[Claim], side: dict, features: Features = OFF) -> Expanded:
+    return Expander(slug, side, features).expand(claims)

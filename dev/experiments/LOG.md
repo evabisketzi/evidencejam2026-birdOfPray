@@ -141,3 +141,28 @@ direct (Murphy 33/39/11/17, 4CB9X9XE 2/48/31/19, 3KPITIV3 20/17/59/4, 6HKWT4QG 2
 - **Reading:** entities are still found (Murphy loose F1 holds) but no longer match at the standard level, on both models,
   far outside the noise. The causal-language accuracy on matched pairs was higher (0.70 / 0.76 vs 0.675 / 0.621), on far fewer pairs.
 - **Left in place:** the file `system_v1.txt` and its test are still in the working tree, unused (not deleted without the user's say).
+
+## 2026-11-14 (night) — branch `merge_camo_onto`: camo_pipeline ports + the ontology module, all as flags  — PENDING (default off)
+- **Change:** new flags, all default off: `--ontology off|lookup|select` + `--ontology-fields all|entities`
+  (`pipeline/ontology_stage.py`, wraps Eva's `ontology/` from `harness` unchanged), `--fit-attributes`, `--double-negative`,
+  `--provenance` (`pipeline/features.py`), `--study` (`pipeline/study.py`), `--continue-truncated` and `--glean off|auto|always`
+  (`pipeline/extract.py`). Job runner keys for each, and `set=gold8`. `dev/eval_murphy.py --cached` takes
+  `EVAL_FEATURES=...` and `EVAL_ONTOLOGY=lookup[:entities]`. Report tooling: `dev/results_table.py` (generates the RESULTS.md
+  table from per-run score files, now with P and R), `dev/diag/merge_graphs.py`, `dev/diag/ontology_coverage.py`,
+  `dev/diag/camo_vs_main_entities.py`.
+- **Why:** camo_pipeline (one saved run, same scorer) is lower on Murphy (0.467 vs 0.570) but higher out of sample (std 0.084 vs
+  0.069, loose 0.397 vs 0.191); the ontology module existed but nothing called it.
+- **Type:** mixed. `--fit-attributes`, `--double-negative`, `--provenance`, `--ontology lookup` are post-processing → exact check on
+  cached output. `--study`, `--glean`, `--continue-truncated`, `--ontology select` add calls → endpoint arms.
+- **Checked:** flags off, the 8 gold papers through `dev/mock_endpoint.py`: graph byte-identical to `main` (JSON and YAML, except
+  `provenance.created`). Every flag on: JSON Schema + linkml-validate pass. Per-paper extra prompt tokens on the mock (meaningless
+  for F1): study + ontology select ≈ +1k; gleaning +3-4k at the first cap, so the cap was lowered to ~2,300 tokens.
+- **Result (ontology lookup, exact, on camo's saved graphs):** Murphy std F1 0.467 → 0.467 (both modes); out-of-sample std F1
+  0.084 → 0.078 (`entities`, 2 values changed) / 0.073 (`all`, 42 values). The `entities` drop is one 4CB9X9XE edge and a scorer
+  artefact: with an ID in `entity_term` the scorer compares the node name (no ELMO/ENVO/GO labels). Gold practice
+  (`dev/diag/ontology_coverage.py`): ENVO on 40-60 % of environmental variables, PATO on ~8 % of attributes.
+- **Rejected variants:** PATO for every attribute without a blocklist: `quality` → PATO:0000001 (PATO's root), `competition` →
+  ELMO "competition intensity" (both listed under Known limitations in `ontology/GROUNDING.md`) → blocklist in the stage.
+- **Pending:** the exact checks on the extraction cache and the endpoint arms listed in `reports/RESULTS.md` (section on this
+  branch). Decide per flag by the queue rules (beat the control by more than the noise, or F1-neutral and valid).
+- **Tests:** `tests/test_ontology_stage.py`, `test_features.py`, `test_study.py`, `test_truncation.py`, `test_glean.py`.

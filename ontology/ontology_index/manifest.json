@@ -1,0 +1,66 @@
+{
+  "chebi": {
+    "built": "2026-11-14",
+    "bytes": 27579,
+    "file": "chebi.json.gz",
+    "terms": 988,
+    "versions": [
+      "envo-full.json: 2026-10-23",
+      "pato-full.json: 2026-10-01"
+    ]
+  },
+  "elmo": {
+    "built": "2026-11-14",
+    "bytes": 35946,
+    "file": "elmo.json.gz",
+    "terms": 546,
+    "versions": [
+      "elmo-full.json: 2026-07-09"
+    ]
+  },
+  "envo": {
+    "built": "2026-11-14",
+    "bytes": 197835,
+    "file": "envo.json.gz",
+    "terms": 4007,
+    "versions": [
+      "envo-full.json: 2026-10-23"
+    ]
+  },
+  "go": {
+    "built": "2026-11-14",
+    "bytes": 1345133,
+    "file": "go.json.gz",
+    "terms": 23974,
+    "versions": [
+      "go-full.json: 2026-07-26"
+    ]
+  },
+  "pato": {
+    "built": "2026-11-14",
+    "bytes": 68304,
+    "file": "pato.json.gz",
+    "terms": 1943,
+    "versions": [
+      "pato-full.json: 2026-10-01"
+    ]
+  },
+  "po": {
+    "built": "2026-11-14",
+    "bytes": 19071,
+    "file": "po.json.gz",
+    "terms": 296,
+    "versions": [
+      "sqlite:obo:po"
+    ]
+  },
+  "uberon": {
+    "built": "2026-11-14",
+    "bytes": 3675,
+    "file": "uberon.json.gz",
+    "terms": 54,
+    "versions": [
+      "uberon.json: 2026-11-05"
+    ]
+  }
+}

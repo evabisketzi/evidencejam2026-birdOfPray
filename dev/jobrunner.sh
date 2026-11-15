@@ -4,7 +4,10 @@
 # A job is a file dev/jobs/queue/NAME.job (NAME: letters, digits, _ . -) with one line of key=value pairs, oldest first.
 # Only these keys and values are accepted (anything else: the job is REJECTED and logged, the runner keeps going):
 #   preprocess=sentence|paragraph|paragraph-chunks   prompt=<file in pipeline/prompt/>   cache=on|refresh|off
-#   set=gold5|gold4|murphy|all   thinking=on|off   max_tokens=<1000-16000>   refine=on|off   samples=1|2|3
+#   set=gold5|gold4|gold8|murphy|all   thinking=on|off   max_tokens=<1000-16000>   refine=on|off   samples=1|2|3
+#   camo / ontology merge (branch merge_camo_onto; each passes its flag only when set to a non-default value):
+#   ontology=off|lookup|select   ontology_fields=all|entities   glean=off|auto|always   study=on|off   continue=on|off
+#   fit_attributes=on|off   double_negative=on|off   provenance=on|off
 # refine=on / samples=2|3 become --refine / --samples N only if the CURRENT pipeline has those flags (checked per job, so a
 # flag added later works without restarting the runner; otherwise the job is REJECTED); refine=off and samples=1 are the
 # pipeline defaults and pass no flag.  A job whose pipeline rejects a flag anyway (argparse error) FAILS with the reason
@@ -39,6 +42,7 @@ has_flag() {   # does the current pipeline accept this flag?
 # parse "$1" (job file) into ARGS / DESC; on a bad key or value set BAD and return 1
 parse_job() {
   local pre=sentence prompt=system.txt cache=on set=gold5 thinking="" maxtok="" refine="" samples="" kv k v
+  local onto="" ofields="" glean="" study="" cont="" fitattr="" dneg="" prov="" 
   BAD=""; ARGS=(); DESC=""
   for kv in $(head -1 "$1"); do
     k="${kv%%=*}"; v="${kv#*=}"
@@ -47,11 +51,19 @@ parse_job() {
       preprocess) [[ "$v" =~ ^(sentence|paragraph|paragraph-chunks)$ ]] && pre="$v" || BAD="$kv" ;;
       prompt) [[ "$v" =~ ^[A-Za-z0-9_.-]+$ ]] && [ -f "pipeline/prompt/$v" ] && prompt="$v" || BAD="$kv" ;;
       cache) [[ "$v" =~ ^(on|refresh|off)$ ]] && cache="$v" || BAD="$kv" ;;
-      set) [[ "$v" =~ ^(gold5|gold4|murphy|all)$ ]] && set="$v" || BAD="$kv" ;;
+      set) [[ "$v" =~ ^(gold5|gold4|gold8|murphy|all)$ ]] && set="$v" || BAD="$kv" ;;
       thinking) [[ "$v" =~ ^(on|off)$ ]] && thinking="$v" || BAD="$kv" ;;
       refine) [[ "$v" =~ ^(on|off)$ ]] && refine="$v" || BAD="$kv" ;;
       samples) [[ "$v" =~ ^[123]$ ]] && samples="$v" || BAD="$kv" ;;
       max_tokens) [[ "$v" =~ ^[0-9]{4,5}$ ]] && [ "$v" -ge 1000 ] && [ "$v" -le 16000 ] && maxtok="$v" || BAD="$kv" ;;
+      ontology) [[ "$v" =~ ^(off|lookup|select)$ ]] && onto="$v" || BAD="$kv" ;;
+      ontology_fields) [[ "$v" =~ ^(all|entities)$ ]] && ofields="$v" || BAD="$kv" ;;
+      glean) [[ "$v" =~ ^(off|auto|always)$ ]] && glean="$v" || BAD="$kv" ;;
+      study) [[ "$v" =~ ^(on|off)$ ]] && study="$v" || BAD="$kv" ;;
+      continue) [[ "$v" =~ ^(on|off)$ ]] && cont="$v" || BAD="$kv" ;;
+      fit_attributes) [[ "$v" =~ ^(on|off)$ ]] && fitattr="$v" || BAD="$kv" ;;
+      double_negative) [[ "$v" =~ ^(on|off)$ ]] && dneg="$v" || BAD="$kv" ;;
+      provenance) [[ "$v" =~ ^(on|off)$ ]] && prov="$v" || BAD="$kv" ;;
       *) BAD="$kv (unknown key)" ;;
     esac
     [ -n "$BAD" ] && return 1
@@ -60,6 +72,7 @@ parse_job() {
   case "$set" in
     gold5) ARGS+=(--docs YKQQZV93,4CB9X9XE,3KPITIV3,6HKWT4QG,ITXNQ843) ;;
     gold4) ARGS+=(--docs YKQQZV93,4CB9X9XE,3KPITIV3,6HKWT4QG) ;;
+    gold8) ARGS+=(--docs YKQQZV93,4CB9X9XE,3KPITIV3,6HKWT4QG,ITXNQ843,2F76GVEE,4C479SU8,V3H4MP29) ;;
     murphy) ARGS+=(--docs YKQQZV93) ;;
   esac
   [ "$cache" = refresh ] && ARGS+=(--refresh-cache)
@@ -74,8 +87,27 @@ parse_job() {
     has_flag --samples || { BAD="samples=$samples (this pipeline has no --samples yet)"; return 1; }
     ARGS+=(--samples "$samples")
   fi
+  if [ -n "$onto" ] && [ "$onto" != off ]; then
+    has_flag --ontology || { BAD="ontology=$onto (this pipeline has no --ontology)"; return 1; }
+    ARGS+=(--ontology "$onto")
+    [ -n "$ofields" ] && ARGS+=(--ontology-fields "$ofields")
+  fi
+  if [ -n "$glean" ] && [ "$glean" != off ]; then
+    has_flag --glean || { BAD="glean=$glean (this pipeline has no --glean)"; return 1; }
+    ARGS+=(--glean "$glean")
+  fi
+  local pair flag
+  for pair in "study:$study:--study" "continue:$cont:--continue-truncated" "fit_attributes:$fitattr:--fit-attributes"               "double_negative:$dneg:--double-negative" "provenance:$prov:--provenance"; do
+    IFS=: read -r k v flag <<< "$pair"
+    if [ "$v" = on ]; then
+      has_flag "$flag" || { BAD="$k=on (this pipeline has no $flag)"; return 1; }
+      ARGS+=("$flag")
+    fi
+  done
   DESC="preprocess=$pre prompt=$prompt cache=$cache set=$set${thinking:+ thinking=$thinking}${maxtok:+ max_tokens=$maxtok}"
-  DESC+="${refine:+ refine=$refine}${samples:+ samples=$samples}"
+  DESC+="${refine:+ refine=$refine}${samples:+ samples=$samples}${onto:+ ontology=$onto}${ofields:+ ontology_fields=$ofields}"
+  DESC+="${glean:+ glean=$glean}${study:+ study=$study}${cont:+ continue=$cont}${fitattr:+ fit_attributes=$fitattr}"
+  DESC+="${dneg:+ double_negative=$dneg}${prov:+ provenance=$prov}"
   return 0
 }
 

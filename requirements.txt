@@ -1,2 +1,5 @@
 PyYAML==6.0.1
 fastjsonschema==2.20.0
+# ontology grounding (ontology/ground_terms.py): reads the committed ontology_index/, no oaklib or network at run time
+rapidfuzz==3.14.6
+curies==0.15.8

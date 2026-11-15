@@ -153,7 +153,7 @@ def validate_edge(edge: dict, nodes: Dict[str, dict]) -> Tuple[Optional[dict], D
 
 
 # ----------------------------------------------------------------------------------------------- per paper
-def guard_paper(slug: str, nodes: Dict[str, dict], edges: List[dict]) -> Tuple[Dict[str, dict], List[dict], Counter]:
+def guard_paper(slug: str, nodes: Dict[str, dict], edges: List[dict], features=None) -> Tuple[Dict[str, dict], List[dict], Counter]:
     """Repair + validate every edge of one paper; return the surviving nodes and edges."""
     stats: Counter = Counter()
     keep_edges: List[dict] = []
@@ -161,6 +161,11 @@ def guard_paper(slug: str, nodes: Dict[str, dict], edges: List[dict]) -> Tuple[D
     for e in edges:
         for r in repair_edge(e):
             stats["repair: " + r] += 1
+        if features is not None and features.double_negative:          # --double-negative
+            from .features import repair_double_negative
+            r = repair_double_negative(e, clean_nodes)
+            if r:
+                stats["repair: " + r] += 1
         if e.get("subject") not in clean_nodes or e.get("object") not in clean_nodes:
             stats["dropped edge: dangling"] += 1
             continue
@@ -270,7 +275,7 @@ def source_document(row: Dict[str, str], doi: Optional[str] = None) -> dict:
 
 
 def merge(index_rows: Sequence[Dict[str, str]], per_doc: Dict[str, Tuple[Dict[str, dict], List[dict]]],
-          created: Optional[str] = None, dois: Optional[Dict[str, str]] = None) -> dict:
+          created: Optional[str] = None, dois: Optional[Dict[str, str]] = None, study: Optional[Dict[str, dict]] = None) -> dict:
     """One CausalGraph.  Every article in index.csv gets a source_documents entry, whether or not extraction worked."""
     nodes: List[dict] = []
     edges: List[dict] = []
@@ -285,7 +290,8 @@ def merge(index_rows: Sequence[Dict[str, str]], per_doc: Dict[str, Tuple[Dict[st
         "provenance": {"causal_mosaic_version": SCHEMA_VERSION,
                        "created": created or _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
                        "source_corpus": "Evidence Jam 2026 Lane 1 corpus (ecological restoration articles)"},
-        "source_documents": [source_document(r, (dois or {}).get(r["slug"])) for r in index_rows],
+        "source_documents": [dict(source_document(r, (dois or {}).get(r["slug"])), **(study or {}).get(r["slug"], {}))
+                             for r in index_rows],
         "nodes": nodes, "edges": edges,
     }
 

@@ -12,18 +12,22 @@ to run it, from a fresh fork to a validated graph.
 ## Quick start
 
 Needs Python 3.10 or newer (tested on 3.12) and nothing else: the ontology indexes are
-committed in `ontology_index/`, so there is nothing to download.
+committed in `ontology_index/`, so there is nothing to download. The pipeline already runs
+this module as stage 5b (see [Calling it from the pipeline](#calling-it-from-the-pipeline));
+the commands below use it on its own. **All commands in this guide run from `ontology/`**
+with the repository's virtual environment active.
 
 ```bash
-git clone <your fork> evidencejam && cd evidencejam
-python3 -m venv venv && source venv/bin/activate
-pip install -r requirements.txt                      # ~25 s
+# from the repository root (reuses the .venv that ./run.sh creates, if it exists)
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt                      # ~25 s; the repository root's pinned requirements
+cd ontology
 
 python tests/test_grounding.py                       # ~2 s, offline; should end "ok  gold precision >= 0.9"
 
 # Ground the demo graph and validate the result
 python ground_terms.py tests/demo_graph.yaml --report report.json --out grounded.yaml
-linkml-validate -s schema/causalmosaic.yaml -C CausalGraph grounded.yaml    # -> No issues found
+linkml-validate -s ../schema/causalmosaic.yaml -C CausalGraph grounded.yaml    # -> No issues found
 ```
 
 `tests/demo_graph.yaml` looks like extraction output: names in every ontology field. In
@@ -138,7 +142,7 @@ python select_terms.py report.json --dry-run      # print the prompt; no endpoin
 ### 3. Validate
 
 ```bash
-linkml-validate -s schema/causalmosaic.yaml -C CausalGraph grounded.yaml
+linkml-validate -s ../schema/causalmosaic.yaml -C CausalGraph grounded.yaml
 ```
 
 ## Calling it from the pipeline
@@ -192,8 +196,8 @@ ontologies are searched.
 | `ontology_index/taxon_online_cache.json` | NCBI answers, created by `--taxon-online` | commit it: later runs stay offline |
 | `build_ontology_indexes.py` | Rebuilds `ontology_index/` from the raw ontology files | maintainers |
 | `build_all.sh` | One command: environment, missing downloads, every index, tests | maintainers |
-| `requirements.txt` | Runtime dependencies, pinned | everyone |
-| `requirements-dev.txt` | Plus `ijson` and `oaklib`, for rebuilding | maintainers |
+| `../requirements.txt` | Runtime dependencies, pinned (repository root, shared with the pipeline) | everyone |
+| `../requirements-dev.txt` | Plus `ijson` and `oaklib`, for rebuilding (repository root) | maintainers |
 | `tests/test_grounding.py` | Unit tests, demo check, gold-set precision | everyone |
 | `tests/grounding_gold.yaml` | Terms with their expected ID (or `null` = must not be auto-assigned) | extend it |
 | `tests/demo_graph.yaml` | Small extraction-style graph used above | — |
@@ -218,7 +222,7 @@ git add ontology_index && git commit -m "Build ontology indexes"
 Step by step:
 
 ```bash
-pip install -r requirements-dev.txt
+pip install -r ../requirements-dev.txt
 python build_ontology_indexes.py --download --ncbitaxon    # everything, fetching missing files
 git add ontology_index && git commit -m "Rebuild ontology indexes"
 ```

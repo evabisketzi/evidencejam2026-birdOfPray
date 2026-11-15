@@ -7,7 +7,8 @@ One command turns the 308 articles in `corpus/` into one merged CAMO v0.10.0 gra
 ```
 
 It needs `BRINE_URL`, `BRINE_MODEL` and `BRINE_API_KEY` in the environment. It writes `output/camo_graph.yaml` and
-`output/camo_graph.json`, plus `tokens.csv`, `run_log.json`, `retries.csv` and `doi_report.csv`.
+`output/camo_graph.json`, plus `tokens.csv`, `run_log.json`, `retries.csv`, `doi_report.csv`, `ontology_report.json`,
+`raw_responses.jsonl` and `losses.jsonl` (what each holds: [README](../README.md#outputs)).
 
 ## Design in one paragraph
 
@@ -26,6 +27,7 @@ invalid graph, and its output stays short, which keeps the token cost per articl
 | 3 | Extraction | `extract.py`, `prompt/system.txt` | One model call per chunk of the paper. The answer is one line per claim. |
 | 4 | Parse and expand | `parse.py`, `expand.py` | Reads the lines and builds CAMO nodes and edges from them. |
 | 5 | Guard and merge | `guard.py` | Repairs or drops anything invalid, removes repeated claims, merges all papers into one graph. |
+| 5b | Ontology IDs | `ontology_stage.py`, `ontology/` | Before the merge, looks each paper's remaining free-text terms up in committed ontology indexes and writes an ID only for a unique exact match. No model call. |
 | 6 | Write and validate | `write.py`, `validate.py` | Writes YAML and JSON and validates both against the schema. |
 
 ### 1. Preprocess
@@ -104,6 +106,26 @@ edge with a broken required field is dropped. A claim repeated within the same s
 another dose, season or comparator is a different claim and is kept. Then all papers
 are merged. Every row of `corpus/index.csv` gets a `source_documents` entry with its DOI, including papers where
 extraction failed, and every edge points to one of those entries.
+
+### 5b. Ontology IDs
+
+Stage 2 only covers species in the taxon table and a few verified terms. Stage 5b (`--ontology lookup`, the default since
+2026-11-15) runs the team's grounding module, `ontology/ground_terms.py`, on each paper's nodes after the guard, and the
+guard runs again afterwards:
+
+- Every free-text `entity_term`, `measured_attribute` and `life_stage_term` is looked up in the indexes committed in
+  `ontology/ontology_index/` (NCBITaxon for taxa the table missed, ELMO, ENVO, GO, PATO, ChEBI, PO, UBERON). The node's
+  `entity_type` decides which ontologies are searched.
+- An ID is written only when exactly one label or exact synonym matches. Ambiguous and fuzzy matches stay free text,
+  for the same reason as in stage 2.
+- Values that already are CURIEs are left as they are. A failure in this stage never costs the paper: its nodes stay as
+  the guard left them.
+- No model call, so no tokens. `--ontology select` would also let the model choose among the candidates (one short call
+  per paper); `--ontology off` skips the stage. Every looked-up term, with its status and candidates, is listed in
+  `ontology_report.json`.
+
+How the module works, and how its indexes are built: [ontology/GROUNDING.md](../ontology/GROUNDING.md). The numbers in
+`RESULTS.md` were measured before this stage was switched on; what is known about its effect is stated there.
 
 ### 6. Write and validate
 

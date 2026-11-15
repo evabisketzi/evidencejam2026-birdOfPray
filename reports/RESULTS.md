@@ -11,6 +11,15 @@ development numbers, not the judges' score.
 | Prompt | `pipeline/prompt/system.txt` |
 | Thinking | off |
 | Output limit per call | 3,000 tokens |
+| Ontology IDs (stage 5b) | `--ontology lookup`: unique exact matches in the committed ontology indexes, no model call |
+
+**Stage 5b and these numbers:** stage 5b was switched on by default on 2026-11-15 at 14:00 EST, after every
+measurement in this file, so all numbers below are without it. It adds no tokens (it makes no model call). Its effect
+was measured only on another pipeline's saved graphs (the camo reference, in commit `1a37db3`, later reverted): Murphy
+standard F1 unchanged (0.467 → 0.467); out-of-sample standard F1 0.084 → 0.073 with all fields grounded (42 values
+changed) and 0.078 with entities only (2 values). That analysis attributes the drop to our scorer, which compares node
+names instead of terms once a term is an ID, and has labels for NCBITaxon and a few attribute IDs but not for ELMO,
+ENVO or GO.
 
 ## Overnight changes (2026-11-15) and their measured effect
 
@@ -47,7 +56,7 @@ identical paragraph-chunks runs.
 ## Why this configuration
 
 Three endpoint runs per variant on the five gold papers, cache bypassed. Values are the mean, with the lowest and
-highest run in brackets. "Out-of-sample" is the mean over the four team-annotated papers (4CB9X9XE, 3KPITIV3,
+highest run in brackets. "Out-of-sample" is the mean over the four Claude-made reference papers (4CB9X9XE, 3KPITIV3,
 6HKWT4QG, ITXNQ843).
 
 | variant | Murphy standard F1 | Murphy strict F1 | Murphy loose F1 | Murphy null recall | Out-of-sample standard F1 | Out-of-sample loose F1 | Tokens per paper (in + out) |

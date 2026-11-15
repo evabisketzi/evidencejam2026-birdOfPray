@@ -27,7 +27,8 @@ def process_paper_team(slug: str, raw: str, meta: Dict[str, str], count: Callabl
     call (sidecar['chunk_texts']), with the same TITLE/SPECIES/CONTEXT header and globally numbered sentences."""
     base = process_paper(slug, raw, meta, count, opts, taxon_table)          # our header (TITLE / SPECIES / CONTEXT) and report row
     try:
-        res = T.preprocess(raw, tokenizer=count, source=slug, config=T.Config(min_score=min_score))
+        res = T.preprocess(raw, tokenizer=count, source=slug, config=T.Config(min_score=min_score,
+                                                                        keep_results_prose=bool(getattr(opts, "keep_results", False))))
         sents: List[dict] = []
         if chunk_tokens:
             pk = T.pack(res, T.PackConfig(max_chunk_tokens=chunk_tokens), tokenizer=count)
@@ -72,7 +73,7 @@ def process_paper_team(slug: str, raw: str, meta: Dict[str, str], count: Callabl
 
 def process_paper_team_chunks(slug, raw, meta, count, opts, taxon_table=None):
     """Paragraph selection + one LLM call per paragraph chunk (pack(), default 2,500 tokens of paragraph text per chunk)."""
-    return process_paper_team(slug, raw, meta, count, opts, taxon_table, chunk_tokens=CHUNK_TOKENS)
+    return process_paper_team(slug, raw, meta, count, opts, taxon_table, chunk_tokens=getattr(opts, "chunk_tokens", None) or CHUNK_TOKENS)
 
 
 CHUNK_TOKENS = 2500

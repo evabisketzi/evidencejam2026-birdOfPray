@@ -27,6 +27,9 @@ class Options:
     max_legend: int = 25
     cite_filter: str = "strict"          # strict | relaxed (--cite-filter)
     taxon_groups: bool = False          # --taxon-groups
+    clean_variants: bool = False        # --clean-variants (legend: no generic 'common names' such as species, trees, trial)
+    chunk_tokens: int = 0               # --chunk-tokens (paragraph-chunks: tokens of paragraph text per call; 0 = 2,500)
+    keep_results: bool = False          # --keep-results (paragraph preprocessing: keep every Results prose paragraph)
 
 
 @dataclass
@@ -147,7 +150,8 @@ def _process(slug, raw, meta, count, opts: Options, table, fallbacks: List[str])
     # ---- step 9: species legend (built from the whole text; pruned after assembly) ----------
     alpha = detect_alpha(cleaned.s)
     try:
-        legend = build_legend(raw, cleaned.s, "\n".join(s["clean"] for s in sents), table, opts.max_legend)
+        legend = build_legend(raw, cleaned.s, "\n".join(s["clean"] for s in sents), table, opts.max_legend,
+                              clean_variants=getattr(opts, "clean_variants", False))
     except Exception as e:  # noqa: BLE001
         log.warning("%s: legend failed (%r)", slug, e)
         legend, _ = [], fallbacks.append("legend")

@@ -1,0 +1,64 @@
+# Claim-level corrections from reading all edges of the four gold5 annotations against their papers (2026-11-14).
+# Applied by dev/annot_fix.py after the mechanical steps. Everything not listed here was read and left as it was.
+
+3KPITIV3:
+  set:
+    # The annotation says cold May/June/September go with more light rings, which is what the paper reports (previous
+    # sentence, Figure 5 and its caption, Discussion). The quoted Results sentence says "high average temperatures",
+    # contradicting the edge it was attached to. The supporting sentence is quoted instead; the conflicting one stays
+    # in the source spans and the annotation notes.
+    - edges: [e07_mayT_light, e08_junT_light, e09_sepT_light]
+      original_sentence: >-
+        As shown in Figures 4, 5, a high percentage of light rings was formed in years that were characterized by cold
+        temperatures at the beginning and end of the growing season (see large pink circles in Figure 5 for 1996, 2000,
+        and 2004).
+    # Table-derived claim about Montane sources; the quoted sentence was about Continental Boreal sources.
+    - edges: [e25_montane_initFrost]
+      original_sentence: Table 1 | The frequency (in percent) of tree ring anomalies in trees representing six Canadian ecozones.
+
+  # Claims the authors report from other studies. The human Murphy annotation contains none (all 25 findings are the
+  # study's own results, interpretations or recommendations), so these are removed. Kept: the authors' own
+  # interpretations that cite a source in support (e.g. e20 "A possible explanation ... is that ...", e43).
+  delete:
+    - e18_xylemDev_double            # "This constraint is usually caused by summer droughts (Hoffer and Tardif, 2009; ...)"
+
+6HKWT4QG:
+  delete:
+    - e33_cited_RS_height            # "have been previously shown to result in greater height growth (Martens et al. 2007; ...)"
+    - e36_aboveComp_shootAlloc       # "aspen seedlings tend to prioritize shoot growth (Bockstette et al. 2018)"
+    - e38_cited_light_root           # "light availability has been shown to be an important factor ... (Landhäusser and Lieffers 2001; ...)"
+    - e43_cited_canopy_veg           # "Achieving early canopy closure is a management strategy ... (Macdonald et al. 2015)"
+    - e52_stock_dryEstab_insufficient  # "can be tailored ... (Pinto et al. 2011; ...), there are physiological limitations ... (Rose et al. 1993)"
+
+ITXNQ843:
+  delete:
+    - e40_freqCut_nng                # "Short-term cutting is likely more effective ... (Rinella et al. 2001) ... (Willson & Stubbendieck 1996; ...)"
+    - e41_perennial_moderates_steam  # "are difficult to kill with steam (Wei et al. 2010)"
+    - e48_repeat_reinvasion          # "has been recommended for every 2-3 yr to prevent reinvasion (Holl et al. 2014)"
+    - e50_cited_removal_native       # "In contrast to our findings and others ..., native diversity and abundance increased following ..."
+    - e51_cited_cut_native           # "Cutting increased growth and seed production of native species ... (Maron & Jefferies 2001; ...)"
+  # Null results stated in sentences that were already annotated, but only mentioned in the annotation notes.
+  add_null:
+    # "They did not reduce non-native grass and forb cover relative to controls within a year"
+    - id: e35b_cut_forbCover_null
+      clone: e35_cut_cover_null
+      object: causal_mosaic:decreased_non_native_forb_cover_82c2
+    - id: e36b_steam_forbCover_null
+      clone: e36_steam_cover_null
+      object: causal_mosaic:decreased_non_native_forb_cover_82c2
+    # "Centaurea maculosa (all three sites) and C. leucanthemum ... were not reduced over time"
+    - id: e30b_gly_chle_null
+      clone: e30_gly_cema_null
+      new_object:
+        clone: causal_mosaic:decreased_cover_of_centaurea_maculosa_1ef6
+        id: causal_mosaic:decreased_cover_of_chrysanthemum_leucanthemum
+        name: Decreased cover of Chrysanthemum leucanthemum
+        entity_term: NCBITaxon:99072
+    # "At Site 3, treatment had no effect on non-native plant flowering and seed production"
+    - id: e21b_trt_nonNativeFlower_null
+      clone: e21_trt_nativeFlower
+      new_object:
+        clone: causal_mosaic:decreased_flowering_and_seed_set_of_non_native_forbs_6d39
+        id: causal_mosaic:decreased_flowering_and_seed_set_of_non_native_plants
+        name: Decreased flowering and seed set of non-native plants
+        entity_term: non-native plants

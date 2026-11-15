@@ -45,6 +45,26 @@ class Species:
     group: bool = False            # a group word (rodents, grasses) from data/taxon_groups.tsv, not a species of the paper
 
 
+_GENERIC_HEADS = {"species", "tree", "trees", "plant", "plants", "trial", "trials", "forb", "forbs", "grass", "grasses", "shrub",
+                  "shrubs", "herb", "herbs", "seedling", "seedlings", "sapling", "saplings", "individual", "individuals",
+                  "population", "populations", "site", "sites", "plot", "plots", "community", "communities", "vegetation",
+                  "taxa", "taxon", "genus", "family", "treatment", "treatments", "control", "experiment", "study"}
+
+
+_NEVER_NAME_HEADS = {"species", "trial", "trials", "plants", "individuals", "vegetation", "taxa", "communities", "community",
+                     "populations", "treatments", "sites", "plots"}
+
+
+def generic_variant(v: str) -> bool:
+    """A 'common name' whose head noun is a generic word (species, trees, trial, native oldfield species) names no species."""
+    w = v.lower().split()
+    if not w:
+        return False
+    if len(w) == 1:
+        return w[0] in _GENERIC_HEADS                     # 'grass', 'species', 'trees'
+    return w[-1] in _NEVER_NAME_HEADS                     # 'native oldfield species'; 'reed canary grass' stays
+
+
 def load_taxon_table(path: Optional[Path] = None) -> Dict[str, int]:
     path = Path(path) if path else DEFAULT_TABLE
     table: Dict[str, int] = {}
@@ -73,7 +93,7 @@ def _plausible(genus: str, epithet: str) -> bool:
 
 
 def build_legend(raw: str, cleaned_text: str, used_text: str, table: Optional[Dict[str, int]] = None,
-                 max_entries: int = 25) -> List[Species]:
+                 max_entries: int = 25, clean_variants: bool = False) -> List[Species]:
     """`cleaned_text`: where to look for definitions; `used_text`: the text that will be shown to the model
     (entries not occurring there are dropped)."""
     table = table or {}
@@ -152,6 +172,8 @@ def build_legend(raw: str, cleaned_text: str, used_text: str, table: Optional[Di
             if v not in seen and v != sp.name:
                 seen.add(v)
                 vs.append(v)
+        if clean_variants:          # 'species (Peromyscus maniculatus)' must not make "species" a name of the deer mouse
+            vs = [v for v in vs if not generic_variant(v)]
         sp.variants = vs
         if sp.count > 0:
             out.append(sp)

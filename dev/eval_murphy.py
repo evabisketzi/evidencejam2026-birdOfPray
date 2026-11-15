@@ -19,6 +19,8 @@ SLUG, GOLD = "YKQQZV93", ROOT / "dev/gold/murphy2005.yaml"
 PREPROCESS = os.environ.get("EVAL_PREPROCESS", "sentence")
 OTHER = [("4CB9X9XE", ROOT / "dev/gold/4CB9X9XE.camo.yaml", None), ("3KPITIV3", ROOT / "dev/gold/3KPITIV3.yaml", None),
          ("6HKWT4QG", ROOT / "dev/gold/6HKWT4QG.yaml", None), ("ITXNQ843", ROOT / "dev/gold/ITXNQ843.yaml", None)]
+if os.environ.get("EVAL_OTHERS_DIR"):          # e.g. dev/annot_v2: the cleaned copies of the four machine-made annotations
+    OTHER = [(slug, ROOT / os.environ["EVAL_OTHERS_DIR"] / f"{slug}.yaml", None) for slug, _, _ in OTHER]
 
 
 def graph_from_cache(prompt: str, slugs=(SLUG,)) -> Path:

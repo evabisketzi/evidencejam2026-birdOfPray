@@ -264,6 +264,7 @@ class Config:
     keep_null_results: bool = True               # any null-result cue keeps a paragraph
     keep_fragments: bool = True                  # lowercase-start paragraphs are never dropped by selection
     max_extract_tokens: int | None = None        # per-article budget for 'extract' tokens
+    keep_results_prose: bool = False             # (lane 1, --keep-results) every Results prose paragraph is kept; captions are not
 
 
 @dataclass
@@ -1166,11 +1167,17 @@ def score_paragraph(text: str) -> tuple[float, dict[str, int]]:
     return score, cues
 
 
+_CAPTION = re.compile(r"^\s*(?:\*\*)?(?:fig(?:ure)?s?\.?|tables?|tab\.|plate|appendix)\s*[A-Z]?\d+", re.I)
+
+
 def keep_paragraph(block: Block, cfg: Config) -> bool:
     """Selection rule (C8). Keep if the section is protected, the paragraph reports a
     null result (CAMO requires null results), or its cue score reaches the threshold."""
     if block.section in cfg.always_keep_sections:
         return True
+    if (cfg.keep_results_prose and block.section == "results" and block.kind != "heading"
+            and not _CAPTION.match(block.text) and not block.text.lstrip().startswith("#")):
+        return True                    # an own-study Results paragraph is never judged by its cue score alone
     if cfg.keep_fragments and block.text.lstrip()[:1].islower():
         return True                    # second half of a split sentence: never judge it alone
     if cfg.keep_null_results and block.cues.get("null_result"):

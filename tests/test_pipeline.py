@@ -993,3 +993,109 @@ def test_every_system_v1_example_parses_including_long_paper_phrases():
     assert "Decreased recruitment of planted prairie species" in names          # a group in the paper's words
     assert "Decreased April minimum temperature" in names                       # property with its qualifiers
     assert not out.stats.get("unknown_tcode")
+
+
+# ---------------------------------------------------------------- lenient parsing (2026-11-14)
+def test_lenient_value_word_is_kept_on_the_property_without_a_direction():
+    c = parse_line("F|5|T2/origin/hatchery-reared|c|T2/anti-predator response/-|D|exp|vs=wild")
+    assert c.cause.prop == "origin (hatchery-reared)" and c.cause.change is None
+    c = parse_line("F|33|peat chemistry/pH/high|ct|colonization/occ|U|obs")
+    assert c.cause.prop == "pH (high)" and c.cause.change is None
+
+
+def test_lenient_unit_slash_is_not_a_field_separator():
+    c = parse_line("F|143|anticipated harvest/0.3-0.35 kg/ha|c|fishing mortality/+|D|mod")
+    assert c.cause.thing == "anticipated harvest" and c.cause.prop == "0.3-0.35 kg per ha"
+    c = parse_line("F|1|T1/density/+/tax|c|T2/biomass/-|D|exp")        # an ordinary line is unchanged
+    assert (c.cause.prop, c.cause.change, c.cause.vtype) == ("density", "+", "tax")
+
+
+def test_lenient_f_line_with_language_n_is_a_null_result():
+    c = parse_line("F|11|T1/initial planting density/+/tax|c|T2/number of seedlings|N|exp|season=autumn")
+    assert c.kind == "N" and c.design == "exp" and c.keys["season"] == "autumn"
+
+
+def test_lenient_joint_cause_stays_one_node():
+    c = parse_line("F|112|low soil moisture/pres/var;high temperature/pres/var|c|lichen/decomposition rate/-/proc|U|jud")
+    assert len(c.cause.parts) == 2 and c.cause.vtype == "var"
+    from pipeline.expand import expand_claims
+    side = {"sentences": [{"n": 112, "clean": "Low soil moisture and high temperature may slow lichen decomposition.",
+                           "section": "dis"}]}
+    exp = expand_claims("X", [c], side)
+    subj = exp.nodes[exp.edges[0]["subject"]]
+    assert subj["name"] == "Presence of low soil moisture and presence of high temperature" and len(exp.edges) == 1
+
+
+def test_truly_broken_lines_still_fail():
+    for bad in ("F|121|spawning stock/abundance/+|D|obs", "N|161|T1/seed viability|exp"):
+        with pytest.raises(ParseError):
+            parse_line(bad)
+
+
+def test_guard_keeps_the_same_pair_from_one_sentence_at_another_dose_or_season():
+    nodes, e = edge_with()
+    d1 = copy.deepcopy(e); d1["id"] = e["id"] + "b"; d1["dose"] = {"numeric_value": 5.0, "verbatim": "5 ramets/m2"}
+    d2 = copy.deepcopy(e); d2["id"] = e["id"] + "c"; d2["dose"] = {"numeric_value": 9.0, "verbatim": "9 ramets/m2"}
+    s1 = copy.deepcopy(e); s1["id"] = e["id"] + "d"; s1["temporal_extent"] = {"observation_seasons": ["autumn"]}
+    rep = copy.deepcopy(d1); rep["id"] = e["id"] + "e"                            # a true repeat of d1
+    _, edges, stats = guard_paper("DOC", nodes, [e, d1, d2, s1, rep])
+    assert [x["id"] for x in edges] == [e["id"], d1["id"], d2["id"], s1["id"]]
+    assert stats["dropped edge: same claim, same sentence"] == 1
+
+
+def test_keep_results_keeps_results_prose_but_not_captions():
+    from pipeline.preprocess import team_paper as T
+    cfg_on, cfg_off = T.Config(keep_results_prose=True), T.Config()
+    from types import SimpleNamespace
+    def blk(text, section="results"):
+        return SimpleNamespace(text=text, section=section, kind="text", score=0.0, cues={})
+    prose = blk("Our samples included all four types of xylem irregularities.")
+    assert T.keep_paragraph(prose, cfg_on) and not T.keep_paragraph(prose, cfg_off)
+    assert not T.keep_paragraph(blk("Figure 2. Mean number of emergent leaves."), cfg_on)
+    assert not T.keep_paragraph(blk("TABLE 1 | The frequency of anomalies."), cfg_on)
+    assert not T.keep_paragraph(blk("Our samples included all four types.", "discussion"), cfg_on)
+
+
+def test_lenient_every_effect_marked_null_is_an_n_line():
+    c = parse_line("F|16|T1/initial planting density/+/tax|c|T2/number of seedlings|N;T2/leaf area|N|exp|dose=9-20 ramets/m2")
+    assert c.kind == "N" and [e.prop for e in c.effects] == ["number of seedlings", "leaf area"] and c.keys["dose"] == "9-20 ramets/m2"
+
+
+def test_measured_attribute_is_the_head_of_an_x_of_y_property_and_the_name_keeps_everything():
+    from pipeline.expand import attribute_head
+    assert attribute_head("size of year 1 rosettes") == "size"
+    assert attribute_head("gross area of stem leaves") == "gross area"
+    assert attribute_head("leaf area") == "leaf area" and attribute_head("height at final flowering") == "height at final flowering"
+    c = parse_line("F|7|T1/initial density/+/tax|c|T2/size of year 1 rosettes/-|D|exp")
+    side = {"sentences": [{"n": 7, "clean": "Density reduced rosette size.", "section": "res"}],
+            "species": [{"id": "T2", "name": "Alliaria petiolata"}, {"id": "T1", "name": "Sanguinaria canadensis"}]}
+    exp = expand_claims("X", [c], side)
+    obj = exp.nodes[exp.edges[0]["object"]]
+    assert "year 1 rosettes" in obj["name"] and obj["measured_attribute"] != "size of year 1 rosettes"
+
+
+def test_species_fan_out_is_merged_unless_the_sentence_names_the_species():
+    sp = [{"id": f"T{i}", "name": n, "variants": v} for i, (n, v) in enumerate(
+        [("Odocoileus virginianus", ["deer"]), ("Populus tremuloides", ["trees"]), ("Quercus rubra", ["oak"]),
+         ("Acer saccharum", []), ("Tilia americana", []), ("Prunus serotina", [])], 1)]
+    side = {"species": sp, "sentences": [{"n": 4, "clean": "Deer reduced small trees, especially Q. rubra.", "section": "res"}]}
+    c = parse_line("F|4|T1/density/+/tax|c|T2/density/-;T3/density/-;T4/density/-;T5/density/-;T6/density/-|D|obs")
+    exp = expand_claims("X", [c], side)
+    names = sorted(exp.nodes[e["object"]]["name"] for e in exp.edges)
+    assert names == ["Decreased density of Quercus rubra", "Decreased density of multiple species"]
+    c2 = parse_line("F|4|T1/density/+/tax|c|T2/density/-;T3/density/-|D|obs")       # below the threshold: unchanged
+    assert len(expand_claims("X", [c2], side).edges) == 2
+
+
+def test_lenient_line_that_starts_with_its_language_letter_is_an_f_line():
+    claims, bad = parse_text("A|5|vascular vegetation cover|a|CO2 exchange|A|obs\nU|7|restoration/occ/mgmt|p|emissions|U|jud\n"
+                             "D|9|fire/occ|c|cover/-|obs\nAbstract| prose is ignored")
+    assert [(c.kind, c.language, c.design) for c in claims] == [("F", "A", "obs"), ("F", "U", "jud"), ("F", "D", "obs")] and bad == []
+
+
+def test_generic_legend_variants_are_recognised_but_real_common_names_are_not():
+    from pipeline.preprocess.legend import generic_variant
+    for v in ("species", "grass", "trees", "trial", "native oldfield species", "tree species", "vascular plants"):
+        assert generic_variant(v), v
+    for v in ("oak", "reed canary grass", "Columbia spotted frog", "pine seedlings", "sunflower", "deer"):
+        assert not generic_variant(v), v

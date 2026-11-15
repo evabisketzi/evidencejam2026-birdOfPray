@@ -1,0 +1,260 @@
+## 4CB9X9XE (4CB9X9XE.camo.yaml)
+
+- **spans fixed:** 5 (in 5 nodes/edges)
+- **spans not found:** 0
+- **taxon IDs:** 0
+- **terms shortened:** 0
+- **hand edits:** 0
+- **duplicate edges dropped:** 0
+
+## 3KPITIV3 (3KPITIV3.yaml)
+
+- **spans fixed:** 104 (in 88 nodes/edges)
+- **spans not found:** 18
+  - e25_montane_initFrost: 'Table 1 | The frequency (in percent) of tree ring anomalies in trees representin'
+  - e26_coldBoreal_springFrost: 'Table 1 | The frequency (in percent) of tree ring anomalies in trees representin'
+  - e27_mildBoreal_light: 'Table 1 | The frequency (in percent) of tree ring anomalies in trees representin'
+  - e28_tempMixed_light: 'Table 1 | The frequency (in percent) of tree ring anomalies in trees representin'
+  - e29_maritime_blue: 'Table 1 | The frequency (in percent) of tree ring anomalies in trees representin'
+  - e30_maritime_double: 'Table 1 | The frequency (in percent) of tree ring anomalies in trees representin'
+  - e31_tempMixed_blue: 'Table 1 | The frequency (in percent) of tree ring anomalies in trees representin'
+  - e32_lat_light: 'Table 2 | Pearson correlation between the intensity of different tree ring distu'
+  - e33_lat_blue: 'Table 2 | Pearson correlation between the intensity of different tree ring distu'
+  - e34_lat_double: 'Table 2 | Pearson correlation between the intensity of different tree ring distu'
+  - e35_mat_light: 'Table 2 | Pearson correlation between the intensity of different tree ring distu'
+  - e36_mat_blue: 'Table 2 | Pearson correlation between the intensity of different tree ring distu'
+  - e37_mat_double: 'Table 2 | Pearson correlation between the intensity of different tree ring distu'
+  - e38_effp_light: 'Table 2 | Pearson correlation between the intensity of different tree ring distu'
+  - e39_effp_blue: 'Table 2 | Pearson correlation between the intensity of different tree ring distu'
+  - e40_effp_double: 'Table 2 | Pearson correlation between the intensity of different tree ring distu'
+  - e41_mcmt_blue: 'Table 2 | Pearson correlation between the intensity of different tree ring distu'
+  - e42_map_blue: 'Table 2 | Pearson correlation between the intensity of different tree ring distu'
+- **taxon IDs:** 0
+- **terms shortened:** 24
+  - causal_mosaic:decreased_summer_climate_moisture_index_at_the_test_site_36ac.measured_attribute: 'summer climate moisture index (precipitation minus Hargreaves reference evaporation)' -> 'summer climate moisture index'
+  - causal_mosaic:earlier_end_of_the_growing_season_at_the_test_site_e0ee.measured_attribute: 'end date (day of year)' -> 'end date'
+  - causal_mosaic:increased_initial_frost_ring_frequency_in_picea_glauca_85a4.measured_attribute: 'initial frost ring frequency (proportion of annual rings)' -> 'initial frost ring frequency'
+  - causal_mosaic:increased_spring_frost_ring_frequency_in_picea_glauca_daab.measured_attribute: 'spring frost ring frequency (proportion of annual rings)' -> 'spring frost ring frequency'
+  - causal_mosaic:decreased_frost_ring_frequency_in_picea_glauca_5245.measured_attribute: 'frost ring frequency, initial and spring combined (proportion of annual rings)' -> 'frost ring frequency, initial and spring combined'
+  - causal_mosaic:increased_light_ring_frequency_in_picea_glauca_dd7f.measured_attribute: 'light ring frequency (proportion of annual rings)' -> 'light ring frequency'
+  - causal_mosaic:increased_blue_ring_frequency_in_picea_glauca_4bdb.measured_attribute: 'blue ring frequency (proportion of annual rings)' -> 'blue ring frequency'
+  - causal_mosaic:decreased_blue_ring_frequency_in_picea_glauca_7382.measured_attribute: 'blue ring frequency (proportion of annual rings)' -> 'blue ring frequency'
+  - causal_mosaic:increased_double_ring_frequency_in_picea_glauca_0333.measured_attribute: 'double ring frequency (proportion of annual rings)' -> 'double ring frequency'
+  - causal_mosaic:light_ring_frequency_in_picea_glauca_90cd.measured_attribute: 'light ring frequency (proportion of annual rings)' -> 'light ring frequency'
+  - causal_mosaic:double_ring_frequency_in_picea_glauca_9c81.measured_attribute: 'double ring frequency (proportion of annual rings)' -> 'double ring frequency'
+  - causal_mosaic:increased_latewood_xylem_anomaly_frequency_in_picea_glauca_209f.measured_attribute: 'latewood anomaly frequency (light, blue and double rings)' -> 'latewood anomaly frequency'
+  - causal_mosaic:increased_overall_xylem_anomaly_frequency_in_picea_glauca_eeb1.measured_attribute: 'overall xylem anomaly frequency (frost, light, blue and double rings)' -> 'overall xylem anomaly frequency'
+  - causal_mosaic:decreased_latitude_of_the_seed_source_origin_695c.entity_term: 'seed-source (provenance) origin location' -> 'seed-source origin location'
+  - causal_mosaic:increased_mean_annual_temperature_at_the_seed_source_origin_aec1.measured_attribute: 'mean annual temperature at provenance origin (1961-1990 normal)' -> 'mean annual temperature at provenance origin'
+  - causal_mosaic:later_end_of_the_frost_free_period_at_the_seed_source_origin_fea6.measured_attribute: 'end date at provenance origin (eFFP, 1961-1990 normal)' -> 'end date at provenance origin'
+  - causal_mosaic:increased_mean_coldest_month_temperature_at_the_seed_source__e039.measured_attribute: 'mean coldest month temperature at provenance origin (1961-1990 normal)' -> 'mean coldest month temperature at provenance origin'
+  - causal_mosaic:increased_mean_annual_precipitation_at_the_seed_source_origi_b15a.measured_attribute: 'mean annual precipitation at provenance origin (1961-1990 normal)' -> 'mean annual precipitation at provenance origin'
+  - causal_mosaic:transfer_of_cold_boreal_picea_glauca_seed_sources_to_the_cen_7173.entity_term: 'seed transfer from Cold Boreal ecozone to central Alberta (Continental Boreal)' -> 'seed transfer from Cold Boreal ecozone to central Alberta'
+  - causal_mosaic:transfer_of_montane_picea_glauca_seed_sources_to_the_central_99db.entity_term: 'seed transfer from Montane ecozone to central Alberta (Continental Boreal)' -> 'seed transfer from Montane ecozone to central Alberta'
+  - causal_mosaic:transfer_of_mild_boreal_picea_glauca_seed_sources_to_the_cen_0922.entity_term: 'seed transfer from Mild Boreal ecozone to central Alberta (Continental Boreal)' -> 'seed transfer from Mild Boreal ecozone to central Alberta'
+  - causal_mosaic:transfer_of_temperate_mixedwood_picea_glauca_seed_sources_to_c2ae.entity_term: 'seed transfer from Temperate Mixedwood ecozone to central Alberta (Continental Boreal)' -> 'seed transfer from Temperate Mixedwood ecozone to central Alberta'
+  - causal_mosaic:transfer_of_maritime_picea_glauca_seed_sources_to_the_centra_2e88.entity_term: 'seed transfer from Maritime ecozone to central Alberta (Continental Boreal)' -> 'seed transfer from Maritime ecozone to central Alberta'
+  - causal_mosaic:planting_local_climatically_matched_picea_glauca_seed_source_a2ac.entity_term: 'use of local seed source (planting stock matched to site climate)' -> 'use of local seed source'
+- **hand edits:** 7
+  - entity_term: 'seed transfer from Cold Boreal ecozone to central Alberta' -> 'seed transfer from Cold Boreal ecozone' (1 node(s))
+  - entity_term: 'seed transfer from Montane ecozone to central Alberta' -> 'seed transfer from Montane ecozone' (1 node(s))
+  - entity_term: 'seed transfer from Mild Boreal ecozone to central Alberta' -> 'seed transfer from Mild Boreal ecozone' (1 node(s))
+  - entity_term: 'seed transfer from Temperate Mixedwood ecozone to central Alberta' -> 'seed transfer from Temperate Mixedwood ecozone' (1 node(s))
+  - entity_term: 'seed transfer from Maritime ecozone to central Alberta' -> 'seed transfer from Maritime ecozone' (1 node(s))
+  - entity_term: 'seed transfer from warmer, lower-latitude origins to a cooler, shorter-season site' -> 'northward seed transfer' (1 node(s))
+  - entity_term: 'assisted migration seed transfer beyond the climatic optimum' -> 'assisted migration seed transfer' (1 node(s))
+- **duplicate edges dropped:** 0
+- **claim corrections:** 5
+  - e07_mayT_light: original_sentence set to 'As shown in Figures 4, 5, a high percentage of light rings was formed in years that were c'
+  - e08_junT_light: original_sentence set to 'As shown in Figures 4, 5, a high percentage of light rings was formed in years that were c'
+  - e09_sepT_light: original_sentence set to 'As shown in Figures 4, 5, a high percentage of light rings was formed in years that were c'
+  - e25_montane_initFrost: original_sentence set to 'Table 1 | The frequency (in percent) of tree ring anomalies in trees representing six Cana'
+  - deleted (claim cited from another study): e18_xylemDev_double
+
+## 6HKWT4QG (6HKWT4QG.yaml)
+
+- **spans fixed:** 195 (in 107 nodes/edges)
+- **spans not found:** 0
+- **taxon IDs:** 0
+- **terms shortened:** 24
+  - causal_mosaic:planting_aspen_nursery_stock_of_a_given_size_class_f3fd.entity_term: 'planting of container-grown aspen seedling stock (size class set by nursery, sowing date and container)' -> 'planting of container-grown aspen seedling stock'
+  - causal_mosaic:nursery_culture_of_the_tall_stock_seedling_groups_at_the_uni_53f7.entity_term: 'nursery culture at University of Alberta (April sowing, 615A/815A styroblocks)' -> 'nursery culture at University of Alberta'
+  - causal_mosaic:black_plastic_mulch_over_planting_rows_2b7b.entity_term: 'black plastic mulch (1.8 m wide) over planting rows' -> 'black plastic mulch over planting rows'
+  - causal_mosaic:site_preparation_plus_continued_competition_control_after_ou_896c.entity_term: 'site preparation plus ongoing competing-vegetation control (plastic mulch and weeding; rototilling, glyphosate spot spraying)' -> 'site preparation plus ongoing competing-vegetation control'
+  - causal_mosaic:surface_site_preparation_immediately_before_outplanting_temp_2b49.entity_term: 'surface site preparation just before outplanting (plowing; rip-plowing)' -> 'surface site preparation just before outplanting'
+  - causal_mosaic:competing_vegetation_present_at_outplanting_0a57.entity_term: 'competing herbaceous vegetation (grasses and forbs)' -> 'competing herbaceous vegetation'
+  - causal_mosaic:increased_cover_of_competing_vegetation_recovering_in_the_se_d494.entity_term: 'competing herbaceous vegetation (grasses and forbs)' -> 'competing herbaceous vegetation'
+  - causal_mosaic:decreased_cover_of_competing_vegetation_1058.entity_term: 'competing herbaceous vegetation (grasses and forbs)' -> 'competing herbaceous vegetation'
+  - causal_mosaic:dense_competing_vegetation_cover_over_the_soil_cc39.entity_term: 'competing herbaceous vegetation (grasses and forbs)' -> 'competing herbaceous vegetation'
+  - causal_mosaic:increased_root_mass_of_competing_vegetation_0efd.entity_term: 'competing herbaceous vegetation (grasses and forbs)' -> 'competing herbaceous vegetation'
+  - causal_mosaic:increased_height_of_competing_vegetation_3bdb.entity_term: 'competing herbaceous vegetation (grasses and forbs)' -> 'competing herbaceous vegetation'
+  - causal_mosaic:increased_hargreaves_climatic_moisture_deficit_f8a5.measured_attribute: 'Hargreaves climatic moisture deficit (CMD)' -> 'Hargreaves climatic moisture deficit'
+  - causal_mosaic:increased_two_year_height_growth_increment_of_aspen_seedling_991c.measured_attribute: 'height growth increment over two growing seasons (shoot extension)' -> 'height growth increment over two growing seasons'
+  - causal_mosaic:two_year_height_growth_increment_of_aspen_seedlings_4240.measured_attribute: 'height growth increment over two growing seasons (shoot extension)' -> 'height growth increment over two growing seasons'
+  - causal_mosaic:increased_first_year_height_growth_of_aspen_seedlings_8420.measured_attribute: 'annual height growth, first growing season (2014)' -> 'annual height growth, first growing season'
+  - causal_mosaic:increased_second_year_height_growth_of_aspen_seedlings_1b56.measured_attribute: 'annual height growth, second growing season (2015)' -> 'annual height growth, second growing season'
+  - causal_mosaic:second_year_height_growth_of_aspen_seedlings_5cae.measured_attribute: 'annual height growth, second growing season (2015)' -> 'annual height growth, second growing season'
+  - causal_mosaic:decreased_two_year_survival_of_aspen_seedlings_08a1.measured_attribute: 'two-year survival (proportion alive)' -> 'two-year survival'
+  - causal_mosaic:increased_new_root_growth_of_aspen_seedlings_594f.measured_attribute: 'new root growth (root dry mass gained since outplanting)' -> 'new root growth'
+  - causal_mosaic:increased_relative_increase_in_root_mass_of_aspen_seedlings_089e.measured_attribute: 'relative root mass increase (final / initial root mass)' -> 'relative root mass increase'
+  - causal_mosaic:increased_root_egress_of_aspen_seedlings_577c.measured_attribute: 'percent root egress (egressed root mass / total root mass)' -> 'percent root egress'
+  - causal_mosaic:decreased_root_egress_of_aspen_seedlings_a433.measured_attribute: 'percent root egress (egressed root mass / total root mass)' -> 'percent root egress'
+  - causal_mosaic:increased_water_stress_in_aspen_seedlings_9bad.measured_attribute: 'plant water stress (internal water balance)' -> 'plant water stress'
+  - causal_mosaic:increased_establishment_success_of_planted_aspen_seedlings_1290.measured_attribute: 'establishment success (survival and early growth)' -> 'establishment success'
+- **hand edits:** 16
+  - entity_term: 'planting of container-grown aspen seedling stock' -> 'planting of aspen seedling stock' (1 node(s))
+  - entity_term: 'nursery culture at University of Alberta' -> 'nursery culture' (1 node(s))
+  - entity_term: 'black plastic mulch over planting rows' -> 'black plastic mulch' (1 node(s))
+  - entity_term: 'site preparation plus ongoing competing-vegetation control' -> 'site preparation and competing-vegetation control' (1 node(s))
+  - entity_term: 'surface site preparation just before outplanting' -> 'site preparation' (1 node(s))
+  - entity_term: 'competing-vegetation control extended beyond the first growing season' -> 'extended competing-vegetation control' (1 node(s))
+  - entity_term: 'site amelioration for root development and soil moisture availability' -> 'site amelioration' (1 node(s))
+  - entity_term: 'competing herbaceous vegetation' -> 'competing vegetation' (6 node(s))
+  - entity_term: 'grass component of competing vegetation' -> 'competing grasses' (1 node(s))
+  - entity_term: 'forb component of competing vegetation' -> 'competing forbs' (1 node(s))
+  - entity_term: 'site climatic water balance' -> 'climatic water balance' (1 node(s))
+  - entity_term: 'tree canopy of the restored stand' -> 'tree canopy' (1 node(s))
+  - measured_attribute: 'total root dry mass in 0-30 cm soil cores' -> 'root dry mass' (1 node(s))
+  - measured_attribute: 'volumetric water content at 15 cm depth' -> 'volumetric water content' (1 node(s))
+  - measured_attribute: 'percent cover' -> 'cover' (3 node(s))
+  - measured_attribute: 'percent root egress' -> 'root egress' (2 node(s))
+- **duplicate edges dropped:** 0
+- **claim corrections:** 8
+  - deleted (claim cited from another study): e33_cited_RS_height
+  - deleted (claim cited from another study): e36_aboveComp_shootAlloc
+  - deleted (claim cited from another study): e38_cited_light_root
+  - deleted (claim cited from another study): e43_cited_canopy_veg
+  - deleted (claim cited from another study): e52_stock_dryEstab_insufficient
+  - node no longer used, removed: causal_mosaic:increased_light_availability_to_aspen_seedlings_b432
+  - node no longer used, removed: causal_mosaic:early_canopy_closure_of_planted_trees_9bff
+  - node no longer used, removed: causal_mosaic:increased_carbon_allocation_to_shoot_growth_in_aspen_seedlin_e105
+
+## ITXNQ843 (ITXNQ843.yaml)
+
+- **spans fixed:** 179 (in 107 nodes/edges)
+- **spans not found:** 0
+- **taxon IDs:** 9
+  - causal_mosaic:decreased_cover_of_poa_compressa_fcc4: 'Poa compressa' -> NCBITaxon:269373
+  - causal_mosaic:decreased_cover_of_bromus_inermis_dfb0: 'Bromus inermis' -> NCBITaxon:15371
+  - causal_mosaic:increased_cover_of_bromus_inermis_32de: 'Bromus inermis' -> NCBITaxon:15371
+  - causal_mosaic:decreased_cover_of_poa_pratensis_f7b5: 'Poa pratensis' -> NCBITaxon:4545
+  - causal_mosaic:decreased_cover_of_agropyron_cristatum_de21: 'Agropyron cristatum' -> NCBITaxon:4593
+  - causal_mosaic:elimination_of_poa_pratensis_8238: 'Poa pratensis' -> NCBITaxon:4545
+  - causal_mosaic:elimination_of_elymus_repens_8be1: 'Elymus repens' -> NCBITaxon:52152
+  - causal_mosaic:elimination_of_heterotheca_villosa_7c27: 'Heterotheca villosa' -> NCBITaxon:72941
+  - causal_mosaic:decreased_cover_of_centaurea_maculosa_1ef6: 'Centaurea maculosa' -> NCBITaxon:215693
+- **terms shortened:** 13
+  - causal_mosaic:broadcast_glyphosate_application_not_species_targeted_1578.entity_term: 'broadcast glyphosate application without species targeting (Roundup; July 2010 and May 2011)' -> 'broadcast glyphosate application without species targeting'
+  - causal_mosaic:cutting_of_vegetation_two_annual_cuts_e37e.entity_term: 'cutting with handheld grass trimmers, cuttings left in place (July 2010, June 2011)' -> 'cutting with handheld grass trimmers, cuttings left in place'
+  - causal_mosaic:steam_application_to_vegetation_fb17.entity_term: 'commercial hot-water steam application (325 °C/800 psi 2010; 225 °C/350 psi 2011)' -> 'commercial hot-water steam application'
+  - causal_mosaic:non_native_plant_management_treatment_cutting_glyphosate_or__5959.entity_term: 'non-native plant management treatments tested (cutting, glyphosate, steam)' -> 'non-native plant management treatments tested'
+  - causal_mosaic:spot_spraying_of_herbicide_187b.entity_term: 'spot (targeted) herbicide spraying' -> 'spot herbicide spraying'
+  - causal_mosaic:removal_of_invasive_plant_species_e06b.entity_term: 'invasive plant species removal (various methods; cited studies)' -> 'invasive plant species removal'
+  - causal_mosaic:decreased_shannon_diversity_of_the_plant_community_ffc0.entity_term: 'plant community (native and non-native species)' -> 'plant community'
+  - causal_mosaic:decreased_flowering_and_seed_set_of_non_native_grasses_afeb.measured_attribute: 'physiological stage score (1 immature, 2 flowering, 3 seed set)' -> 'physiological stage score'
+  - causal_mosaic:decreased_flowering_and_seed_set_of_non_native_forbs_6d39.measured_attribute: 'physiological stage score (1 immature, 2 flowering, 3 seed set)' -> 'physiological stage score'
+  - causal_mosaic:decreased_flowering_and_seed_set_of_native_grasses_and_forbs_ebbb.measured_attribute: 'physiological stage score (1 immature, 2 flowering, 3 seed set)' -> 'physiological stage score'
+  - causal_mosaic:increased_dominance_of_non_native_forbs_in_the_plant_communi_6c69.measured_attribute: 'relative dominance of non-native forbs (NMDS ordination)' -> 'relative dominance of non-native forbs'
+  - causal_mosaic:plant_community_structure_6770.measured_attribute: 'community structure (NMDS ordination, MRPP)' -> 'community structure'
+  - causal_mosaic:increased_native_plant_species_abundance_e61c.measured_attribute: 'abundance (NMDS gradient)' -> 'abundance'
+- **hand edits:** 15
+  - entity_term: 'broadcast glyphosate application without species targeting' -> 'glyphosate application' (1 node(s))
+  - entity_term: 'cutting with handheld grass trimmers, cuttings left in place' -> 'cutting' (1 node(s))
+  - entity_term: 'commercial hot-water steam application' -> 'steam application' (1 node(s))
+  - entity_term: 'non-native plant management treatments tested' -> 'non-native plant management treatment' (1 node(s))
+  - entity_term: 'two early spring herbicide applications timed to grass establishment' -> 'early spring herbicide application' (1 node(s))
+  - entity_term: 'follow-up herbicide treatment targeting establishing non-native forbs' -> 'follow-up herbicide treatment' (1 node(s))
+  - entity_term: 'repeated herbicide application at 2-3 year intervals' -> 'repeated herbicide application' (1 node(s))
+  - entity_term: 'cutting repeated during the growing season over longer periods, removing tiller apices' -> 'repeated cutting' (1 node(s))
+  - entity_term: 'native plant species before treatment' -> 'native plant species' (1 node(s))
+  - entity_term: 'site conditions of disturbed grassland restoration sites' -> 'site conditions' (1 node(s))
+  - entity_term: 'native foothills fescue grassland community' -> 'native fescue grassland community' (1 node(s))
+  - measured_attribute: 'species richness per plot' -> 'species richness' (4 node(s))
+  - measured_attribute: 'Shannon diversity index per plot' -> 'Shannon diversity' (1 node(s))
+  - measured_attribute: 'abundance and diversity before management' -> 'abundance and diversity' (1 node(s))
+  - measured_attribute: 'percent canopy cover' -> 'canopy cover' (14 node(s))
+- **duplicate edges dropped:** 0
+- **claim corrections:** 16
+  - deleted (claim cited from another study): e40_freqCut_nng
+  - deleted (claim cited from another study): e41_perennial_moderates_steam
+  - deleted (claim cited from another study): e48_repeat_reinvasion
+  - deleted (claim cited from another study): e50_cited_removal_native
+  - deleted (claim cited from another study): e51_cited_cut_native
+  - node no longer used, removed: causal_mosaic:repeated_herbicide_application_every_2_3_years_5594
+  - node no longer used, removed: causal_mosaic:repeated_within_season_cutting_that_removes_tiller_apices_6fa6
+  - node no longer used, removed: causal_mosaic:removal_of_invasive_plant_species_e06b
+  - node no longer used, removed: causal_mosaic:increased_native_species_diversity_and_abundance_b948
+  - node no longer used, removed: causal_mosaic:increased_growth_and_seed_production_of_native_species_e8e8
+  - node no longer used, removed: causal_mosaic:reinvasion_by_non_native_plants_6a51
+  - node no longer used, removed: causal_mosaic:dominance_of_perennial_non_native_grasses_778f
+  - added null edge e35b_cut_forbCover_null: Cutting of vegetation (two annual cuts) -/-> Decreased non-native forb cover
+  - added null edge e36b_steam_forbCover_null: Steam application to vegetation -/-> Decreased non-native forb cover
+  - added null edge e30b_gly_chle_null: Broadcast glyphosate application (not species-targeted) -/-> Decreased cover of Chrysanthemum leucanthemum
+  - added null edge e21b_trt_nonNativeFlower_null: Non-native plant management treatment (cutting, glyphosate or steam) -/-> Decreased flowering and seed set of non-native plants
+
+## 2F76GVEE (2F76GVEE.yaml)
+
+- **spans fixed:** 257 (in 168 nodes/edges)
+- **spans not found:** 8
+  - causal_mosaic:peatland_restoration_f64c: 'Both GEPmax and NEEmax were significantly different between sites (GEPmax: df = '
+  - causal_mosaic:peatland_restoration_f64c: 'Restored plots acted as both sources and sinks of carbon at both dry and wet res'
+  - causal_mosaic:gross_ecosystem_photosynthesis_3d33: 'Both GEPmax and NEEmax were significantly different between sites (GEPmax: df = '
+  - causal_mosaic:net_ecosystem_exchange_5cea: 'Both GEPmax and NEEmax were significantly different between sites (GEPmax: df = '
+  - causal_mosaic:net_carbon_sink_dfa7: 'Restored plots acted as both sources and sinks of carbon at both dry and wet res'
+  - causal_mosaic:edge_a40f6e96: 'Both GEPmax and NEEmax were significantly different between sites (GEPmax: df = '
+  - causal_mosaic:edge_3569b593: 'Both GEPmax and NEEmax were significantly different between sites (GEPmax: df = '
+  - causal_mosaic:edge_0d37b9d7: 'Restored plots acted as both sources and sinks of carbon at both dry and wet res'
+- **taxon IDs:** 0
+- **terms shortened:** 2
+  - causal_mosaic:gross_ecosystem_photosynthesis_3d33.measured_attribute: 'GEPmax (CO2 uptake under full light)' -> 'GEPmax'
+  - causal_mosaic:net_ecosystem_exchange_5cea.measured_attribute: 'NEEmax (net CO2 exchange under full light)' -> 'NEEmax'
+- **hand edits:** 0
+- **duplicate edges dropped:** 0
+
+## 4C479SU8 (4C479SU8.yaml)
+
+- **spans fixed:** 197 (in 155 nodes/edges)
+- **spans not found:** 8
+  - causal_mosaic:deer_exclosure_dc60: 'The densities of small trees within exclosures were more than four times greater'
+  - causal_mosaic:small_tree_frequency_9b78: 'The loss of small trees was accompanied by an increase over time in mean basal a'
+  - causal_mosaic:mean_basal_area_per_individual_f6b3: 'The loss of small trees was accompanied by an increase over time in mean basal a'
+  - causal_mosaic:small_tree_density_f821: 'The densities of small trees within exclosures were more than four times greater'
+  - causal_mosaic:larger_tree_size_classes_e3db: 'The densities of small trees within exclosures were more than four times greater'
+  - causal_mosaic:edge_1a5fae4c: 'The loss of small trees was accompanied by an increase over time in mean basal a'
+  - causal_mosaic:edge_75f34d84: 'The densities of small trees within exclosures were more than four times greater'
+  - causal_mosaic:edge_4b1c7ebd: 'The densities of small trees within exclosures were more than four times greater'
+- **taxon IDs:** 0
+- **terms shortened:** 0
+- **hand edits:** 0
+- **duplicate edges dropped:** 0
+
+## V3H4MP29 (V3H4MP29.yaml)
+
+- **spans fixed:** 253 (in 184 nodes/edges)
+- **spans not found:** 12
+  - causal_mosaic:lake_michigan_sites_8739: 'Fry emergence as measured by fry traps yielded similar results – high fry densit'
+  - causal_mosaic:lake_michigan_sites_8739: 'The total reef area available for lake trout spawning appears to be highest in L'
+  - causal_mosaic:lake_champlain_sites_1d9d: 'Fry emergence as measured by fry traps yielded similar results – high fry densit'
+  - causal_mosaic:parry_sound_sites_2763: 'The total reef area available for lake trout spawning appears to be highest in L'
+  - causal_mosaic:emergent_lake_trout_fry_density_4d47: 'Fry emergence as measured by fry traps yielded similar results – high fry densit'
+  - causal_mosaic:emergent_lake_trout_fry_density_bfdd: 'Fry emergence as measured by fry traps yielded similar results – high fry densit'
+  - causal_mosaic:total_reef_area_available_for_spawning_9844: 'The total reef area available for lake trout spawning appears to be highest in L'
+  - causal_mosaic:total_reef_area_available_for_spawning_053a: 'The total reef area available for lake trout spawning appears to be highest in L'
+  - causal_mosaic:edge_6f17f6d7: 'Fry emergence as measured by fry traps yielded similar results – high fry densit'
+  - causal_mosaic:edge_ff3418ba: 'Fry emergence as measured by fry traps yielded similar results – high fry densit'
+  - causal_mosaic:edge_46cc0c65: 'The total reef area available for lake trout spawning appears to be highest in L'
+  - causal_mosaic:edge_e62866d2: 'The total reef area available for lake trout spawning appears to be highest in L'
+- **taxon IDs:** 0
+- **terms shortened:** 9
+  - causal_mosaic:lake_trout_spawning_b5d6.measured_attribute: 'evidence of spawning (egg deposition)' -> 'evidence of spawning'
+  - causal_mosaic:lake_trout_spawning_d278.measured_attribute: 'evidence of spawning (egg deposition)' -> 'evidence of spawning'
+  - causal_mosaic:lake_trout_egg_density_b19e.measured_attribute: 'egg density (eggs per m2)' -> 'egg density'
+  - causal_mosaic:lake_trout_egg_density_b615.measured_attribute: 'egg density (eggs per m2)' -> 'egg density'
+  - causal_mosaic:lake_trout_egg_density_7d2d.measured_attribute: 'egg density (eggs per m2)' -> 'egg density'
+  - causal_mosaic:lake_trout_egg_survival_to_hatch_6677.measured_attribute: 'percent hatch (fry per 100 eggs in egg bags)' -> 'percent hatch'
+  - causal_mosaic:lake_trout_egg_survival_to_hatch_462f.measured_attribute: 'percent hatch (fry per 100 eggs in egg bags)' -> 'percent hatch'
+  - causal_mosaic:lake_trout_egg_survival_to_hatch_199e.measured_attribute: 'percent hatch (fry per 100 eggs in egg bags)' -> 'percent hatch'
+  - causal_mosaic:lake_trout_fry_emergence_per_egg_ac6c.measured_attribute: 'fry emerging per 100 eggs (fry traps)' -> 'fry emerging per 100 eggs'
+- **hand edits:** 0
+- **duplicate edges dropped:** 0
+

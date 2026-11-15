@@ -1,0 +1,42 @@
+# Hand edits applied by dev/annot_fix.py after the mechanical steps: the entity_term / measured_attribute names the entity or
+# the measured property only. Method, place, timing and dose detail stays in the node name and the edge fields.
+# Terms were chosen from each paper's own wording, not from pipeline output.
+# slug	field	old	new
+3KPITIV3	entity_term	seed transfer from Cold Boreal ecozone to central Alberta	seed transfer from Cold Boreal ecozone
+3KPITIV3	entity_term	seed transfer from Montane ecozone to central Alberta	seed transfer from Montane ecozone
+3KPITIV3	entity_term	seed transfer from Mild Boreal ecozone to central Alberta	seed transfer from Mild Boreal ecozone
+3KPITIV3	entity_term	seed transfer from Temperate Mixedwood ecozone to central Alberta	seed transfer from Temperate Mixedwood ecozone
+3KPITIV3	entity_term	seed transfer from Maritime ecozone to central Alberta	seed transfer from Maritime ecozone
+3KPITIV3	entity_term	seed transfer from warmer, lower-latitude origins to a cooler, shorter-season site	northward seed transfer
+3KPITIV3	entity_term	assisted migration seed transfer beyond the climatic optimum	assisted migration seed transfer
+6HKWT4QG	entity_term	planting of container-grown aspen seedling stock	planting of aspen seedling stock
+6HKWT4QG	entity_term	nursery culture at University of Alberta	nursery culture
+6HKWT4QG	entity_term	black plastic mulch over planting rows	black plastic mulch
+6HKWT4QG	entity_term	site preparation plus ongoing competing-vegetation control	site preparation and competing-vegetation control
+6HKWT4QG	entity_term	surface site preparation just before outplanting	site preparation
+6HKWT4QG	entity_term	competing-vegetation control extended beyond the first growing season	extended competing-vegetation control
+6HKWT4QG	entity_term	site amelioration for root development and soil moisture availability	site amelioration
+6HKWT4QG	entity_term	competing herbaceous vegetation	competing vegetation
+6HKWT4QG	entity_term	grass component of competing vegetation	competing grasses
+6HKWT4QG	entity_term	forb component of competing vegetation	competing forbs
+6HKWT4QG	entity_term	site climatic water balance	climatic water balance
+6HKWT4QG	entity_term	tree canopy of the restored stand	tree canopy
+ITXNQ843	entity_term	broadcast glyphosate application without species targeting	glyphosate application
+ITXNQ843	entity_term	cutting with handheld grass trimmers, cuttings left in place	cutting
+ITXNQ843	entity_term	commercial hot-water steam application	steam application
+ITXNQ843	entity_term	non-native plant management treatments tested	non-native plant management treatment
+ITXNQ843	entity_term	two early spring herbicide applications timed to grass establishment	early spring herbicide application
+ITXNQ843	entity_term	follow-up herbicide treatment targeting establishing non-native forbs	follow-up herbicide treatment
+ITXNQ843	entity_term	repeated herbicide application at 2-3 year intervals	repeated herbicide application
+ITXNQ843	entity_term	cutting repeated during the growing season over longer periods, removing tiller apices	repeated cutting
+ITXNQ843	entity_term	native plant species before treatment	native plant species
+ITXNQ843	entity_term	site conditions of disturbed grassland restoration sites	site conditions
+ITXNQ843	entity_term	native foothills fescue grassland community	native fescue grassland community
+ITXNQ843	measured_attribute	species richness per plot	species richness
+ITXNQ843	measured_attribute	Shannon diversity index per plot	Shannon diversity
+ITXNQ843	measured_attribute	abundance and diversity before management	abundance and diversity
+6HKWT4QG	measured_attribute	total root dry mass in 0-30 cm soil cores	root dry mass
+6HKWT4QG	measured_attribute	volumetric water content at 15 cm depth	volumetric water content
+ITXNQ843	measured_attribute	percent canopy cover	canopy cover
+6HKWT4QG	measured_attribute	percent cover	cover
+6HKWT4QG	measured_attribute	percent root egress	root egress

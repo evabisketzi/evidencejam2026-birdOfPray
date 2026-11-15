@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import logging
+import os
 import re
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple
@@ -55,6 +56,13 @@ _METHODS = [(re.compile(r"\bMANOVA\b|\bMANOVAR\b", re.I), "manova"), (re.compile
             (re.compile(r"\bWilcoxon\b|\bKruskal\b|\bMann[- ]Whitney\b", re.I), "nonparametric"),
             (re.compile(r"\bregression\b|\bR\s*2\b|\bR²", re.I), "regression")]
 _TCODE = re.compile(r"\bT(\d+)\b")
+FANOUT = int(os.environ.get("PIPELINE_FANOUT", "4"))      # 0 = off (comparisons)
+_GENERIC_VARIANTS = {"tree", "trees", "plant", "plants", "shrub", "shrubs", "grass", "grasses", "seedling", "seedlings", "herb",
+                     "herbs", "forb", "forbs", "fish", "bird", "birds", "insect", "insects", "species", "weed", "weeds"}
+
+
+def norm_key(s: Optional[str]) -> str:
+    return re.sub(r"\s+", " ", (s or "").strip().lower())
 
 
 @dataclass
@@ -136,8 +144,21 @@ class Expander:
             return "composite_variable"
         return "environmental_variable"
 
+    def joint_text(self, var: Var) -> str:
+        """'A;B' in the CAUSE field: 'low soil moisture and high temperature', each part named as a node would be."""
+        names = []
+        for p in var.parts:
+            pk, ptext, _, _ = self.resolve(p.thing)
+            n = compose_name(p.change, p.prop, ptext)
+            names.append(n if pk == "taxon" or re.match(r"[A-Z][a-z]+ [a-z]+$", ptext) else n[:1].lower() + n[1:])
+        return " and ".join(names)
+
     def node(self, var: Var, stage: Optional[str], spans: List[dict], null_effect: bool = False) -> str:
-        kind, text, word, tid = self.resolve(var.thing)
+        if var.parts:
+            text = self.joint_text(var)
+            kind, word, tid = "noun", text, None
+        else:
+            kind, text, word, tid = self.resolve(var.thing)
         change = var.change
         if null_effect and change == "=":
             change = None                              # never 'unchanged' on a null result
@@ -160,8 +181,9 @@ class Expander:
             name = expand_abbreviations(compose_name(change, var.prop, text), self.abbrev)
             node = {"id": nid, "name": _cap(name), "entity_type": self.entity_type(var, kind, word), "entity_term": entity_term}
             if prop:
-                node["measured_attribute"] = (grounding.term_id(prop, "attribute") or grounding.term_id(var.prop, "attribute")
-                                              or prop)
+                attr = attribute_head(prop) if HEAD_ATTRIBUTE else prop
+                node["measured_attribute"] = (grounding.term_id(attr, "attribute") or grounding.term_id(prop, "attribute")
+                                              or grounding.term_id(var.prop, "attribute") or attr)
             if change:
                 node["state_or_change_qualifier"] = CHANGE_ENUM[change]
             if applied:
@@ -307,8 +329,62 @@ class Expander:
         self.out.edges.append(edge)
         return eid
 
+    # ------------------------------------------------------------------ species fan-out
+    def mentioned(self, tcode: str, text: str) -> bool:
+        """Does the text name this legend species (full name, 'G. species', or a non-generic variant)?"""
+        sp = self.species.get(tcode)
+        if not sp:
+            return False
+        name = sp["name"]
+        parts = name.split()
+        pats = [re.escape(name)]
+        if len(parts) >= 2:
+            pats.append(re.escape(parts[0][0]) + r"\.\s*" + re.escape(parts[1]))
+        pats += [re.escape(v) for v in sp.get("variants") or [] if v.lower() not in _GENERIC_VARIANTS and len(v) > 2]
+        return any(re.search(rf"\b{p}\b", text, re.I) for p in pats)
+
+    def defan_cause(self, claim: Claim) -> Var:
+        """The same fan-out in a joint cause ('T3/density/-;T4/density/-;...')."""
+        c = claim.cause
+        if not FANOUT or not c.parts:
+            return c
+        tmp = Claim(claim.kind, claim.sentences, c, claim.predicate, list(c.parts), claim.language, claim.design, {}, "")
+        parts = self.defan(tmp)
+        if len(parts) == len(c.parts):
+            return c
+        if len(parts) == 1:
+            return parts[0]
+        return Var(" and ".join(v.thing for v in parts), None, None, c.vtype, tuple(parts))
+
+    def defan(self, claim: Claim) -> List[Var]:
+        """A line listing >= FANOUT bare T-codes with the same property and change is usually a group word ('small trees',
+        'seedlings') spread over every species in the legend.  Species the cited sentences do not name are merged into one
+        'multiple species' effect; the ones they name are kept."""
+        effects = list(claim.effects)
+        if not FANOUT:
+            return effects
+        text = " ".join((self.sent[n].get("clean") or "") for n in claim.sentences if n in self.sent)
+        groups: Dict[Tuple, List[Var]] = {}
+        for e in effects:
+            if re.fullmatch(r"T\d+", e.thing.strip()) and not e.parts:
+                groups.setdefault((norm_key(e.prop), e.change, e.vtype), []).append(e)
+        for (_, _, _), vs in groups.items():
+            if len(vs) < FANOUT:
+                continue
+            unnamed = [v for v in vs if not self.mentioned(v.thing.strip(), text)]
+            if len(unnamed) < 2:
+                continue
+            first = effects.index(unnamed[0])
+            effects = [e for e in effects if e not in unnamed]
+            u = unnamed[0]
+            effects.insert(min(first, len(effects)), Var("multiple species", u.prop, u.change, "com"))
+            self.out.stats["species fan-out merged"] = self.out.stats.get("species fan-out merged", 0) + len(unnamed)
+        return effects
+
     def expand(self, claims: List[Claim]) -> Expanded:
         for claim in claims:
+            claim.effects = self.defan(claim)
+            claim.cause = self.defan_cause(claim)
             spans = self.spans(claim.sentences)
             if not spans:
                 self.out.stats["no_spans"] = self.out.stats.get("no_spans", 0) + 1
@@ -338,6 +414,18 @@ _UNDO = re.compile(r"\b(closure|removal|cessation|abandonment|end)\b", re.I)
 _CATEGORY = re.compile(r"\b(type|class|category|group|status|use|stage|zone)$", re.I)
 _ADJ_ENTITY = re.compile(r"^(herbaceous|woody|native|exotic|non-?native|invasive|natural|aquatic|terrestrial|total|planted|"
                          r"understou?ry|overstou?ry)$", re.I)
+
+
+# CAMO: measured_attribute is the quality measured (abundance, density, cover, height); the bearer belongs to the entity.  A
+# property phrased 'size of year 1 rosettes' therefore has the attribute 'size'; the full phrase stays in the node name.
+HEAD_ATTRIBUTE = os.environ.get("PIPELINE_HEAD_ATTRIBUTE", "1") == "1"
+_HEAD_OF = re.compile(r"^(?!(?:the|a|an)\b)([A-Za-z][\w\-]*(?: [\w\-]+){0,3}?) of (?=\S)")
+
+
+def attribute_head(prop: str) -> str:
+    """'size of year 1 rosettes' -> 'size'; 'gross area of stem leaves' -> 'gross area'; 'leaf area' -> 'leaf area'."""
+    m = _HEAD_OF.match(prop.strip())
+    return m.group(1) if m else prop
 
 
 def compose_name(change: Optional[str], prop: Optional[str], text: str) -> str:

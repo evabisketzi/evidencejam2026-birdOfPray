@@ -4,7 +4,8 @@
 # A job is a file dev/jobs/queue/NAME.job (NAME: letters, digits, _ . -) with one line of key=value pairs, oldest first.
 # Only these keys and values are accepted (anything else: the job is REJECTED and logged, the runner keeps going):
 #   preprocess=sentence|paragraph|paragraph-chunks   prompt=<file in pipeline/prompt/>   cache=on|refresh|off
-#   set=gold5|gold4|murphy|all   thinking=on|off   max_tokens=<1000-16000>   refine=on|off   samples=1|2|3
+#   set=gold8|gold5|gold4|murphy|all   thinking=on|off   max_tokens=<1000-16000>   refine=on|off   samples=1|2|3
+#   ontology=off|lookup|select   ontology_fields=all|entities   (stage 5b; unset = the pipeline default, lookup + all)
 # refine=on / samples=2|3 become --refine / --samples N only if the CURRENT pipeline has those flags (checked per job, so a
 # flag added later works without restarting the runner; otherwise the job is REJECTED); refine=off and samples=1 are the
 # pipeline defaults and pass no flag.  A job whose pipeline rejects a flag anyway (argparse error) FAILS with the reason
@@ -38,7 +39,7 @@ has_flag() {   # does the current pipeline accept this flag?
 
 # parse "$1" (job file) into ARGS / DESC; on a bad key or value set BAD and return 1
 parse_job() {
-  local pre=sentence prompt=system.txt cache=on set=gold5 thinking="" maxtok="" refine="" samples="" kv k v
+  local pre=sentence prompt=system.txt cache=on set=gold5 thinking="" maxtok="" refine="" samples="" onto="" ofields="" kv k v
   BAD=""; ARGS=(); DESC=""
   for kv in $(head -1 "$1"); do
     k="${kv%%=*}"; v="${kv#*=}"
@@ -47,17 +48,20 @@ parse_job() {
       preprocess) [[ "$v" =~ ^(sentence|paragraph|paragraph-chunks)$ ]] && pre="$v" || BAD="$kv" ;;
       prompt) [[ "$v" =~ ^[A-Za-z0-9_.-]+$ ]] && [ -f "pipeline/prompt/$v" ] && prompt="$v" || BAD="$kv" ;;
       cache) [[ "$v" =~ ^(on|refresh|off)$ ]] && cache="$v" || BAD="$kv" ;;
-      set) [[ "$v" =~ ^(gold5|gold4|murphy|all)$ ]] && set="$v" || BAD="$kv" ;;
+      set) [[ "$v" =~ ^(gold8|gold5|gold4|murphy|all)$ ]] && set="$v" || BAD="$kv" ;;
       thinking) [[ "$v" =~ ^(on|off)$ ]] && thinking="$v" || BAD="$kv" ;;
       refine) [[ "$v" =~ ^(on|off)$ ]] && refine="$v" || BAD="$kv" ;;
       samples) [[ "$v" =~ ^[123]$ ]] && samples="$v" || BAD="$kv" ;;
       max_tokens) [[ "$v" =~ ^[0-9]{4,5}$ ]] && [ "$v" -ge 1000 ] && [ "$v" -le 16000 ] && maxtok="$v" || BAD="$kv" ;;
+      ontology) [[ "$v" =~ ^(off|lookup|select)$ ]] && onto="$v" || BAD="$kv" ;;
+      ontology_fields) [[ "$v" =~ ^(all|entities)$ ]] && ofields="$v" || BAD="$kv" ;;
       *) BAD="$kv (unknown key)" ;;
     esac
     [ -n "$BAD" ] && return 1
   done
   ARGS=(--preprocess "$pre" --prompt "$prompt" --concurrency 8)
   case "$set" in
+    gold8) ARGS+=(--docs YKQQZV93,4CB9X9XE,3KPITIV3,6HKWT4QG,ITXNQ843,2F76GVEE,4C479SU8,V3H4MP29) ;;
     gold5) ARGS+=(--docs YKQQZV93,4CB9X9XE,3KPITIV3,6HKWT4QG,ITXNQ843) ;;
     gold4) ARGS+=(--docs YKQQZV93,4CB9X9XE,3KPITIV3,6HKWT4QG) ;;
     murphy) ARGS+=(--docs YKQQZV93) ;;
@@ -74,8 +78,13 @@ parse_job() {
     has_flag --samples || { BAD="samples=$samples (this pipeline has no --samples yet)"; return 1; }
     ARGS+=(--samples "$samples")
   fi
+  if [ -n "$onto$ofields" ]; then
+    has_flag --ontology || { BAD="ontology (this pipeline has no --ontology)"; return 1; }
+    [ -n "$onto" ] && ARGS+=(--ontology "$onto")
+    [ -n "$ofields" ] && ARGS+=(--ontology-fields "$ofields")
+  fi
   DESC="preprocess=$pre prompt=$prompt cache=$cache set=$set${thinking:+ thinking=$thinking}${maxtok:+ max_tokens=$maxtok}"
-  DESC+="${refine:+ refine=$refine}${samples:+ samples=$samples}"
+  DESC+="${refine:+ refine=$refine}${samples:+ samples=$samples}${onto:+ ontology=$onto}${ofields:+ ontology_fields=$ofields}"
   return 0
 }
 

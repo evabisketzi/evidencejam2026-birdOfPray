@@ -1,0 +1,68 @@
+# Curated unit table for ground_terms.py: exact matches only, never fuzzy (a wrong unit is
+# worse than none). Matching ignores spaces and normalises ², ³, ⁻¹, µ and °; it is
+# case-sensitive first (Mg ≠ mg), case-insensitive only as a fallback.
+# Every ID was checked against the QUDT 3.1.8 unit vocabulary (qudt.org/3.1.8/vocab/unit)
+# on 2026-11-14.
+# Count densities ("ramets/m2", "deer/km2") are deliberately absent: the worked example
+# records them as unit_text, and the schema names the counted thing in counted_entity.
+# Anything not listed here ends up in unit_text, which validates.
+
+unit:PERCENT: {label: percent, aliases: ["%", per cent, percentage]}
+unit:M: {label: metre, aliases: [m, meter, metres, meters]}
+unit:CentiM: {label: centimetre, aliases: [cm, centimeter, centimetres, centimeters]}
+unit:MilliM: {label: millimetre, aliases: [mm, millimeter, millimetres, millimeters]}
+unit:MicroM: {label: micrometre, aliases: [µm, um, micrometer, micron, microns]}
+unit:KiloM: {label: kilometre, aliases: [km, kilometer, kilometres, kilometers]}
+unit:M2: {label: square metre, aliases: [m2, m^2, sq m, square meter, square metres, square meters]}
+unit:CentiM2: {label: square centimetre, aliases: [cm2, cm^2, square centimeter]}
+unit:HA: {label: hectare, aliases: [ha, hectares]}
+unit:KiloM2: {label: square kilometre, aliases: [km2, km^2, square kilometer, square kilometres]}
+unit:M3: {label: cubic metre, aliases: [m3, m^3, cubic meter]}
+unit:L: {label: litre, aliases: [L, l, liter, litres, liters]}
+unit:MilliL: {label: millilitre, aliases: [mL, ml, milliliter]}
+unit:MicroL: {label: microlitre, aliases: [µL, uL, microliter]}
+unit:GM: {label: gram, aliases: [g, grams]}
+unit:KiloGM: {label: kilogram, aliases: [kg, kilograms]}
+unit:MilliGM: {label: milligram, aliases: [mg, milligrams]}
+unit:MicroGM: {label: microgram, aliases: [µg, ug, micrograms]}
+unit:MegaGM: {label: megagram, aliases: [Mg, megagrams]}
+unit:TONNE: {label: tonne, aliases: [t, tonnes, metric ton, metric tons]}
+unit:DEG_C: {label: degree Celsius, aliases: [°C, deg C, degrees Celsius, degree C]}
+unit:SEC: {label: second, aliases: [s, sec, seconds]}
+unit:MIN: {label: minute, aliases: [min, minutes]}
+unit:HR: {label: hour, aliases: [h, hr, hours]}
+unit:DAY: {label: day, aliases: [d, days]}
+unit:WK: {label: week, aliases: [wk, weeks]}
+unit:MO: {label: month, aliases: [mo, months]}
+unit:YR: {label: year, aliases: [yr, years]}
+unit:KiloGM-PER-HA: {label: kilogram per hectare, aliases: [kg/ha, kg ha-1, kg ha^-1, kg per ha, kg per hectare]}
+unit:MegaGM-PER-HA: {label: megagram per hectare, aliases: [Mg/ha, Mg ha-1, Mg ha^-1]}
+unit:TONNE-PER-HA: {label: tonne per hectare, aliases: [t/ha, t ha-1, t ha^-1, tonnes per hectare]}
+unit:GM-PER-HA: {label: gram per hectare, aliases: [g/ha, g ha-1]}
+unit:GM-PER-M2: {label: gram per square metre, aliases: [g/m2, g m-2, g m^-2, g per m2, g per square metre]}
+unit:GM-PER-L: {label: gram per litre, aliases: [g/L, g/l, g L-1]}
+unit:MilliGM-PER-L: {label: milligram per litre, aliases: [mg/L, mg/l, mg L-1, mg l-1]}
+unit:MicroGM-PER-L: {label: microgram per litre, aliases: [µg/L, ug/L, µg/l, ug/l, µg L-1, ug L-1]}
+unit:GM-PER-KiloGM: {label: gram per kilogram, aliases: [g/kg, g kg-1]}
+unit:MilliGM-PER-KiloGM: {label: milligram per kilogram, aliases: [mg/kg, mg kg-1]}
+unit:MicroGM-PER-GM: {label: microgram per gram, aliases: [µg/g, ug/g, µg g-1, ug g-1]}
+unit:GM-PER-CentiM3: {label: gram per cubic centimetre, aliases: [g/cm3, g cm-3, g/cm^3]}
+unit:PPM: {label: parts per million, aliases: [ppm]}
+unit:PPB: {label: parts per billion, aliases: [ppb]}
+unit:PH: {label: pH, aliases: [pH units, pH unit]}
+unit:PSU: {label: practical salinity unit, aliases: [psu, PSU]}
+unit:MicroS-PER-CentiM: {label: microsiemens per centimetre, aliases: [µS/cm, uS/cm, µS cm-1, uS cm-1]}
+unit:MilliS-PER-CentiM: {label: millisiemens per centimetre, aliases: [mS/cm, mS cm-1]}
+unit:DeciS-PER-M: {label: decisiemens per metre, aliases: [dS/m, dS m-1]}
+unit:CentiMOL-PER-KiloGM: {label: centimole per kilogram, aliases: [cmol/kg, cmolc/kg, cmol(+)/kg, cmol kg-1, cmolc kg-1]}
+unit:MilliMOL-PER-KiloGM: {label: millimole per kilogram, aliases: [mmol/kg, mmol kg-1]}
+unit:MicroMOL-PER-L: {label: micromole per litre, aliases: [µmol/L, umol/L, µmol L-1, umol L-1]}
+unit:MilliMOL-PER-L: {label: millimole per litre, aliases: [mmol/L, mmol L-1]}
+unit:MicroMOL-PER-M2-SEC: {label: micromole per square metre per second, aliases: [µmol/m2/s, umol/m2/s, µmol m-2 s-1, umol m-2 s-1]}
+unit:MilliM-PER-YR: {label: millimetre per year, aliases: [mm/yr, mm/year, mm yr-1, mm per year]}
+unit:MilliM-PER-DAY: {label: millimetre per day, aliases: [mm/day, mm/d, mm d-1, mm day-1]}
+unit:CentiM-PER-YR: {label: centimetre per year, aliases: [cm/yr, cm/year, cm yr-1]}
+unit:M-PER-SEC: {label: metre per second, aliases: [m/s, m s-1]}
+unit:GM-PER-M2-YR: {label: gram per square metre per year, aliases: [g/m2/yr, g m-2 yr-1, g/m2/year]}
+unit:GM-PER-M2-DAY: {label: gram per square metre per day, aliases: [g/m2/day, g/m2/d, g m-2 d-1, g m-2 day-1]}
+unit:KiloGM-PER-HA-YR: {label: kilogram per hectare per year, aliases: [kg/ha/yr, kg ha-1 yr-1, kg/ha/year]}

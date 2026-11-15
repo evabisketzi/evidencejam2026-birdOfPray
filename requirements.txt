@@ -1,2 +1,7 @@
+# Runtime dependencies (what the judge machine installs). Pinned.
+# Grounding reads the committed ontology_index/ files: no oaklib needed at run time.
+rapidfuzz==3.14.6
+curies==0.15.8
+linkml==1.12.1
 PyYAML==6.0.1
 fastjsonschema==2.20.0

@@ -1,0 +1,73 @@
+# Gold terms for tests/test_grounding.py.
+#   expect: CURIE  -> the grounder (or grounder + LLM) should produce exactly this
+#   expect: null   -> must NOT be auto-resolved (free text, or a decision for the LLM)
+# Taxa come from the hand-checked example/Murphy2005.yaml. The other entries were checked
+# against the ontology labels on 2026-11-14 (the term means the same as the label); they test
+# the plumbing, and should be extended with hand-checked terms from corpus articles.
+
+- {kind: management_intervention, text: mowing, expect: "elmo:3621036"}
+- {kind: management_intervention, text: herbicide application, expect: "elmo:3620504"}
+- {kind: management_intervention, text: fencing, expect: "elmo:3620031"}
+- {kind: management_intervention, text: topsoil removal, expect: "elmo:3620060"}
+- {kind: management_intervention, text: rewetting, expect: "elmo:3621052"}
+- {kind: management_intervention, text: planting, expect: "elmo:3620601"}
+- {kind: management_intervention, text: seeding, expect: "elmo:3620609"}
+- {kind: management_intervention, text: transplanting, expect: "elmo:3621055"}
+- {kind: management_intervention, text: tilling, expect: "elmo:3620049"}
+- {kind: management_intervention, text: tree planting, expect: "elmo:3620604"}
+- {kind: management_intervention, text: prescribed burning, expect: "elmo:3621037"}   # ELMO exact synonym of "prescribed fire process"
+- {kind: management_intervention, text: grazing, expect: null}                        # no equivalent ELMO term
+
+- {kind: environmental_variable, text: water table depth, expect: "elmo:3622713"}
+- {kind: environmental_variable, text: light availability, expect: "elmo:3622714"}
+- {kind: environmental_variable, text: canopy cover, expect: "elmo:3622302"}
+- {kind: environmental_variable, text: litter depth, expect: "elmo:3622311"}
+- {kind: environmental_variable, text: soil temperature, expect: "elmo:3622102"}
+- {kind: environmental_variable, text: dissolved oxygen concentration, expect: "elmo:3622207"}
+- {kind: environmental_variable, text: soil bulk density, expect: "ENVO:00010005"}
+- {kind: environmental_variable, text: soil pH, expect: "elmo:3622101"}
+- {kind: environmental_variable, text: air temperature, expect: "elmo:3622002"}        # ELMO preferred over ENVO "temperature of air"
+- {kind: environmental_variable, text: nitrate, expect: "CHEBI:17632"}
+- {kind: environmental_variable, text: carbon dioxide, expect: "CHEBI:16526"}
+- {kind: environmental_variable, text: methane, expect: "CHEBI:16183"}
+- {kind: environmental_variable, text: bare ground, expect: null}
+
+- {kind: environmental_process, text: pollination, expect: "GO:0009856"}
+- {kind: environmental_process, text: photosynthesis, expect: "GO:0015979"}
+- {kind: environmental_process, text: nitrogen fixation, expect: "GO:0009399"}
+- {kind: environmental_process, text: seed germination, expect: "GO:0009845"}
+- {kind: environmental_process, text: leaf senescence, expect: "GO:0010150"}          # used in example/Murphy2005.yaml
+
+- {kind: composite_variable, text: species richness, expect: "elmo:3622401"}
+- {kind: composite_variable, text: vegetation cover, expect: "elmo:3622717"}
+- {kind: composite_variable, text: plant species diversity, expect: null}
+
+- {kind: measured_attribute, text: diameter, expect: "PATO:0001334"}
+- {kind: measured_attribute, text: length, expect: "PATO:0000122"}
+- {kind: measured_attribute, text: mass, expect: "PATO:0000125"}
+- {kind: measured_attribute, text: height, expect: "PATO:0000119"}
+- {kind: measured_attribute, text: width, expect: "PATO:0000921"}
+- {kind: measured_attribute, text: temperature, expect: "PATO:0000146"}
+- {kind: measured_attribute, text: area, expect: "PATO:0001323"}
+- {kind: measured_attribute, text: volume, expect: "PATO:0000918"}
+- {kind: measured_attribute, text: age, expect: "PATO:0000011"}
+- {kind: measured_attribute, text: biomass, expect: null}
+- {kind: measured_attribute, text: abundance, expect: null}                           # PATO:0000070 is "amount", not abundance
+- {kind: measured_attribute, text: cover, expect: null}
+
+- {kind: unit, text: "°C", expect: "unit:DEG_C"}
+- {kind: unit, text: kg/ha, expect: "unit:KiloGM-PER-HA"}
+- {kind: unit, text: "%", expect: "unit:PERCENT"}
+- {kind: unit, text: ramets/m2, expect: null}                                         # -> unit_text, as in the example
+
+- {kind: taxon, text: Sanguinaria canadensis, expect: "NCBITaxon:3472"}
+- {kind: taxon, text: Alliaria petiolata, expect: "NCBITaxon:126270"}
+- {kind: taxon, text: garlic mustard, expect: "NCBITaxon:126270"}
+- {kind: taxon, text: bloodroot, expect: "NCBITaxon:3472"}
+
+- {kind: life_stage, text: seedling, expect: "PO:0007131"}                            # the schema names this term for seedlings
+- {kind: life_stage, text: flowering, expect: "PO:0007616"}
+- {kind: life_stage, text: larva, expect: "UBERON:0000069"}
+- {kind: life_stage, text: pupa, expect: "UBERON:0000070"}
+- {kind: life_stage, text: embryo, expect: "UBERON:0000068"}
+- {kind: life_stage, text: adult, expect: null}                                       # only broad synonyms match

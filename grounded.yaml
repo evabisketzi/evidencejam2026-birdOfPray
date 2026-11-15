@@ -1,0 +1,80 @@
+graph_id: demo-murphy2005
+schema_version: 0.10.0
+provenance:
+  causal_mosaic_version: 0.10.0
+nodes:
+- id: causal_mosaic:demo_transplanting
+  name: Introduction of transplanted Sanguinaria canadensis
+  entity_type: management_intervention
+  entity_term: elmo:3621055
+  measured_attribute: initial planting density
+  state_or_change_qualifier: introduced
+  applied_to:
+  - entity_type: taxon
+    entity_term: Sanguinaria canadensis
+  source_spans:
+  - text: Sanguinaria canadensis was transplanted at ten different densities
+- id: causal_mosaic:demo_alliaria_seedlings
+  name: Decreased seedling count of Alliaria petiolata
+  entity_type: taxon
+  entity_term: Alliaria petiolata
+  measured_attribute: count
+  state_or_change_qualifier: decreased
+  life_stage: germinant_or_seedling
+  life_stage_term: PO:0007131
+  source_spans:
+  - text: densities of 9 and 11 ramets/m2 resulted in the lowest numbers of late-spring
+      seedlings
+- id: causal_mosaic:demo_alliaria_height
+  name: Decreased height at flowering of A. petiolata
+  entity_type: taxon
+  entity_term: A. petiolata
+  measured_attribute: PATO:0000119
+  state_or_change_qualifier: decreased
+  life_stage: reproductive_adult
+  life_stage_term: PO:0007616
+  source_spans:
+  - text: A. petiolata plants were shorter at flowering
+- id: causal_mosaic:demo_light
+  name: Decreased light availability to the forest floor
+  entity_type: environmental_variable
+  entity_term: elmo:3622714
+  state_or_change_qualifier: decreased
+  source_spans:
+  - text: the dense S. canadensis canopy reduced light reaching the forest floor
+edges:
+- id: causal_mosaic:demo_edge_1
+  subject: causal_mosaic:demo_transplanting
+  predicate: causes
+  object: causal_mosaic:demo_alliaria_seedlings
+  causal_language: direct_causal
+  philosophical_accounts:
+  - interventionist
+  original_sentence: densities of 9 and 11 ramets/m2 resulted in the lowest numbers
+    of late-spring seedlings
+  dose:
+    minimum_value: 9
+    maximum_value: 11
+    counted_entity:
+      entity_type: taxon
+      entity_term: Sanguinaria canadensis
+    verbatim: 9 and 11 ramets/m2
+    unit_text: ramets/m2
+- id: causal_mosaic:demo_edge_2
+  subject: causal_mosaic:demo_transplanting
+  predicate: causes
+  object: causal_mosaic:demo_alliaria_height
+  causal_language: direct_causal
+  philosophical_accounts:
+  - interventionist
+  original_sentence: A. petiolata plants were shorter at flowering in high-density
+    plots
+- id: causal_mosaic:demo_edge_3
+  subject: causal_mosaic:demo_transplanting
+  predicate: contributes_to
+  object: causal_mosaic:demo_light
+  causal_language: uncertain_causal
+  philosophical_accounts:
+  - mechanistic
+  original_sentence: the dense S. canadensis canopy may have reduced light reaching
+    the forest floor

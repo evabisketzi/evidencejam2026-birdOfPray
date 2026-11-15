@@ -15,7 +15,9 @@ written as YAML and JSON, with an LLM (Qwen on the shared BRINE endpoint).
 1 preprocess (`preprocess/`: clean, sections, sentences with raw-markdown offsets, citation filter, stats compression,
 species legend, context) → 2 grounding (`grounding.py`, `data/terms.tsv`, `data/ncbitaxon_names.tsv`) → 3 LLM extraction
 (`extract.py`, prompt `prompt/system.txt`, one line per claim `F|...`/`N|...`) → 4 parse + expand (`parse.py`, `expand.py`) →
-5 guard + merge (`guard.py`) → 6 write + validate (`write.py`).
+5 guard (`guard.py`) → 5b ontology IDs (`ontology_stage.py` runs `ontology/ground_terms.py` on each paper's nodes, then guard
+again; `--ontology lookup` default = unique exact matches only, no LLM; `select` = the model picks among candidates, one short
+call per paper; `off`; per-term results in `out/ontology_report.json`) → merge → 6 write + validate (`write.py`).
 - `--preprocess paragraph-chunks` (default since 2026-11-14, see `reports/RESULTS.md`): the teammate's paragraph selection
   (`preprocess/team_paper.py`, verbatim; adapter `team_adapter.py`), one LLM call per paragraph chunk. `paragraph`: the same,
   whole paper in one call. `sentence`: our sentence filter. `sentence-chunks`: the sentence filter, one call per chunk.
@@ -23,7 +25,7 @@ species legend, context) → 2 grounding (`grounding.py`, `data/terms.tsv`, `dat
 
 ## Commands
 ```
-./run.sh corpus/ out/ [--docs A,B] [--preprocess sentence|paragraph|paragraph-chunks] [--prompt FILE] [--concurrency 8]
+./run.sh corpus/ out/ [--docs A,B] [--preprocess sentence|paragraph|paragraph-chunks] [--prompt FILE] [--concurrency 8] [--ontology off|lookup|select]
 .venv/bin/python -m pytest -q tests                      # full suite, ~50 s (a hook runs the relevant fast subset after edits)
 .venv/bin/python dev/eval_murphy.py --cached --others    # exact before/after on CACHED model output (post-processing changes)
 .venv/bin/python dev/eval_murphy.py out/camo_graph.yaml --others     # score any graph on the gold papers
@@ -49,8 +51,8 @@ dev/preflight.sh                                         # clean-checkout submis
 - `BRINE_URL`, `BRINE_MODEL`, `BRINE_API_KEY` come from the environment only. Claude's own shell usually does NOT have them.
 - The user starts `tmux new -d -s jobs 'dev/jobrunner.sh'` in a shell that has them; Claude then queues runs by writing
   `dev/jobs/queue/NAME.job` (one line of key=value; NAME must be new). Keys: `preprocess=sentence|paragraph|paragraph-chunks
-  prompt=<file> cache=on|refresh|off set=gold5|gold4|murphy|all thinking=on|off max_tokens=<1000-16000> refine=on|off
-  samples=1|2|3` (refine=on / samples>1 only once the pipeline has `--refine` / `--samples`; checked per job, no restart).
+  prompt=<file> cache=on|refresh|off set=gold8|gold5|gold4|murphy|all thinking=on|off max_tokens=<1000-16000> refine=on|off
+  samples=1|2|3 ontology=off|lookup|select ontology_fields=all|entities` (refine=on / samples>1 only once the pipeline has `--refine` / `--samples`; checked per job, no restart).
   Up to 2 jobs run at once (oldest first); a bad key/value is REJECTED at once, a job the pipeline rejects FAILS, both with
   the reason in `dev/jobs/runner.log`; the runner keeps going. Output goes to `dev/jobs/out/NAME/`.
   Never edit `dev/jobrunner.sh` while it runs without telling the user to restart it (`tmux kill-session -t jobs`, not STOP).

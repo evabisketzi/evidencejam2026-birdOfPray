@@ -1,0 +1,82 @@
+# A small CausalGraph shaped like LLM extraction output: names in every ontology field, no
+# IDs (see EXTRACTION_RULES in ground_terms.py). Based on the hand-checked Murphy (2005)
+# example. GROUNDING.md walks through grounding it.
+#
+# As written it does NOT validate: `unit: ramets/m2` breaks the unit pattern. After
+# ground_terms.py --out it does (the unit moves to unit_text).
+graph_id: demo-murphy2005
+schema_version: 0.10.0
+provenance:
+  causal_mosaic_version: 0.10.0
+nodes:
+- id: causal_mosaic:demo_transplanting
+  name: Introduction of transplanted Sanguinaria canadensis
+  entity_type: management_intervention
+  entity_term: transplanting
+  measured_attribute: initial planting density
+  state_or_change_qualifier: introduced
+  applied_to:
+  - entity_type: taxon
+    entity_term: Sanguinaria canadensis
+  source_spans:
+  - text: Sanguinaria canadensis was transplanted at ten different densities
+- id: causal_mosaic:demo_alliaria_seedlings
+  name: Decreased seedling count of Alliaria petiolata
+  entity_type: taxon
+  entity_term: Alliaria petiolata
+  measured_attribute: count
+  state_or_change_qualifier: decreased
+  life_stage: germinant_or_seedling
+  life_stage_term: seedling
+  source_spans:
+  - text: densities of 9 and 11 ramets/m2 resulted in the lowest numbers of late-spring seedlings
+- id: causal_mosaic:demo_alliaria_height
+  name: Decreased height at flowering of A. petiolata
+  entity_type: taxon
+  entity_term: A. petiolata
+  measured_attribute: height
+  state_or_change_qualifier: decreased
+  life_stage: reproductive_adult
+  life_stage_term: flowering
+  source_spans:
+  - text: A. petiolata plants were shorter at flowering
+- id: causal_mosaic:demo_light
+  name: Decreased light availability to the forest floor
+  entity_type: environmental_variable
+  entity_term: light availability
+  state_or_change_qualifier: decreased
+  source_spans:
+  - text: the dense S. canadensis canopy reduced light reaching the forest floor
+edges:
+- id: causal_mosaic:demo_edge_1
+  subject: causal_mosaic:demo_transplanting
+  predicate: causes
+  object: causal_mosaic:demo_alliaria_seedlings
+  causal_language: direct_causal
+  philosophical_accounts:
+  - interventionist
+  original_sentence: densities of 9 and 11 ramets/m2 resulted in the lowest numbers of late-spring seedlings
+  dose:
+    minimum_value: 9
+    maximum_value: 11
+    unit: ramets/m2
+    counted_entity:
+      entity_type: taxon
+      entity_term: Sanguinaria canadensis
+    verbatim: 9 and 11 ramets/m2
+- id: causal_mosaic:demo_edge_2
+  subject: causal_mosaic:demo_transplanting
+  predicate: causes
+  object: causal_mosaic:demo_alliaria_height
+  causal_language: direct_causal
+  philosophical_accounts:
+  - interventionist
+  original_sentence: A. petiolata plants were shorter at flowering in high-density plots
+- id: causal_mosaic:demo_edge_3
+  subject: causal_mosaic:demo_transplanting
+  predicate: contributes_to
+  object: causal_mosaic:demo_light
+  causal_language: uncertain_causal
+  philosophical_accounts:
+  - mechanistic
+  original_sentence: the dense S. canadensis canopy may have reduced light reaching the forest floor

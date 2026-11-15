@@ -1,0 +1,10 @@
+venv/
+__pycache__/
+# Raw ontology files: large, and only needed to rebuild ontology_index/ (which IS committed).
+*-full.json
+ncbitaxon*.json
+po.json
+uberon.json
+# Run outputs
+grounding_report.json
+selections.json

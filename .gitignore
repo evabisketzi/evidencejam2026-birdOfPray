@@ -6,6 +6,12 @@ __pycache__/
 dev/score_out/
 .venv/
 dev/out/
+venv/
+# Raw ontology files: large, and only needed to rebuild ontology_index/ (which IS committed).
+ncbitaxon*.json
+# Run outputs
+grounding_report.json
+selections.json
 dev/overnight/
 dev/preproc_compare/
 dev/jobs/

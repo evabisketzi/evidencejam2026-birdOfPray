@@ -1,6 +1,8 @@
 """python -m pipeline.main corpus/ output/ [--docs SLUG,...] [--limit N] [--concurrency 4] [--thinking on|off] [--prompt FILE]
+                         [--ontology off|lookup|select] [--ontology-fields all|entities]
 
-Stages: 1 preprocess -> 2 grounding -> 3 LLM extraction -> 4 parse + expand -> 5 guard + merge -> 6 write + validate.
+Stages: 1 preprocess -> 2 grounding -> 3 LLM extraction -> 4 parse + expand -> 5 guard -> 5b ontology IDs (ontology/, default
+lookup) + guard again -> merge -> 6 write + validate.
 One paper failing never stops the run; every paper in corpus/index.csv still gets a source_documents entry."""
 from __future__ import annotations
 
@@ -21,6 +23,7 @@ from .extract import Client, ConfigError, DEFAULT_PROMPT, LLMError, ROOT, config
 from .parse import check_sentences, parse_text
 from . import doi as doimod
 from .guard import guard_paper, merge
+from .ontology_stage import FIELD_SETS as ONTOLOGY_FIELDS, MODES as ONTOLOGY_MODES, regrounded, stage_from_args
 from .preprocess.assemble import Options, process_paper as process_paper_ours
 from .preprocess.legend import load_taxon_table
 from .preprocess.tokens import get_counter
@@ -60,10 +63,10 @@ def read_index(corpus: Path) -> List[Dict[str, str]]:
 
 
 def process_one(row: Dict[str, str], corpus: Path, client: Client, system: str, count, table, max_input_tokens: int,
-                pre_fn=None, opts: Optional[Options] = None, retry_client: Optional[Client] = None) -> dict:
+                pre_fn=None, opts: Optional[Options] = None, retry_client: Optional[Client] = None, ontology=None) -> dict:
     slug = row["slug"]
     out = {"doc": slug, "error": None, "prompt_tokens": 0, "completion_tokens": 0, "seconds": 0.0, "chunks": 0,
-           "nodes": {}, "edges": [], "stats": {}}
+           "nodes": {}, "edges": [], "stats": {}, "ontology_terms": []}
     t0 = time.time()
     try:
         raw = (corpus / f"{slug}.md").read_text(encoding="utf-8", errors="replace")
@@ -84,6 +87,11 @@ def process_one(row: Dict[str, str], corpus: Path, client: Client, system: str, 
         out.update(prompt_tokens=ex.prompt_tokens, completion_tokens=ex.completion_tokens, seconds=ex.seconds, chunks=ex.chunks)
         exp = expand_claims(slug, ex.claims, pre.sidecar)                                     # stage 4
         nodes, edges, stats = guard_paper(slug, exp.nodes, exp.edges)                         # stage 5 (per paper)
+        if ontology is not None:                                                              # stage 5b (--ontology)
+            nodes, edges, ostats, otok, out["ontology_terms"] = regrounded(nodes, edges, slug, ontology, guard_paper)
+            stats.update(ostats)
+            out["prompt_tokens"] += otok["prompt_tokens"]
+            out["completion_tokens"] += otok["completion_tokens"]
         out.update(nodes=nodes, edges=edges, stats=dict(stats))
         out["counts"] = {"sentences": len(valid), "claims": len(ex.claims), "bad_lines": ex.n_bad, "repaired": ex.n_repaired,
                          "dropped_lines": ex.n_dropped_lines, "dropped_sentence_refs": ex.n_dropped_sentences,
@@ -100,7 +108,7 @@ def process_one(row: Dict[str, str], corpus: Path, client: Client, system: str, 
 def run(corpus: Path, out_dir: Path, docs: Optional[List[str]] = None, limit: Optional[int] = None, concurrency: int = 4,
         thinking: bool = False, prompt: str = DEFAULT_PROMPT, use_cache: bool = True, max_input_tokens: int = 12000,
         max_tokens: int = 3000, preprocess: str = "paragraph-chunks", refresh_cache: bool = False, cite_filter: str = "strict",
-        taxon_groups: bool = False, retry_underextraction: bool = False) -> int:
+        taxon_groups: bool = False, retry_underextraction: bool = False, ontology: str = "lookup", ontology_fields: str = "all") -> int:
     t0 = time.time()
     opts = Options(cite_filter=cite_filter, taxon_groups=taxon_groups)
     pre_fn = get_preprocessor(preprocess)
@@ -124,17 +132,20 @@ def run(corpus: Path, out_dir: Path, docs: Optional[List[str]] = None, limit: Op
         rcfg = copy.copy(cfg)
         rcfg.cache_salt = "underextraction-retry-1"        # its own cache entry: cached re-runs reproduce the retry exactly
         retry_client = Client(rcfg, retry_log=out_dir / "retries.csv")
+    onto = stage_from_args(ontology, ontology_fields, cfg, Client)          # loads the ontology indexes once (~1.5 s)
     log.info("prompt=%s thinking=%s tokenizer=%s papers=%d concurrency=%d", pname, "on" if thinking else "off", tok_name, len(todo), concurrency)
     outcomes: List[dict] = []
     done = 0
     with ThreadPoolExecutor(max_workers=max(1, concurrency)) as pool:
-        futs = [pool.submit(process_one, r, corpus, client, system, count, table, max_input_tokens, pre_fn, opts, retry_client)
+        futs = [pool.submit(process_one, r, corpus, client, system, count, table, max_input_tokens, pre_fn, opts, retry_client, onto)
                 for r in todo]
         for f in futs:
             outcomes.append(f.result())
             done += 1
             if done % 10 == 0 or done == len(futs):
                 log.info("%d/%d papers done (%d failed)", done, len(futs), sum(1 for o in outcomes if o["error"]))
+    if onto is not None:
+        onto.close()                                                       # select: saves the memo when it grew
     per_doc = {o["doc"]: (o["nodes"], o["edges"]) for o in outcomes}
     dois = doimod.resolve_all(index, corpus)                               # DOI fallback for rows with an empty DOI cell
     graph = merge(index, per_doc, dois={s: d.doi for s, d in dois.items()})   # raises if there is not a single edge
@@ -142,6 +153,10 @@ def run(corpus: Path, out_dir: Path, docs: Optional[List[str]] = None, limit: Op
     yp, jp = write_outputs(graph, out_dir)
     errors, validators = validate_outputs(graph, yp, jp)
     out_dir.mkdir(parents=True, exist_ok=True)
+    if onto is not None:
+        with open(out_dir / "ontology_report.json", "w", encoding="utf-8") as f:
+            json.dump({"mode": ontology, "fields": ontology_fields, "sources": onto.registry.versions(),
+                       "papers": {o["doc"]: o["ontology_terms"] for o in outcomes if o["ontology_terms"]}}, f, indent=1, ensure_ascii=False)
     with open(out_dir / "tokens.csv", "w", encoding="utf-8", newline="") as f:
         w = csv.writer(f)
         w.writerow(["doc", "prompt_tokens", "completion_tokens", "seconds", "chunks", "thinking"])
@@ -149,9 +164,12 @@ def run(corpus: Path, out_dir: Path, docs: Optional[List[str]] = None, limit: Op
             w.writerow([o["doc"], o["prompt_tokens"], o["completion_tokens"], f"{o['seconds']:.2f}", o["chunks"], "on" if thinking else "off"])
     with open(out_dir / "run_log.json", "w", encoding="utf-8") as f:
         json.dump({"prompt": pname, "preprocess": preprocess, "cite_filter": cite_filter, "taxon_groups": taxon_groups,
-                   "retry_underextraction": retry_underextraction, "thinking": "on" if thinking else "off", "model": cfg.model, "tokenizer": tok_name,
-                   "papers": [{k: v for k, v in o.items() if k not in ("nodes", "edges")} for o in outcomes]}, f, indent=1)
+                   "retry_underextraction": retry_underextraction, "ontology": ontology, "ontology_fields": ontology_fields,
+                   "thinking": "on" if thinking else "off", "model": cfg.model, "tokenizer": tok_name,
+                   "papers": [{k: v for k, v in o.items() if k not in ("nodes", "edges", "ontology_terms")} for o in outcomes]}, f, indent=1)
     print(summary(graph, outcomes, time.time() - t0, validators, doimod.counts(dois)))
+    if onto is not None:
+        print(onto.summary())
     if errors:
         print(f"VALIDATION FAILED ({len(errors)} problems):", file=sys.stderr)
         for e in errors[:20]:
@@ -160,7 +178,8 @@ def run(corpus: Path, out_dir: Path, docs: Optional[List[str]] = None, limit: Op
     return 0
 
 
-def run_smoke(slug: str, corpus: Path, out_dir: Path, prompt: str = DEFAULT_PROMPT, max_tokens: int = 3000) -> int:
+def run_smoke(slug: str, corpus: Path, out_dir: Path, prompt: str = DEFAULT_PROMPT, max_tokens: int = 3000,
+              ontology: str = "lookup", ontology_fields: str = "all") -> int:
     """One real call on one paper, with the cache bypassed, to measure the endpoint before a full run."""
     from urllib.parse import urlparse
     import os
@@ -204,6 +223,13 @@ def run_smoke(slug: str, corpus: Path, out_dir: Path, prompt: str = DEFAULT_PROM
     print(f"raw response saved: {rp}")
     exp = expand_claims(slug, kept, pre.sidecar)
     nodes, edges, stats = guard_paper(slug, exp.nodes, exp.edges)
+    onto = stage_from_args(ontology, ontology_fields, cfg, Client)
+    if onto is not None:
+        nodes, edges, ostats, otok, _ = regrounded(nodes, edges, slug, onto, guard_paper)
+        stats.update(ostats)
+        onto.close()
+        print(onto.summary() + (f" (select: prompt {otok['prompt_tokens']:,}, completion {otok['completion_tokens']:,} tokens)"
+                                if ontology == "select" else ""))
     if not edges:
         print("no edges survived expansion and the guard: nothing to write or validate")
         return 1
@@ -233,6 +259,8 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--cite-filter", choices=("strict", "relaxed"), default="strict", help="relaxed: in discussion/conclusions also keep cited sentences that refer back to the authors' own results")
     ap.add_argument("--taxon-groups", action="store_true", help="group words (rodents, conifers, grasses, ...) get a SPECIES legend entry with the group's NCBITaxon ID")
     ap.add_argument("--retry-underextraction", action="store_true", help="retry a paper once (own cache entry) when claims per sentence fall below UNDER_EXTRACTION")
+    ap.add_argument("--ontology", choices=ONTOLOGY_MODES, default="lookup", help="stage 5b, ontology/ground_terms.py on the LLM step's nodes: lookup (default) = IDs only for unique exact matches in the committed indexes (NCBITaxon for taxa the TSV missed, ELMO, ENVO, GO, PATO, ChEBI, PO, UBERON; no LLM); select = also let the model pick among candidates by number (one short call per paper); off = free text stays")
+    ap.add_argument("--ontology-fields", choices=ONTOLOGY_FIELDS, default="all", help="entities: ground entity_term and life_stage_term only, keep measured_attribute as free text")
     ap.add_argument("--refresh-cache", action="store_true", help="call the model even when an answer is cached, and store the new answer")
     ap.add_argument("--no-cache", action="store_true")
     ap.add_argument("--max-input-tokens", type=int, default=12000)
@@ -242,12 +270,13 @@ def main(argv: Optional[List[str]] = None) -> int:
     logging.basicConfig(level=logging.DEBUG if a.verbose else logging.INFO, format="%(asctime)s %(levelname)s %(message)s", datefmt="%H:%M:%S")
     try:
         if a.smoke:
-            return run_smoke(a.smoke, Path(a.corpus) if a.corpus else ROOT / "corpus", Path(a.smoke_dir), a.prompt, a.max_tokens)
+            return run_smoke(a.smoke, Path(a.corpus) if a.corpus else ROOT / "corpus", Path(a.smoke_dir), a.prompt, a.max_tokens,
+                             a.ontology, a.ontology_fields)
         if not a.corpus or not a.output:
             ap.error("corpus and output directories are required (or use --smoke SLUG)")
         return run(Path(a.corpus), Path(a.output), [d.strip() for d in a.docs.split(",") if d.strip()] if a.docs else None, a.limit,
                    a.concurrency, a.thinking == "on", a.prompt, not a.no_cache, a.max_input_tokens, a.max_tokens, a.preprocess, a.refresh_cache,
-                   a.cite_filter, a.taxon_groups, a.retry_underextraction)
+                   a.cite_filter, a.taxon_groups, a.retry_underextraction, a.ontology, a.ontology_fields)
     except (ConfigError, RuntimeError) as e:
         print(f"error: {e}", file=sys.stderr)
         return 2 if isinstance(e, ConfigError) else 1

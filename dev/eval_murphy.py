@@ -6,6 +6,8 @@
   python dev/eval_murphy.py GRAPH.yaml [...]      score existing graphs (pipeline outputs) on Murphy (--others: also the other gold papers)
   EVAL_PREPROCESS=paragraph-chunks python dev/eval_murphy.py --cached --prompts system.txt    the paragraph-chunks model
   --json OUT                                      also write the numbers
+  EVAL_ONTOLOGY=lookup|lookup:entities|off        --cached: stage 5b as in the pipeline (default lookup = ./run.sh's default;
+                                                  off = the control). select is not offered: it needs the endpoint
 """
 import argparse, csv, json, os, sys, tempfile
 from pathlib import Path
@@ -17,6 +19,7 @@ from dev.score.load import load_graph
 from dev.score.metrics import score
 SLUG, GOLD = "YKQQZV93", ROOT / "dev/gold/murphy2005.yaml"
 PREPROCESS = os.environ.get("EVAL_PREPROCESS", "sentence")
+ONTOLOGY = os.environ.get("EVAL_ONTOLOGY", "lookup")
 OTHER = [("4CB9X9XE", ROOT / "dev/gold/4CB9X9XE.camo.yaml", None), ("3KPITIV3", ROOT / "dev/gold/3KPITIV3.yaml", None),
          ("6HKWT4QG", ROOT / "dev/gold/6HKWT4QG.yaml", None), ("ITXNQ843", ROOT / "dev/gold/ITXNQ843.yaml", None),
          ("2F76GVEE", ROOT / "dev/gold/2F76GVEE.yaml", None), ("4C479SU8", ROOT / "dev/gold/4C479SU8.yaml", None),
@@ -32,6 +35,11 @@ def graph_from_cache(prompt: str, slugs=(SLUG,)) -> Path:
     from pipeline.preprocess.legend import load_taxon_table
     from pipeline.preprocess.tokens import get_counter
     from pipeline.write import write_yaml
+    from pipeline.ontology_stage import OntologyStage, regrounded
+    mode, _, fields = ONTOLOGY.partition(":")
+    if mode not in ("off", "lookup"):
+        raise SystemExit("EVAL_ONTOLOGY: lookup[:all|:entities] or off (select needs the endpoint)")
+    onto = OntologyStage("lookup", fields or "all") if mode == "lookup" else None
     rows = {r["slug"]: r for r in csv.DictReader(open(ROOT / "corpus/index.csv", encoding="utf-8"))}
     count, _ = get_counter(allow_download=False)
     _, system = load_prompt(prompt)
@@ -43,6 +51,8 @@ def graph_from_cache(prompt: str, slugs=(SLUG,)) -> Path:
         ex = extract_paper(Client(cfg), system, pre.txt, [s["n"] for s in pre.sidecar["sentences"]], 12000, slug, pre.sidecar.get("chunk_texts"))
         exp = expand_claims(slug, ex.claims, pre.sidecar)
         nodes, edges, _ = guard_paper(slug, exp.nodes, exp.edges)
+        if onto is not None:
+            nodes, edges, _, _, _ = regrounded(nodes, edges, slug, onto, guard_paper)
         per[slug] = (nodes, edges)
     g = merge([rows[s] for s in slugs], per)
     out = Path(tempfile.mkdtemp()) / f"murphy_{prompt}.yaml"
@@ -76,7 +86,7 @@ def main():
         for p in a.prompts.split(","):
             slugs = (SLUG,) + (tuple(o[0] for o in OTHER) if a.others else ())
             gp = graph_from_cache(p, slugs)
-            rows.append((f"Murphy cached {p} [{PREPROCESS}]", murphy_score(gp)))
+            rows.append((f"Murphy cached {p} [{PREPROCESS}, ontology={ONTOLOGY}]", murphy_score(gp)))
             if a.others:
                 for slug, gpath, gid in OTHER:
                     rows.append((f"  {slug} cached {p}", murphy_score(gp, gpath, gid, slug)))

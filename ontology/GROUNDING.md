@@ -143,8 +143,16 @@ linkml-validate -s schema/causalmosaic.yaml -C CausalGraph grounded.yaml
 
 ## Calling it from the pipeline
 
-The pipeline should load the indexes once and ground each article's graph in-process (the
-CLIs above are for one file at a time):
+**Wired in:** `pipeline/ontology_stage.py` is stage 5b of `./run.sh`. After the LLM step's
+claims are expanded into nodes and guarded, each paper's nodes go through `ground_graph` (and,
+with `--ontology select`, `select_candidates` through the pipeline's own LLM client), then the
+guard runs again. Default `--ontology lookup` (no LLM call); `--ontology-fields entities`
+leaves `measured_attribute` as text; `--ontology off` skips it. Taxa that already carry an
+NCBITaxon ID from `data/ncbitaxon_names.tsv` are left alone; free-text taxa are looked up.
+Per-term results go to `<output>/ontology_report.json`.
+
+The pattern it follows (load the indexes once, ground each article in-process; the CLIs above
+are for one file at a time):
 
 ```python
 from ground_terms import (CAMO_PREFIXES, EXTRACTION_RULES, Prefixes, Registry,

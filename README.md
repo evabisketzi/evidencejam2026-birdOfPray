@@ -3,8 +3,7 @@
 Turns the 308 ecological restoration articles in `corpus/` into one merged causal graph in the Causal Mosaic Schema
 (CAMO v0.10.0), as YAML and JSON, validated against the schema. A language model reads; plain code writes the graph.
 
-**[Pipeline explorer (website)](https://evabisketzi.github.io/evidencejam2026-birdOfPray/)**: follow one claim from sentence to graph, read how each stage
-works, and replay the pipeline on the reference papers in your browser.
+**[Pipeline explorer (website)](https://evabisketzi.github.io/evidencejam2026-birdOfPray/)**: follow one claim from sentence to graph, read how each stage works and what the ablation studies kept or rejected, and replay the pipeline on the reference papers in your browser.
 
 **Docs:** [Method](reports/METHOD.md) · [Results](reports/RESULTS.md) · [Ontology grounding](ontology/GROUNDING.md) ·
 [Experiment log](dev/experiments/LOG.md)

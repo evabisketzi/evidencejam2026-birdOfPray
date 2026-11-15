@@ -5,7 +5,10 @@ Resolution order:
   2. cached ``.cache/qwen3_tokenizer.json``; downloaded from Hugging Face if missing (needs ``tokenizers``)
   3. ``transformers.AutoTokenizer`` for a Qwen3 model
   4. tiktoken built from ``data/qwen.tiktoken`` (if present) with Qwen's pre-tokenizer pattern
-  5. digit-aware heuristic estimate (stdlib only; always available)
+  5. ``data/token_counts.json.gz``: Qwen3 counts precomputed for every text the preprocessing counts on this corpus
+     (``dev/build_token_counts.py``), so a clean install without ``tokenizers`` packs the paragraph chunks exactly as the
+     evaluated runs did; any other text falls back to 6 (checked before 3 and 4)
+  6. digit-aware heuristic estimate (stdlib only; always available)
 """
 from __future__ import annotations
 
@@ -67,6 +70,12 @@ def get_counter(allow_download: bool = True) -> Tuple[Callable[[str], int], str]
                 CACHE.unlink()
             except OSError:
                 pass
+    table = load_count_table()
+    if table:
+        def counted(s: str) -> int:
+            n = table.get(count_key(s))
+            return n if n is not None else _heuristic(s)
+        return counted, f"table:{COUNT_TABLE.name} (Qwen3 counts for this corpus, {len(table):,} texts; heuristic otherwise)"
     try:
         from transformers import AutoTokenizer  # type: ignore
 
@@ -86,3 +95,24 @@ def get_counter(allow_download: bool = True) -> Tuple[Callable[[str], int], str]
         except Exception as e:  # noqa: BLE001
             log.info("tiktoken unavailable: %r", e)
     return _heuristic, "heuristic (digit-aware estimate; NOT the Qwen tokenizer)"
+
+
+COUNT_TABLE = ROOT / "data" / "token_counts.json.gz"
+
+
+def count_key(text: str) -> str:
+    import hashlib
+    return hashlib.sha1(text.encode("utf-8")).hexdigest()[:16]
+
+
+def load_count_table() -> dict:
+    if not COUNT_TABLE.exists():
+        return {}
+    try:
+        import gzip
+        import json
+        with gzip.open(COUNT_TABLE, "rt", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:  # noqa: BLE001
+        log.warning("token count table %s unusable: %r", COUNT_TABLE, e)
+        return {}

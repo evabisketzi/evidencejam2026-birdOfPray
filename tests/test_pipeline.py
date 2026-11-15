@@ -1099,3 +1099,22 @@ def test_generic_legend_variants_are_recognised_but_real_common_names_are_not():
         assert generic_variant(v), v
     for v in ("oak", "reed canary grass", "Columbia spotted frog", "pine seedlings", "sunflower", "deer"):
         assert not generic_variant(v), v
+
+
+def test_token_count_table_reproduces_qwen_chunking_without_the_tokenizer():
+    """A clean install has no `tokenizers`: the precomputed Qwen counts must give the same paragraph chunks."""
+    import csv as _csv
+    from pipeline.preprocess import tokens as T
+    from pipeline.preprocess.team_adapter import process_paper_team_chunks
+    from pipeline.preprocess.assemble import Options
+    from pipeline.preprocess.legend import load_taxon_table
+    table = T.load_count_table()
+    assert len(table) > 70000
+    rows = {r["slug"]: r for r in _csv.DictReader(open(T.ROOT / "corpus" / "index.csv", encoding="utf-8"))}
+    raw = (T.ROOT / "corpus" / "YKQQZV93.md").read_text(encoding="utf-8")
+    def table_only(s):
+        n = table.get(T.count_key(s))
+        assert n is not None, "a counted text is missing from the table"
+        return n
+    pre = process_paper_team_chunks("YKQQZV93", raw, rows["YKQQZV93"], table_only, Options(), load_taxon_table())
+    assert len(pre.sidecar["chunk_texts"]) == 2           # as in every evaluated run (Qwen tokenizer)

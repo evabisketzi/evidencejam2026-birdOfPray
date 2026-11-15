@@ -4,9 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lane 1 Pipeline Explorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f7f7f5;--panel:#fff;--ink:#1d1d1b;--mute:#66665f;--line:#e2e1dc;--acc:#2f6f5e;--acc2:#b4572f;--soft:#eef4f1;--code:#f1f0ec;--bad:#a33;--ok:#2f6f5e}
-@media (prefers-color-scheme:dark){:root{--bg:#161615;--panel:#1f1f1d;--ink:#ecebe6;--mute:#a3a29b;--line:#34332f;--acc:#6fbfa5;--acc2:#e08a62;--soft:#22302b;--code:#2a2a27;--bad:#e07070;--ok:#6fbfa5}}
+:root{--bg:#f4f6f3;--panel:#fff;--ink:#1b211d;--mute:#5d665f;--line:#dde2dc;--acc:#2f6f5e;--acc2:#a5620f;--soft:#e8f1ec;--code:#edf0eb;--bad:#a33;--ok:#2f6f5e;
+--llm:#a5620f;--llm-soft:#fbf2e3;--cause:#1f5fa8;--cause-soft:#e6f0fb;--effect:#2f6f5e;--effect-soft:#e4f2ea;--note-bg:#fdf6e3;
+--serif:"Source Serif 4","Source Serif Pro",Georgia,serif;--sans:system-ui,-apple-system,"Segoe UI",sans-serif;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+@media (prefers-color-scheme:dark){:root{--bg:#121513;--panel:#1a1f1c;--ink:#e7ebe7;--mute:#a1aaa3;--line:#2e3631;--acc:#74c2a6;--acc2:#e0a54b;--soft:#1f2b26;--code:#222823;--bad:#e07070;--ok:#74c2a6;
+--llm:#e0a54b;--llm-soft:#2a2214;--cause:#7db4f0;--cause-soft:#15243a;--effect:#74c2a6;--effect-soft:#14271f;--note-bg:#2a2414}}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
 .wrap{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
 nav{position:sticky;top:0;height:100vh;overflow:auto;border-right:1px solid var(--line);padding:22px 14px;background:var(--panel)}
@@ -16,7 +21,7 @@ nav a:hover{background:var(--soft)}nav a.on{background:var(--soft);color:var(--a
 nav .n{display:inline-block;width:20px;color:var(--mute);font-variant-numeric:tabular-nums}
 main{padding:30px 40px 80px;max-width:1150px}
 section{display:none}section.on{display:block}
-h2{font-size:24px;margin:0 0 6px}h3{font-size:17px;margin:26px 0 8px}.lead{color:var(--mute);margin:0 0 20px;max-width:820px}
+h2{font-family:var(--serif);font-weight:600;font-size:26px;margin:0 0 6px}h3{font-size:17px;margin:26px 0 8px}.lead{color:var(--mute);margin:0 0 20px;max-width:820px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:12px 0}
 table{border-collapse:collapse;width:100%;font-size:13.5px;margin:8px 0}th,td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
 th{color:var(--mute);font-weight:600;font-size:12.5px}td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
@@ -35,10 +40,126 @@ button{cursor:pointer}.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}.t
 .bad{color:var(--bad)}.ok{color:var(--ok)}.mute{color:var(--mute)}
 details{margin:6px 0}summary{cursor:pointer;color:var(--acc)}
 @media (max-width:820px){.wrap{grid-template-columns:1fr}nav{position:static;height:auto}main{padding:18px 16px}.grid2{grid-template-columns:1fr}}
+.wrap>main{min-width:0}
+/* ---- landing overview (scoped to .ov) ---- */
+.ov{max-width:1080px}
+.ov a{color:inherit;text-decoration:none}
+.ov a:focus-visible,.ov summary:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:10px}
+.ov-head{max-width:820px;margin:4px 0 26px}
+.ov-title{text-wrap:balance;font-family:var(--serif);font-weight:600;font-size:clamp(28px,3.4vw,40px);line-height:1.12;letter-spacing:-.01em;margin:0 0 12px}
+.ov-lead{font-size:16.5px;line-height:1.6;color:var(--mute);margin:0;max-width:68ch}
+.ov-lead code{font-size:14px}
+.ov-h{font-family:var(--serif);font-weight:600;font-size:21px;margin:0 0 12px}
+.ov-block{margin:34px 0 0}
+.ov-note{color:var(--mute);font-size:13.5px;margin:0 0 12px;max-width:62ch}
+.ov-links{display:flex;flex-wrap:wrap;gap:6px 18px;margin:12px 0 0;font-size:14px}
+.ov-links a{color:var(--acc);font-weight:600;border-bottom:1px solid color-mix(in srgb,var(--acc) 35%,transparent)}
+.ov-links a:hover{border-bottom-color:var(--acc)}
+
+/* hero: one claim traced through the pipeline */
+.ov-trace{margin:0;padding:22px;border-radius:16px;background:var(--panel);border:1px solid var(--line)}
+.ov-trace-cap{font-size:14px;color:var(--mute);margin:0 0 14px}
+.ov-trace-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:34px;position:relative}
+.ov-trace-steps>li{position:relative;display:flex;min-width:0}
+.ov-trace-steps>li+li::before{content:"";position:absolute;left:-27px;top:50%;width:20px;height:2px;background:var(--mute);opacity:.55}
+.ov-trace-steps>li+li::after{content:"";position:absolute;left:-12px;top:calc(50% - 5px);border:6px solid transparent;border-left:7px solid var(--mute);border-right:0;opacity:.55}
+.ov-tr{display:flex;flex-direction:column;gap:12px;width:100%;padding:16px 16px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);transition:border-color .15s,transform .15s}
+.ov-tr:hover{border-color:var(--acc);transform:translateY(-1px)}
+.ov-tr-llm{background:var(--llm-soft);border-color:color-mix(in srgb,var(--llm) 45%,var(--line))}
+.ov-tr-llm:hover{border-color:var(--llm)}
+.ov-tr-step{font-weight:650;font-size:15px;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.ov-tr-llm .ov-tr-step{color:var(--llm)}
+.ov-tag{font-size:11.5px;font-weight:600;padding:1px 8px;border-radius:99px;border:1px solid currentColor}
+.ov-tr-body{display:flex;flex-direction:column;gap:6px;flex:1;font-size:14px}
+.ov-tr-more{font-size:13px;color:var(--mute);border-top:1px solid var(--line);padding-top:10px}
+.ov-tr:hover .ov-tr-more{color:var(--ink)}
+.ov-legend{font-family:var(--mono);font-size:12.5px}
+.ov-legend i{font-family:var(--sans)}
+.ov-sent{font-family:var(--mono);font-size:12.5px;color:var(--mute);margin-top:6px}
+.ov-gist{font-size:14px;line-height:1.5}
+.ov-line{display:flex;flex-direction:column;background:none;padding:0;font-size:13px;line-height:1.7;white-space:pre;overflow-x:auto}
+.ov-line b{font-weight:650}
+.ov-line .i1{padding-left:2ch}.ov-line .i2{padding-left:4ch}
+.c-cause{color:var(--cause)}.c-effect{color:var(--effect)}
+.ov-mini{flex-direction:row;align-items:center;gap:0}
+.ov-node{display:block;padding:6px 9px;border-radius:8px;font-size:13px;font-weight:600;line-height:1.3}
+.ov-node small{display:block;font-weight:400;font-size:11.5px;color:var(--mute);margin-top:2px}
+.ov-node-cause{background:var(--cause-soft);border:1.5px solid var(--cause);color:var(--cause);flex:0 1 46%}
+.ov-node-effect{background:var(--effect-soft);border:1.5px solid var(--effect);color:var(--effect)}
+.ov-edges{flex:0 0 26px;height:110px;display:block}
+.ov-edges svg{width:100%;height:100%;display:block}
+.ov-edges path{fill:none;stroke:var(--mute);stroke-width:1.5;vector-effect:non-scaling-stroke}
+.ov-effects{display:flex;flex-direction:column;gap:7px;flex:1}
+
+/* the six stages */
+.ov-stages{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(6,1fr);gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--panel)}
+.ov-stages li+li{border-left:1px solid var(--line)}
+.ov-stages a{display:flex;flex-direction:column;gap:6px;height:100%;padding:14px 14px 16px;position:relative}
+.ov-stages a:hover{background:var(--soft)}
+.ov-stages a:focus-visible{outline-offset:-3px}
+.ov-n{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:12.5px;font-weight:700;background:var(--ink);color:var(--panel)}
+.ov-stages b{font-size:15px;line-height:1.25}
+.ov-stages span:not(.ov-n){font-size:13px;color:var(--mute);line-height:1.45;flex:1}
+.ov-stages em{font-style:normal;font-size:13px;font-weight:650;color:var(--acc);font-variant-numeric:tabular-nums}
+.ov-stages .is-llm a{background:var(--llm-soft)}
+.ov-stages .is-llm a:hover{background:color-mix(in srgb,var(--llm-soft) 70%,var(--llm) 12%)}
+.ov-stages .is-llm .ov-n{background:var(--llm);color:var(--panel)}
+.ov-stages .is-llm em{color:var(--llm)}
+
+/* scores and run facts */
+.ov-two{display:grid;grid-template-columns:1.25fr 1fr;gap:28px}
+.ov-two>.ov-block{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+.ov-scale{display:flex;flex-direction:column;gap:14px;margin:16px 0 14px}
+.ov-row{display:grid;grid-template-columns:150px 1fr 48px;align-items:center;gap:14px}
+.ov-row a{font-size:14px;font-weight:600;line-height:1.25}
+.ov-row a:hover{color:var(--acc)}
+.ov-row small{display:block;font-weight:400;font-size:12px;color:var(--mute)}
+.ov-row>b{font-size:18px;font-variant-numeric:tabular-nums;text-align:right}
+.ov-track{position:relative;height:22px;border-radius:99px;background:linear-gradient(90deg,var(--line) 0 0) center/100% 2px no-repeat}
+.ov-noise{position:absolute;top:2px;bottom:2px;border-radius:6px;background:color-mix(in srgb,var(--acc) 30%,transparent)}
+.ov-range{position:absolute;top:7px;height:8px;min-width:3px;border-radius:4px;background:var(--acc);opacity:.45}
+.ov-dot{position:absolute;top:50%;width:13px;height:13px;margin:-6.5px 0 0 -6.5px;border-radius:50%;background:var(--acc);box-shadow:0 0 0 3px var(--panel)}
+.ov-axis{display:flex;justify-content:space-between;margin-left:164px;margin-right:62px;font-size:11.5px;color:var(--mute);font-variant-numeric:tabular-nums}
+.ov-facts{margin:4px 0 0;display:grid;gap:0}
+.ov-facts div{display:grid;grid-template-columns:128px 1fr;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}
+.ov-facts div:last-child{border-bottom:0}
+.ov-facts dt{color:var(--mute);font-size:13.5px}
+.ov-facts dd{margin:0;font-size:14px}
+.ov-facts dd b{font-size:16px;font-variant-numeric:tabular-nums}
+
+/* config */
+.ov-config{margin:30px 0 0;border-top:1px solid var(--line);padding-top:14px}
+.ov-config summary{font-size:14px;font-weight:600;color:var(--acc);width:max-content}
+.ov-config table{margin-top:10px}
+
+@media (max-width:1100px){
+  .ov-stages{grid-template-columns:repeat(3,1fr)}
+  .ov-stages li:nth-child(4){border-left:0}
+  .ov-stages li:nth-child(n+4){border-top:1px solid var(--line)}
+}
+@media (max-width:1180px){
+  .ov-trace-steps{grid-template-columns:1fr;gap:28px}
+  .ov-trace-steps>li+li::before{left:50%;top:-20px;width:2px;height:12px}
+  .ov-trace-steps>li+li::after{left:calc(50% - 5px);top:-9px;border:6px solid transparent;border-top:7px solid var(--mute);border-bottom:0}
+  .ov-mini{max-width:520px}
+  .ov-two{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .ov-trace{padding:14px}
+  .ov-stages{grid-template-columns:1fr 1fr}
+  .ov-stages li{border-left:0 !important;border-top:1px solid var(--line)}
+  .ov-stages li:nth-child(even){border-left:1px solid var(--line) !important}
+  .ov-stages li:nth-child(-n+2){border-top:0}
+  .ov-row{grid-template-columns:104px 1fr 42px;gap:10px}
+  .ov-axis{margin-left:114px;margin-right:52px}
+  .ov-facts div{grid-template-columns:104px 1fr}
+  .ov-line{font-size:12px}
+}
+@media (prefers-reduced-motion:reduce){.ov-tr{transition:none}.ov-tr:hover{transform:none}}
 </style>
 </head>
 <body>
-<p style="margin:0;padding:6px 12px;background:#fff8e1;font:13px sans-serif">Static snapshot of the pipeline explorer (commit cb4341a, 2026-11-15): the paper replay was computed in advance from the saved answers in <code>dev/gui/sample_run</code>; run <code>dev/gui/server.py</code> locally to replay other runs.</p>
+<p style="margin:0;padding:7px 14px;background:var(--note-bg);color:var(--ink);font-size:13px;border-bottom:1px solid var(--line)">Static snapshot of the pipeline explorer (commit cb4341a, 2026-11-15): the paper replay was computed in advance from the saved answers in <code>dev/gui/sample_run</code>; run <code>dev/gui/server.py</code> locally to replay other runs.</p>
 <div class="wrap">
 <nav>
   <h1>Lane 1 pipeline</h1>
@@ -58,17 +179,130 @@ details{margin:6px 0}summary{cursor:pointer;color:var(--acc)}
 </nav>
 <main>
 
-<section id="overview">
-  <h2>From 308 articles to one causal graph</h2>
-  <p class="lead">One command, <code>./run.sh corpus/ output/</code>, turns the restoration articles in <code>corpus/</code> into one merged
-  CAMO v0.10.0 graph in YAML and JSON. A Qwen model on the shared endpoint does the reading; everything around it is
-  deterministic code. Click a stage to read how it works.</p>
-  <div class="flow" id="flow"></div>
-  <div class="kpi" id="kpis"></div>
-  <h3>Submitted configuration</h3>
-  <div class="card" id="cfg"></div>
-  <p class="mute">The judges score annotation quality first, then energy per article (LLM tokens). Every number on these pages comes from
-  our own scorer on eight reference papers; they are development numbers, not the judges' score.</p>
+<section id="overview" class="ov">
+  <header class="ov-head">
+    <h2 class="ov-title">From 308 restoration articles to one causal graph</h2>
+    <p class="ov-lead">One command, <code>./run.sh corpus/ output/</code>, reads every article, asks Qwen for one short line per
+    causal claim, and turns those lines into a single CAMO v0.10.0 graph in YAML and JSON. The model only reads;
+    everything that can be checked mechanically is done in code.</p>
+  </header>
+
+  <figure class="ov-trace" aria-labelledby="trace-cap">
+    <figcaption id="trace-cap" class="ov-trace-cap">One claim from Murphy (2005), sentence 7, through the pipeline</figcaption>
+    <ol class="ov-trace-steps">
+      <li>
+        <a class="ov-tr" href="#pre">
+          <span class="ov-tr-step">What the model reads</span>
+          <span class="ov-tr-body">
+            <span class="ov-legend"><b class="c-cause">T1</b> = <i>Sanguinaria canadensis</i></span>
+            <span class="ov-legend"><b class="c-effect">T2</b> = <i>Alliaria petiolata</i></span>
+            <span class="ov-sent" id="trace-sentence">[7] (res), a Results sentence</span>
+            <span class="ov-gist">In short: a higher initial <i>S. canadensis</i> density (9–11 ramets/m²) meant fewer,
+            smaller and shorter <i>A. petiolata</i> in late spring.</span>
+          </span>
+          <span class="ov-tr-more">Preprocessing keeps findings, numbers sentences and adds the species legend</span>
+        </a>
+      </li>
+      <li>
+        <a class="ov-tr ov-tr-llm" href="#prompt">
+          <span class="ov-tr-step">What Qwen writes <span class="ov-tag">the only model call</span></span>
+          <span class="ov-tr-body">
+            <code class="ov-line"><span>F|7|<b class="c-cause">T1/initial planting density/+/tax</b></span><span class="i1">|c|<b class="c-effect">T2/number of individuals/-</b></span><span class="i2">;<b class="c-effect">T2/size/-</b>;<b class="c-effect">T2/height/-</b></span><span class="i1">|D|exp|dose=9-11 ramets/m2</span><span class="i1">|season=late_spring</span></code>
+          </span>
+          <span class="ov-tr-more">One compact line per claim: no JSON, no quotes, no ontology IDs</span>
+        </a>
+      </li>
+      <li>
+        <a class="ov-tr" href="#post">
+          <span class="ov-tr-step">What code builds</span>
+          <span class="ov-tr-body ov-mini">
+            <span class="ov-node ov-node-cause">↑ initial planting density<small><i>S. canadensis</i> NCBITaxon:3472</small></span>
+            <span class="ov-edges" aria-hidden="true"><svg viewBox="0 0 40 120" preserveAspectRatio="none"><path d="M2 60 C 20 60, 20 16, 38 16 M2 60 L38 60 M2 60 C 20 60, 20 104, 38 104"/></svg></span>
+            <span class="ov-effects">
+              <span class="ov-node ov-node-effect">↓ number of individuals</span>
+              <span class="ov-node ov-node-effect">↓ size</span>
+              <span class="ov-node ov-node-effect">↓ height</span>
+            </span>
+          </span>
+          <span class="ov-tr-more">Three <code>causes</code> edges, each with the sentence, its character offsets and the DOI</span>
+        </a>
+      </li>
+    </ol>
+  </figure>
+
+  <div class="ov-block" aria-labelledby="ov-stages-h">
+    <h3 id="ov-stages-h" class="ov-h">The six stages</h3>
+    <ol class="ov-stages">
+      <li><a href="#pre"><span class="ov-n">1</span><b>Preprocess</b><span>Clean the PDF text, keep paragraphs that state findings, chunks of ≤ 2,500 tokens</span><em>≈ 2.5 chunks per paper</em></a></li>
+      <li><a href="#onto"><span class="ov-n">2</span><b>Ground taxa</b><span>Species legend looked up in a checked NCBITaxon table, in code</span><em>0.99 taxon-ID accuracy on Murphy</em></a></li>
+      <li class="is-llm"><a href="#extract"><span class="ov-n">3</span><b>Extract with Qwen</b><span>One call per chunk, thinking off, temperature 0, answers cached</span><em>9.3k in + 2.3k out per paper</em></a></li>
+      <li><a href="#post"><span class="ov-n">4</span><b>Parse and expand</b><span>Lenient line parser, one edge per effect, nulls become negated</span><em>lost lines 1,883 → 128</em></a></li>
+      <li><a href="#post"><span class="ov-n">5</span><b>Guard and merge</b><span>Each edge checked against the schema, repaired or dropped; all 308 source documents</span><em>30,208 edges</em></a></li>
+      <li><a href="#post"><span class="ov-n">6</span><b>Write and validate</b><span>YAML and JSON, JSON Schema and linkml-validate; a failing paper never stops the run</span><em>0 schema errors</em></a></li>
+    </ol>
+  </div>
+
+  <div class="ov-two">
+    <div class="ov-block" aria-labelledby="ov-score-h">
+      <h3 id="ov-score-h" class="ov-h">How well it extracts</h3>
+      <p class="ov-note">Standard F1 against reference annotations: cause and effect found, effect attribute similar, direction not
+      reversed. Mean of 3 runs; the bar is the range.</p>
+      <div class="ov-scale" role="table" aria-label="Standard F1 by reference set">
+        <div class="ov-row" role="row">
+          <a role="rowheader" href="#refs">Murphy 2005<small>human gold, 1 paper</small></a>
+          <span class="ov-track" role="cell" aria-label="0.579, range 0.575 to 0.583; identical runs vary 0.542 to 0.583">
+            <span class="ov-noise" style="left:54.2%;width:4.1%"></span>
+            <span class="ov-range" style="left:57.5%;width:0.8%"></span>
+            <span class="ov-dot" style="left:57.9%"></span>
+          </span>
+          <b role="cell" data-k="murphy_std">0.579</b>
+        </div>
+        <div class="ov-row" role="row">
+          <a role="rowheader" href="#refs">Development<small>3 papers, Claude-made</small></a>
+          <span class="ov-track" role="cell" aria-label="0.169, range 0.163 to 0.173">
+            <span class="ov-range" style="left:16.3%;width:1%"></span>
+            <span class="ov-dot" style="left:16.9%"></span>
+          </span>
+          <b role="cell" data-k="dev3_std">0.169</b>
+        </div>
+        <div class="ov-row" role="row">
+          <a role="rowheader" href="#refs">Regression<small>4 papers, never tuned on</small></a>
+          <span class="ov-track" role="cell" aria-label="0.170, range 0.166 to 0.172">
+            <span class="ov-range" style="left:16.6%;width:0.6%"></span>
+            <span class="ov-dot" style="left:17%"></span>
+          </span>
+          <b role="cell" data-k="reg4_std">0.170</b>
+        </div>
+        <div class="ov-axis" aria-hidden="true"><span>0</span><span>0.25</span><span>0.5</span><span>0.75</span><span>1</span></div>
+      </div>
+      <p class="ov-note">The shaded band on Murphy is how much identical runs vary (0.542–0.583). The Claude-made references word
+      entities their own way, so their lower scores partly measure wording. These are our own scorer's numbers, not the judges'.</p>
+      <p class="ov-links"><a href="#results">All results</a><a href="#eval">How the scorer matches edges</a></p>
+    </div>
+
+    <div class="ov-block" aria-labelledby="ov-run-h">
+      <h3 id="ov-run-h" class="ov-h">The full-corpus run</h3>
+      <dl class="ov-facts">
+        <div><dt>Papers</dt><dd><b>308</b> processed, 0 failed</dd></div>
+        <div><dt>Edges</dt><dd><b>30,208</b> in the merged graph</dd></div>
+        <div><dt>Schema errors</dt><dd><b>0</b> (JSON Schema and linkml-validate)</dd></div>
+        <div><dt>Tokens per paper</dt><dd><b>9,308</b> in + <b>2,263</b> out</dd></div>
+        <div><dt>Model calls</dt><dd><b>757</b>, about 2.5 per paper</dd></div>
+        <div><dt>Wall clock</dt><dd><b>4.7 h</b> on the shared endpoint</dd></div>
+      </dl>
+      <p class="ov-links"><a href="#extract">How extraction runs</a><a href="#failures">Bottlenecks</a></p>
+    </div>
+  </div>
+
+  <details class="ov-config">
+    <summary>Submitted configuration</summary>
+    <div id="cfg"><table>
+      <tr><th>commit</th><td>85dd5d0 (team/main): 77046f9 + precomputed Qwen token counts</td></tr>
+      <tr><th>preprocess</th><td>paragraph-chunks: paragraph selection, one model call per chunk of at most 2,500 tokens</td></tr>
+      <tr><th>prompt</th><td>pipeline/prompt/system.txt</td></tr>
+      <tr><th>thinking</th><td>off</td></tr><tr><th>max_tokens</th><td>3000</td></tr><tr><th>temperature</th><td>0</td></tr>
+    </table></div>
+  </details>
 </section>
 
 <section id="refs">
@@ -349,18 +583,14 @@ details{margin:6px 0}summary{cursor:pointer;color:var(--acc)}
 </main></div>
 <script>
 const $=s=>document.querySelector(s), esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const STAGES=[["refs","References","1 human + 7 Claude"],["pre","Preprocessing","select, number, legend"],["onto","Grounding","NCBITaxon, verified terms"],
-["prompt","Prompt","compact claim lines"],["extract","Extraction","Qwen, temp 0"],["post","Post-processing","parse, expand, guard, merge"],["eval","Evaluator","loose / standard / strict"],["results","Results","numbers"]];
 function show(id){document.querySelectorAll("section").forEach(s=>s.classList.toggle("on",s.id===id));document.querySelectorAll("nav a").forEach(a=>a.classList.toggle("on",a.dataset.s===id));window.scrollTo(0,0)}
 window.addEventListener("hashchange",()=>show(location.hash.slice(1)||"overview"));
-$("#flow").innerHTML=STAGES.map(([id,t,s])=>`<div class="st" onclick="location.hash='${id}'"><b>${t}</b><span>${s}</span></div>`).join("");
 function rows(tab,cols,data){$(tab).innerHTML="<tr>"+cols.map(c=>`<th>${c[1]}</th>`).join("")+"</tr>"+data.map(r=>"<tr>"+cols.map(c=>`<td>${esc(r[c[0]])}</td>`).join("")+"</tr>").join("")}
 fetch("api/overview.json").then(r=>r.json()).then(d=>{
   $("#prompttext").textContent=d.prompt; $("#jobname").textContent=d.job.split("/").pop();
   const c=d.submitted; $("#cfg").innerHTML=`<table>${Object.entries(c).map(([k,v])=>`<tr><th>${esc(k)}</th><td>${esc(v)}</td></tr>`).join("")}</table>`;
   const f=d.final_scores.rows[0];
-  $("#kpis").innerHTML=`<div><b>308</b><span>articles, 0 failed</span></div><div><b>30,208</b><span>edges in the full graph</span></div>
-  <div><b>${f.murphy_std.split(" ")[0]}</b><span>Murphy standard F1</span></div><div><b>0</b><span>schema validation errors</span></div>`;
+  document.querySelectorAll("#overview [data-k]").forEach(el=>{const v=f[el.dataset.k];if(v)el.textContent=String(v).split(" ")[0]});
   rows("#reftab",[["file","file"],["paper","paper"],["made_by","made by"],["role","role"]],d.references);
   $("#noise").textContent=d.final_scores.note+" "+d.noise;
   rows("#finaltab",[["model","stage-1 model"],["murphy_std","Murphy std F1"],["murphy_strict","Murphy strict"],["murphy_null_recall","Murphy null recall"],["dev3_std","dev3 std F1"],["reg4_std","reg4 std F1"],["tokens_per_paper","tokens / paper"]],d.final_scores.rows);

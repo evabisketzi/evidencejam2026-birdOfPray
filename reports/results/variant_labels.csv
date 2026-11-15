@@ -1,7 +1,0 @@
-variant,label,tokens
-tp_new_pc,"**paragraph-chunks, `system.txt` (submitted)**","8,312 + 2,277"
-ctrl_sf,"sentence filter, `system.txt`","6,319 + 2,181"
-tp_ctrl_pc,"paragraph-chunks, previous paragraph code","8,325 + 2,292"
-v1_sf,"sentence filter, prompt `system_v1.txt`","7,169 + 2,217"
-v1_pc,"paragraph-chunks, prompt `system_v1.txt`","9,213 + 2,324"
-camo_ref,"camo_pipeline (reference: JSON extraction + study call + gleaning; one saved run)","15,961 + 5,588"

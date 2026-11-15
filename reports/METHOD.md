@@ -54,12 +54,6 @@ If the paragraph selection fails on a paper, that paper falls back to the senten
   genus and epithet without the authority).
 - Other terms: `data/terms.tsv`. Only rows a person has marked as verified ever produce an ID. Everything else stays
   free text, because a wrong ID is worse than none.
-- Optional, off by default (`--ontology lookup|select`, `pipeline/ontology_stage.py`): after the guard, the team grounding
-  module in `ontology/` (see `ontology/GROUNDING.md`) looks every remaining free-text `entity_term`, `measured_attribute` and
-  `life_stage_term` up in committed ELMO, ENVO, GO, PATO, ChEBI, PO and UBERON indexes. Which ontologies are searched
-  depends on the field and on `entity_type`. An ID is written only for a unique exact label or exact-synonym match; with
-  `select` the model may also choose among the candidates the code found, by number. It never writes an ID itself.
-  Taxa and IDs already present are left alone, and the guard validates again afterwards.
 
 ### 3. Extraction
 
@@ -124,9 +118,3 @@ produces an edge, the run fails loudly instead of writing an empty graph.
 | `preflight.sh` | Checks that a commit runs from a clean checkout against a mock endpoint. |
 | `mock_endpoint.py` | A fake endpoint for plumbing tests. |
 | `diag/` | One-off diagnostics behind the decisions in the log. |
-
-## Options from the camo_pipeline merge (all off by default)
-
-`--fit-attributes`, `--double-negative`, `--provenance`, `--study`, `--continue-truncated` and `--glean` are ports of ideas
-from the research pipeline in `camo_pipeline/`. What each does, and what has been measured, is in `reports/RESULTS.md`
-(section on the branch `merge_camo_onto`). With all of them off, the output is byte-identical to the submitted configuration.

@@ -104,7 +104,6 @@ class Result:
     thinking_mode: str = "off"            # off (kwargs) | off (/no_think) | on
     think_returned: bool = False          # did the reply contain a <think> block (before it was stripped)?
     raw: str = ""                         # the reply exactly as the endpoint sent it
-    finish_reason: Optional[str] = None   # 'length' = cut off at max_tokens (inferred from the token count for old cache entries)
 
 
 class Client:
@@ -181,7 +180,6 @@ class Client:
             t0 = time.monotonic()
             parts: List[str] = []
             usage: dict = {}
-            finish: Optional[str] = None
             first: Optional[float] = None
             while True:
                 if time.monotonic() - t0 > self.cfg.total_timeout:
@@ -204,7 +202,6 @@ class Client:
                 if obj.get("usage"):
                     usage = obj["usage"]
                 for ch in obj.get("choices") or []:
-                    finish = ch.get("finish_reason") or finish
                     c = (ch.get("delta") or {}).get("content")
                     if c:
                         if first is None:
@@ -213,7 +210,7 @@ class Client:
                         parts.append(c)
             if not parts and not usage:
                 raise ConnectionError("empty stream (no content, no usage)")
-            return 200, {"choices": [{"message": {"content": "".join(parts)}, "finish_reason": finish}], "usage": usage}
+            return 200, {"choices": [{"message": {"content": "".join(parts)}}], "usage": usage}
 
     def _detect_url(self) -> str:
         if self._chat_url:
@@ -263,8 +260,7 @@ class Client:
             try:
                 d = json.loads(cp.read_text(encoding="utf-8"))
                 return Result(d["text"], d["prompt_tokens"], d["completion_tokens"], d.get("seconds", 0.0), True, d.get("mode", "off"),
-                              bool(d.get("think", False)), d.get("raw", d["text"]),
-                              d.get("finish") or self._inferred_finish(d["completion_tokens"]))
+                              bool(d.get("think", False)), d.get("raw", d["text"]))
             except Exception:  # noqa: BLE001
                 pass
         t0 = time.time()
@@ -293,10 +289,6 @@ class Client:
         except (KeyError, IndexError, TypeError):
             raise LLMError("unexpected response shape (no choices[0].message.content)")
         usage = body.get("usage") or {}
-        try:
-            finish = body["choices"][0].get("finish_reason")
-        except (KeyError, IndexError, TypeError, AttributeError):
-            finish = None
         pt = int(usage.get("prompt_tokens") or (len(system) + len(user)) / CHARS_PER_TOKEN)
         ct = int(usage.get("completion_tokens") or len(text) / CHARS_PER_TOKEN)
         raw_reply, had_think = text, bool(re.search(r"<think>", text, re.I))
@@ -309,15 +301,12 @@ class Client:
                 cp.parent.mkdir(parents=True, exist_ok=True)
                 tmp = cp.with_name(f"{cp.name}.{os.getpid()}.{threading.get_ident()}.tmp")
                 tmp.write_text(json.dumps({"text": text, "prompt_tokens": pt, "completion_tokens": ct, "seconds": secs, "mode": mode,
-                                          "think": had_think, "raw": raw_reply, "finish": finish or self._inferred_finish(ct)}),
+                                          "think": had_think, "raw": raw_reply}),
                                encoding="utf-8")
                 os.replace(tmp, cp)       # atomic: parallel jobs never read a half-written entry
             except OSError:
                 pass
-        return Result(text, pt, ct, secs, False, mode, had_think, raw_reply, finish or self._inferred_finish(ct))
-
-    def _inferred_finish(self, completion_tokens: int) -> Optional[str]:
-        return "length" if completion_tokens >= self.cfg.max_tokens else None
+        return Result(text, pt, ct, secs, False, mode, had_think, raw_reply)
 
 
 # ----------------------------------------------------------------------------------------------- chunking
@@ -383,37 +372,15 @@ class Extraction:
     n_dropped_sentences: int = 0
     raw: List[str] = field(default_factory=list)
     modes: List[str] = field(default_factory=list)
-    n_truncated: int = 0                  # calls cut off at max_tokens (always counted)
-    n_continued: int = 0                  # continuation calls made (--continue-truncated)
-    n_glean_calls: int = 0                # gleaning calls made (--glean)
-    n_gleaned: int = 0                    # claims they added
-
-
-def continuation_input(chunk: str, claims: Sequence[Claim]) -> Optional[str]:
-    """The chunk again, with only the sentences after the last one the cut-off reply cited (camo_pipeline run.py
-    `truncated_rest`).  None when nothing is left, or when the chunk has no numbered sentences."""
-    if "TEXT:\n" not in chunk:
-        return None
-    head, body = chunk.split("TEXT:\n", 1)
-    lines = [ln for ln in body.splitlines() if _SENT_LINE.match(ln)]
-    if not lines:
-        return None
-    last = max((n for c in claims for n in c.sentences), default=0)
-    rest = [ln for ln in lines if int(_SENT_LINE.match(ln).group(1)) > last]
-    if not rest or len(rest) == len(lines):          # nothing left, or no progress (the same input would give the same reply)
-        return None
-    return head + "TEXT:\n" + "\n".join(rest) + "\n"
 
 
 def extract_paper(client: Client, system: str, user_text: str, valid_numbers: Sequence[int], max_input_tokens: int = 12000,
-                  label: str = "", chunks: Optional[List[str]] = None, continue_truncated: bool = False) -> Extraction:
+                  label: str = "", chunks: Optional[List[str]] = None) -> Extraction:
     """`chunks`: ready-made per-call inputs (e.g. one per paragraph chunk); otherwise the text is split only when too long."""
     ex = Extraction([])
     claims: List[Claim] = []
     bad: List[str] = []
-    todo = [(c, 0) for c in (chunks or split_user_text(user_text, max_input_tokens))]
-    while todo:
-        chunk, depth = todo.pop(0)
+    for chunk in (chunks or split_user_text(user_text, max_input_tokens)):
         r = client.complete(system, chunk, label)
         ex.chunks += 1
         ex.prompt_tokens += r.prompt_tokens
@@ -424,14 +391,6 @@ def extract_paper(client: Client, system: str, user_text: str, valid_numbers: Se
         c, b = parse_text(r.text)
         claims += c
         bad += b
-        if r.finish_reason == "length":
-            ex.n_truncated += 1
-            if continue_truncated and b and r.text.rstrip().endswith(b[-1]):
-                bad.pop()                                # the last line was cut mid-way: re-read below, not repaired
-            nxt = continuation_input(chunk, c) if continue_truncated and depth < 2 else None
-            if nxt:                                      # --continue-truncated: the unread rest of this chunk, at most twice
-                ex.n_continued += 1
-                todo.insert(0, (nxt, depth + 1))
     ex.n_bad = len(bad)
     if bad:                                              # one repair call with only the broken lines
         try:
@@ -451,59 +410,6 @@ def extract_paper(client: Client, system: str, user_text: str, valid_numbers: Se
     ex.n_dropped_sentences = dropped
     ex.claims = claims
     return ex
-
-
-# ----------------------------------------------------------------------------------------------- gleaning (--glean)
-GLEAN_SECTIONS = {"abs", "res", "dis", "con"}
-GLEAN_MIN = 3                    # auto: at least this many candidate sentences, else no call
-GLEAN_MAX_CHARS = 8000           # ~2,300 input tokens of candidate sentences per paper: with --study and --ontology select the
-                                 # add-ons stay inside +30 % of the submitted 10.6k tokens per paper (header ~700 tokens extra)
-_RESULT_CUE = re.compile(r"\[sig\]|\[ns\]|\b(?:increas|decreas|reduc|higher|lower|greater|fewer|affect|effect|differ|"
-                         r"associat|correlat|depend|influenc|improv|suppress|enhanc|declin)\w*|\bno significant\b|\bdid not\b",
-                         re.I)
-
-
-def glean_candidates(sentences: Sequence[dict], claims: Sequence[Claim], mode: str = "auto") -> List[dict]:
-    """Sentences worth a second look (camo_pipeline run.glean_candidates): in abstract / results / discussion / conclusions,
-    cited by no claim, and (auto) with a significance token or a result word.  [] when auto finds fewer than GLEAN_MIN."""
-    cited = {n for c in claims for n in c.sentences}
-    out = [s for s in sentences if s.get("section") in GLEAN_SECTIONS and int(s["n"]) not in cited
-           and (mode == "always" or _RESULT_CUE.search(s.get("compressed") or ""))]
-    if mode == "auto" and len(out) < GLEAN_MIN:
-        return []
-    kept, size = [], 0
-    for s in out:
-        size += len(s.get("compressed") or "") + 12
-        if size > GLEAN_MAX_CHARS:
-            break
-        kept.append(s)
-    return kept
-
-
-def glean(client: Client, system: str, user_text: str, sentences: Sequence[dict], ex: Extraction, valid_numbers: Sequence[int],
-          mode: str = "auto", label: str = "") -> int:
-    """One extra call over the candidate sentences, in the normal input format (same header, original numbers), so the
-    prompt, parser and cache are unchanged.  New claims are added to `ex`; returns how many."""
-    cands = glean_candidates(sentences, ex.claims, mode)
-    if not cands or "TEXT:\n" not in user_text:
-        return 0
-    head = user_text.split("TEXT:\n", 1)[0]
-    text = head + "TEXT:\n" + "\n".join(f"[{s['n']}] ({s['section']}) {s['compressed']}" for s in cands) + "\n"
-    try:
-        r = client.complete(system, text, label)
-    except LLMError as e:
-        log.warning("%s: gleaning call failed (%s)", label or "-", e)
-        return 0
-    ex.prompt_tokens += r.prompt_tokens
-    ex.completion_tokens += r.completion_tokens
-    ex.seconds += r.seconds
-    ex.raw.append(r.text)
-    ex.n_glean_calls += 1
-    new, _bad = parse_text(r.text)
-    new, _ = check_sentences(new, [int(s["n"]) for s in cands])      # only claims about the sentences that were sent
-    ex.claims += new
-    ex.n_gleaned += len(new)
-    return len(new)
 
 
 # ----------------------------------------------------------------------------------------------- CLI: one paper
